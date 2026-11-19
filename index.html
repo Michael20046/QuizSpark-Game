@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuizSpark - Quiz Game</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#172554,#4f46e5);
+  color: white;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container {
+  background: white;
+  color: #172554;
+  width: 100%;
+  max-width: 500px;
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+}
+h1 { color: #4f46e5; }
+select, button {
+  width: 100%;
+  padding: 14px;
+  margin: 8px 0;
+  border-radius: 10px;
+  font-size: 16px;
+}
+select { border: 1px solid #ccc; }
+button {
+  border: none;
+  background: #4f46e5;
+  color: white;
+  cursor: pointer;
+}
+button:hover { background: #3730a3; }
+.option {
+  background: #eef2ff;
+  color: #172554;
+  border: 2px solid #c7d2fe;
+}
+.option:hover { background: #c7d2fe; }
+#feedback { font-weight: bold; margin: 15px; }
+#game, #result { display: none; }
+.score { font-weight: bold; color: #4f46e5; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>⚡ QuizSpark</h1>
+  <p>Test your knowledge. Earn points. Have fun!</p>
+
+  <div id="home">
+    <h3>Choose a category</h3>
+    <select id="category">
+      <option value="all">All Categories</option>
+      <option value="science">Science</option>
+      <option value="history">History</option>
+      <option value="sports">Sports</option>
+      <option value="general">General Knowledge</option>
+    </select>
+    <button onclick="startGame()">Start Quiz</button>
+  </div>
+
+  <div id="game">
+    <p id="progress"></p>
+    <p class="score">⭐ Points: <span id="score">0</span></p>
+    <h3 id="question"></h3>
+    <div id="options"></div>
+    <p id="feedback"></p>
+    <button id="next" onclick="nextQuestion()" style="display:none">Next Question</button>
+  </div>
+
+  <div id="result">
+    <h2>🎉 Quiz Completed!</h2>
+    <h3 id="finalScore"></h3>
+    <p id="message"></p>
+    <button onclick="showHome()">Play Again</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+{c:"science",q:"What planet is known as the Red Planet?",o:["Earth","Mars","Jupiter","Venus"],a:"Mars"},
+{c:"science",q:"What gas do plants absorb?",o:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"],a:"Carbon dioxide"},
+{c:"science",q:"What is H2O commonly called?",o:["Salt","Water","Oxygen","Sugar"],a:"Water"},
+{c:"history",q:"Who was the first President of the United States?",o:["Abraham Lincoln","George Washington","John Adams","Thomas Jefferson"],a:"George Washington"},
+{c:"history",q:"Which ancient civilization built the pyramids at Giza?",o:["Romans","Greeks","Ancient Egyptians","Mayans"],a:"Ancient Egyptians"},
+{c:"sports",q:"How many players does a football team have on the field?",o:["9","10","11","12"],a:"11"},
+{c:"sports",q:"Which sport uses a racket and shuttlecock?",o:["Tennis","Badminton","Golf","Cricket"],a:"Badminton"},
+{c:"general",q:"What is the capital of France?",o:["London","Paris","Rome","Berlin"],a:"Paris"},
+{c:"general",q:"How many days are in a week?",o:["5","6","7","8"],a:"7"},
+{c:"general",q:"Which is the largest ocean?",o:["Atlantic","Indian","Arctic","Pacific"],a:"Pacific"}
+];
+
+let quiz = [], index = 0, points = 0;
+
+function startGame() {
+  const category = document.getElementById("category").value;
+  quiz = questions.filter(q => category === "all" || q.c === category);
+  index = 0;
+  points = 0;
+  document.getElementById("home").style.display = "none";
+  document.getElementById("result").style.display = "none";
+  document.getElementById("game").style.display = "block";
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = quiz[index];
+  document.getElementById("progress").textContent =
+    "Question " + (index + 1) + " of " + quiz.length;
+  document.getElementById("score").textContent = points;
+  document.getElementById("question").textContent = q.q;
+  document.getElementById("feedback").textContent = "";
+  document.getElementById("next").style.display = "none";
+  const options = document.getElementById("options");
+  options.innerHTML = "";
+  q.o.forEach(option => {
+    const btn = document.createElement("button");
+    btn.textContent = option;
+    btn.className = "option";
+    btn.onclick = () => checkAnswer(option);
+    options.appendChild(btn);
+  });
+}
+
+function checkAnswer(answer) {
+  const buttons = document.querySelectorAll(".option");
+  buttons.forEach(btn => btn.disabled = true);
+  if (answer === quiz[index].a) {
+    points += 10;
+    document.getElementById("feedback").textContent = "✅ Correct! +10 points";
+  } else {
+    document.getElementById("feedback").textContent =
+      "❌ Incorrect! Answer: " + quiz[index].a;
+  }
+  document.getElementById("score").textContent = points;
+  document.getElementById("next").style.display = "block";
+}
+
+function nextQuestion() {
+  index++;
+  if (index < quiz.length) showQuestion();
+  else finishGame();
+}
+
+function finishGame() {
+  document.getElementById("game").style.display = "none";
+  document.getElementById("result").style.display = "block";
+  document.getElementById("finalScore").textContent =
+    "Your score: " + points + " points";
+  document.getElementById("message").textContent =
+    points >= 70 ? "Excellent work! 🏆" : "Good effort! Keep practicing!";
+}
+
+function showHome() {
+  document.getElementById("result").style.display = "none";
+  document.getElementById("home").style.display = "block";
+}
+</script>
+</body>
+  </html>
+  
