@@ -4,26 +4,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QuizSpark Game</title>
+
+<title>QuizSpark - Play, Learn and Earn Points!</title>
+
+<meta name="description" content="Welcome to QuizSpark! Test your knowledge, play exciting quizzes and earn points. Join the fun today!">
+
+<meta name="theme-color" content="#101044">
+
+<!-- SOCIAL MEDIA SHARING PREVIEW -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="QuizSpark - Play, Learn and Earn Points!">
+<meta property="og:description" content="Challenge yourself with exciting quizzes, test your knowledge and earn points!">
+<meta property="og:url" content="https://michael20046.github.io/QuizSpark-Game/">
+<meta property="og:image" content="https://raw.githubusercontent.com/Michael20046/QuizSpark-Game/main/quizspark-logo.png">
+<meta property="og:image:width" content="1254">
+<meta property="og:image:height" content="1254">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="QuizSpark - Play, Learn and Earn Points!">
+<meta name="twitter:description" content="Test your knowledge and earn points with QuizSpark!">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Michael20046/QuizSpark-Game/main/quizspark-logo.png">
+
+<link rel="icon" type="image/png" href="quizspark-logo.png">
+<link rel="apple-touch-icon" href="quizspark-logo.png">
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
-  background: #101827;
+  background: linear-gradient(145deg, #080d27, #171044, #101827);
   color: white;
   text-align: center;
   padding: 15px;
+  margin: 0;
+  min-height: 100vh;
 }
+
 .container {
   max-width: 500px;
   margin: 25px auto;
   background: #1e293b;
   padding: 25px;
+  border-radius: 20px;
+  border: 1px solid #334155;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+}
+
+.logo {
+  width: 210px;
+  max-width: 80%;
+  height: auto;
+  display: block;
+  margin: 0 auto 12px;
   border-radius: 18px;
 }
-h1 { color: #38bdf8; }
+
+h1 {
+  color: #facc15;
+  margin-bottom: 8px;
+}
+
+h2 {
+  color: #38bdf8;
+}
+
 input {
-  box-sizing: border-box;
   width: 100%;
   padding: 13px;
   margin: 8px 0;
@@ -31,6 +79,7 @@ input {
   border-radius: 8px;
   font-size: 16px;
 }
+
 button {
   display: block;
   width: 100%;
@@ -38,55 +87,146 @@ button {
   margin: 12px 0;
   border: none;
   border-radius: 10px;
-  background: #0ea5e9;
+  background: linear-gradient(90deg, #0284c7, #2563eb);
   color: white;
   font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
 }
-button:disabled { opacity: 0.6; }
-.google { background: white; color: #222; }
-.secondary { background: #475569; }
-#result { color: #4ade80; }
-#authMessage { color: #38bdf8; }
-.hidden { display: none !important; }
+
+button:disabled {
+  opacity: 0.6;
+}
+
+.google {
+  background: white;
+  color: #222;
+}
+
+.secondary {
+  background: #475569;
+}
+
+#result {
+  color: #4ade80;
+  font-weight: bold;
+}
+
+#authMessage {
+  color: #38bdf8;
+}
+
+#score {
+  color: #facc15;
+  font-size: 22px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.welcome-text {
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+hr {
+  border: 1px solid #334155;
+  margin: 25px 0;
+}
+
+footer {
+  color: #94a3b8;
+  font-size: 12px;
+  margin-top: 25px;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 18px;
+    margin: 12px auto;
+  }
+
+  .logo {
+    width: 180px;
+  }
+}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-<h1>⚡ QuizSpark</h1>
-<p>Test your knowledge and earn points!</p>
+
+<!-- QUIZSPARK BRANDING -->
+<img
+  src="quizspark-logo.png"
+  alt="QuizSpark Game Logo"
+  class="logo"
+>
+
+<h1>Welcome to QuizSpark!</h1>
+
+<p class="welcome-text">
+Test your knowledge, challenge yourself
+and earn points!
+</p>
 
 <!-- PLAYER ACCOUNT -->
 <div id="authSection">
+
 <h2>Player Account</h2>
 
 <input id="name" type="text" placeholder="Your name">
+
 <input id="email" type="email" placeholder="Email address">
+
 <input id="password" type="password" placeholder="Password">
 
 <button id="signupBtn">Create Account</button>
-<button id="loginBtn" class="secondary">Sign In</button>
-<button id="googleBtn" class="google">Continue with Google</button>
 
-<p id="authMessage">Create an account or sign in to QuizSpark.</p>
+<button id="loginBtn" class="secondary">
+Sign In
+</button>
+
+<button id="googleBtn" class="google">
+Continue with Google
+</button>
+
+<p id="authMessage">
+Create an account or sign in to QuizSpark.
+</p>
+
 </div>
 
 <!-- SIGNED IN PLAYER -->
 <div id="userSection" class="hidden">
+
 <p id="welcome"></p>
-<button id="logoutBtn" class="secondary">Sign Out</button>
+
+<button id="logoutBtn" class="secondary">
+Sign Out
+</button>
+
 </div>
 
 <hr>
 
-<!-- QUIZ -->
+<!-- QUIZ GAME -->
 <h3 id="score">Points: 0</h3>
-<h2 id="question">Welcome to QuizSpark!</h2>
+
+<h2 id="question">Ready to play?</h2>
+
 <div id="answers"></div>
+
 <p id="result">Press Start to begin.</p>
+
 <button id="start">Start Quiz</button>
+
+<footer>
+© 2026 QuizSpark. All rights reserved.
+</footer>
+
 </div>
 
 <script type="module">
@@ -133,6 +273,7 @@ function showMessage(message) {
 // CREATE ACCOUNT
 document.getElementById("signupBtn").onclick =
 async function () {
+
   const name = nameInput.value.trim();
   const email = emailInput.value.trim();
   const password = passwordInput.value;
@@ -148,6 +289,7 @@ async function () {
   }
 
   try {
+
     const credential =
       await createUserWithEmailAndPassword(
         auth, email, password
@@ -158,6 +300,7 @@ async function () {
     });
 
     showMessage("Account created successfully!");
+
   } catch (error) {
     showMessage(error.message);
   }
@@ -166,6 +309,7 @@ async function () {
 // EMAIL LOGIN
 document.getElementById("loginBtn").onclick =
 async function () {
+
   const email = emailInput.value.trim();
   const password = passwordInput.value;
 
@@ -175,10 +319,13 @@ async function () {
   }
 
   try {
+
     await signInWithEmailAndPassword(
       auth, email, password
     );
+
     showMessage("Welcome back!");
+
   } catch (error) {
     showMessage(error.message);
   }
@@ -187,9 +334,13 @@ async function () {
 // GOOGLE LOGIN
 document.getElementById("googleBtn").onclick =
 async function () {
+
   try {
+
     await signInWithPopup(auth, provider);
+
     showMessage("Google sign-in successful!");
+
   } catch (error) {
     showMessage(error.message);
   }
@@ -198,9 +349,13 @@ async function () {
 // SIGN OUT
 document.getElementById("logoutBtn").onclick =
 async function () {
+
   try {
+
     await signOut(auth);
+
     showMessage("You have signed out.");
+
   } catch (error) {
     showMessage(error.message);
   }
@@ -208,7 +363,9 @@ async function () {
 
 // CHECK PLAYER LOGIN STATUS
 onAuthStateChanged(auth, (user) => {
+
   if (user) {
+
     document.getElementById("authSection")
       .classList.add("hidden");
 
@@ -219,59 +376,76 @@ onAuthStateChanged(auth, (user) => {
       "Welcome, " + (user.displayName || user.email) + "!";
 
   } else {
+
     document.getElementById("authSection")
       .classList.remove("hidden");
 
     document.getElementById("userSection")
       .classList.add("hidden");
+
   }
+
 });
 
 // QUIZ QUESTIONS
 const questions = [
+
 {
-q: "What is the capital of France?",
-a: ["London", "Paris", "Rome", "Madrid"],
-correct: 1
+  q: "What is the capital of France?",
+  a: ["London", "Paris", "Rome", "Madrid"],
+  correct: 1
 },
+
 {
-q: "Which planet is known as the Red Planet?",
-a: ["Earth", "Venus", "Mars", "Jupiter"],
-correct: 2
+  q: "Which planet is known as the Red Planet?",
+  a: ["Earth", "Venus", "Mars", "Jupiter"],
+  correct: 2
 },
+
 {
-q: "How many days are in a week?",
-a: ["5", "6", "7", "8"],
-correct: 2
+  q: "How many days are in a week?",
+  a: ["5", "6", "7", "8"],
+  correct: 2
 },
+
 {
-q: "Which animal is called the King of the Jungle?",
-a: ["Tiger", "Lion", "Elephant", "Leopard"],
-correct: 1
+  q: "Which animal is called the King of the Jungle?",
+  a: ["Tiger", "Lion", "Elephant", "Leopard"],
+  correct: 1
 },
+
 {
-q: "What is 10 + 5?",
-a: ["12", "15", "20", "25"],
-correct: 1
+  q: "What is 10 + 5?",
+  a: ["12", "15", "20", "25"],
+  correct: 1
 }
+
 ];
 
 let current = 0;
 let points = 0;
 let locked = false;
 
+// START QUIZ
 function startQuiz() {
+
   current = 0;
   points = 0;
+  locked = false;
+
   document.getElementById("start").style.display = "none";
+
   showQuestion();
 }
 
+// SHOW QUESTION
 function showQuestion() {
+
   document.getElementById("score").innerText =
     "Points: " + points;
 
   if (current >= questions.length) {
+
     document.getElementById("question").innerText =
       "Quiz Completed!";
 
@@ -280,8 +454,12 @@ function showQuestion() {
     document.getElementById("result").innerText =
       "Congratulations! You earned " + points + " points!";
 
-    document.getElementById("start").innerText = "Play Again";
-    document.getElementById("start").style.display = "block";
+    document.getElementById("start").innerText =
+      "Play Again";
+
+    document.getElementById("start").style.display =
+      "block";
+
     return;
   }
 
@@ -290,44 +468,66 @@ function showQuestion() {
   document.getElementById("question").innerText = q.q;
 
   document.getElementById("result").innerText =
-    "Question " + (current + 1) + " of " + questions.length;
+    "Question " + (current + 1) +
+    " of " + questions.length;
 
   const answers = document.getElementById("answers");
+
   answers.innerHTML = "";
 
   q.a.forEach((answer, index) => {
+
     const btn = document.createElement("button");
+
     btn.innerText = answer;
+
     btn.onclick = () => checkAnswer(index);
+
     answers.appendChild(btn);
+
   });
+
 }
 
+// CHECK ANSWER
 function checkAnswer(index) {
+
   if (locked) return;
+
   locked = true;
 
   if (index === questions[current].correct) {
+
     points += 10;
+
     document.getElementById("result").innerText =
       "Correct! +10 points!";
+
   } else {
+
     document.getElementById("result").innerText =
       "Wrong answer! Keep going!";
+
   }
 
   document.getElementById("score").innerText =
     "Points: " + points;
 
   setTimeout(() => {
+
     current++;
+
     locked = false;
+
     showQuestion();
+
   }, 1000);
+
 }
 
 document.getElementById("start").onclick = startQuiz;
 
 </script>
+
 </body>
 </html>
