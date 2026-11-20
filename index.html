@@ -4,79 +4,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>QuizSpark - Play, Learn and Earn Points!</title>
-
-<meta name="description" content="Welcome to QuizSpark! Test your knowledge, play exciting quizzes and earn points. Join the fun today!">
-
+<title>QuizSpark - Play, Learn and Earn!</title>
+<meta name="description" content="Play 150 exciting quiz questions, test your knowledge and earn points with QuizSpark.">
 <meta name="theme-color" content="#101044">
-
-<!-- SOCIAL MEDIA SHARING PREVIEW -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="QuizSpark - Play, Learn and Earn Points!">
-<meta property="og:description" content="Challenge yourself with exciting quizzes, test your knowledge and earn points!">
+<meta property="og:title" content="QuizSpark - Play, Learn and Earn!">
+<meta property="og:description" content="Challenge yourself with 150 exciting quiz questions.">
 <meta property="og:url" content="https://michael20046.github.io/QuizSpark-Game/">
-<meta property="og:image" content="https://raw.githubusercontent.com/Michael20046/QuizSpark-Game/main/quizspark-logo.png">
-<meta property="og:image:width" content="1254">
-<meta property="og:image:height" content="1254">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="QuizSpark - Play, Learn and Earn Points!">
-<meta name="twitter:description" content="Test your knowledge and earn points with QuizSpark!">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/Michael20046/QuizSpark-Game/main/quizspark-logo.png">
-
-<link rel="icon" type="image/png" href="quizspark-logo.png">
-<link rel="apple-touch-icon" href="quizspark-logo.png">
+<meta property="og:image" content="https://michael20046.github.io/QuizSpark-Game/quizspark-logo.png">
+<link rel="icon" type="image/png" href="./quizspark-logo.png">
+<link rel="apple-touch-icon" href="./quizspark-logo.png">
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
+  margin: 0;
+  padding: 16px;
+  min-height: 100vh;
   font-family: Arial, sans-serif;
-  background: linear-gradient(145deg, #080d27, #171044, #101827);
   color: white;
   text-align: center;
-  padding: 15px;
-  margin: 0;
-  min-height: 100vh;
+  background: linear-gradient(145deg, #080d27, #171044, #101827);
 }
 
 .container {
-  max-width: 500px;
-  margin: 25px auto;
+  width: 100%;
+  max-width: 520px;
+  margin: 20px auto;
+  padding: 22px;
   background: #1e293b;
-  padding: 25px;
+  border: 1px solid #475569;
   border-radius: 20px;
-  border: 1px solid #334155;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  box-shadow: 0 12px 40px rgba(0,0,0,.35);
 }
 
 .logo {
-  width: 210px;
-  max-width: 80%;
-  height: auto;
   display: block;
+  width: 170px;
+  max-width: 75%;
+  height: auto;
   margin: 0 auto 12px;
-  border-radius: 18px;
+  border-radius: 16px;
 }
 
-h1 {
-  color: #facc15;
-  margin-bottom: 8px;
-}
+h1 { color: #facc15; }
+h2 { color: #38bdf8; }
 
-h2 {
-  color: #38bdf8;
-}
+p { line-height: 1.5; }
 
 input {
+  display: block;
   width: 100%;
-  padding: 13px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 8px;
+  padding: 14px;
+  margin: 10px 0;
+  border: 0;
+  border-radius: 9px;
   font-size: 16px;
 }
 
@@ -84,18 +66,24 @@ button {
   display: block;
   width: 100%;
   padding: 14px;
-  margin: 12px 0;
-  border: none;
+  margin: 10px 0;
+  border: 0;
   border-radius: 10px;
-  background: linear-gradient(90deg, #0284c7, #2563eb);
-  color: white;
+  background: linear-gradient(90deg, #d97706, #facc15);
+  color: #171717;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
 }
 
 button:disabled {
-  opacity: 0.6;
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.secondary {
+  background: #475569;
+  color: white;
 }
 
 .google {
@@ -103,137 +91,113 @@ button:disabled {
   color: #222;
 }
 
-.secondary {
-  background: #475569;
+.answer {
+  background: #334155;
+  color: white;
+  text-align: left;
+}
+
+.answer.correct {
+  background: #15803d;
+}
+
+.answer.wrong {
+  background: #b91c1c;
+}
+
+.hidden { display: none !important; }
+
+#score {
+  color: #facc15;
+  font-size: 23px;
+  font-weight: bold;
+}
+
+#progress {
+  color: #cbd5e1;
+  font-size: 14px;
 }
 
 #result {
-  color: #4ade80;
+  min-height: 25px;
   font-weight: bold;
+  color: #4ade80;
 }
 
 #authMessage {
   color: #38bdf8;
+  overflow-wrap: anywhere;
 }
 
-#score {
-  color: #facc15;
-  font-size: 22px;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.welcome-text {
-  color: #cbd5e1;
-  line-height: 1.6;
-}
-
-hr {
-  border: 1px solid #334155;
-  margin: 25px 0;
+#question {
+  min-height: 65px;
+  line-height: 1.4;
 }
 
 footer {
+  margin-top: 25px;
   color: #94a3b8;
   font-size: 12px;
-  margin-top: 25px;
 }
 
 @media (max-width: 480px) {
-  .container {
-    padding: 18px;
-    margin: 12px auto;
-  }
-
-  .logo {
-    width: 180px;
-  }
+  .container { padding: 17px; }
+  .logo { width: 145px; }
 }
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
-<!-- QUIZSPARK BRANDING -->
-<img
-  src="quizspark-logo.png"
-  alt="QuizSpark Game Logo"
-  class="logo"
->
+  <img src="./quizspark-logo.png"
+       alt="QuizSpark Gold Logo"
+       class="logo">
 
-<h1>Welcome to QuizSpark!</h1>
+  <h1>⚡ QuizSpark</h1>
+  <p>Play, learn and earn points!</p>
 
-<p class="welcome-text">
-Test your knowledge, challenge yourself
-and earn points!
-</p>
+  <!-- PLAYER ACCOUNT -->
+  <section id="authSection">
+    <h2>Player Account</h2>
 
-<!-- PLAYER ACCOUNT -->
-<div id="authSection">
+    <input id="name" type="text" placeholder="Your name">
+    <input id="email" type="email" placeholder="Email address">
+    <input id="password" type="password" placeholder="Password">
 
-<h2>Player Account</h2>
+    <button id="signupBtn">Create Account</button>
+    <button id="loginBtn" class="secondary">Sign In</button>
+    <button id="googleBtn" class="google">Continue with Google</button>
 
-<input id="name" type="text" placeholder="Your name">
+    <p id="authMessage">Create an account or sign in to play.</p>
+  </section>
 
-<input id="email" type="email" placeholder="Email address">
+  <!-- SIGNED-IN PLAYER -->
+  <section id="userSection" class="hidden">
+    <p id="welcome"></p>
+    <button id="logoutBtn" class="secondary">Sign Out</button>
+  </section>
 
-<input id="password" type="password" placeholder="Password">
+  <hr>
 
-<button id="signupBtn">Create Account</button>
+  <!-- QUIZ -->
+  <section id="gameSection">
+    <h3 id="score">Points: 0</h3>
+    <p id="progress">150 questions waiting for you!</p>
+    <h2 id="question">Ready to test your knowledge?</h2>
+    <div id="answers"></div>
+    <p id="result">Press Start Quiz when you're ready.</p>
+    <button id="startBtn">Start Quiz</button>
+  </section>
 
-<button id="loginBtn" class="secondary">
-Sign In
-</button>
-
-<button id="googleBtn" class="google">
-Continue with Google
-</button>
-
-<p id="authMessage">
-Create an account or sign in to QuizSpark.
-</p>
-
-</div>
-
-<!-- SIGNED IN PLAYER -->
-<div id="userSection" class="hidden">
-
-<p id="welcome"></p>
-
-<button id="logoutBtn" class="secondary">
-Sign Out
-</button>
-
-</div>
-
-<hr>
-
-<!-- QUIZ GAME -->
-<h3 id="score">Points: 0</h3>
-
-<h2 id="question">Ready to play?</h2>
-
-<div id="answers"></div>
-
-<p id="result">Press Start to begin.</p>
-
-<button id="start">Start Quiz</button>
-
-<footer>
-© 2026 QuizSpark. All rights reserved.
-</footer>
-
+  <footer>
+    © 2026 QuizSpark. All rights reserved.
+  </footer>
 </div>
 
 <script type="module">
-
-// FIREBASE CONNECTION
 import { initializeApp } from
-"https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+  "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getAuth,
@@ -241,75 +205,75 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  onAuthStateChanged,
   signOut,
+  onAuthStateChanged,
   updateProfile
 } from
-"https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+  "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+/* =====================================
+   FIREBASE CONFIGURATION
+   REPLACE THESE PLACEHOLDERS WITH YOUR
+   EXISTING FIREBASE PROJECT VALUES.
+===================================== */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBpADv380nomzd15tNPmruoYcok4VQ29VQ",
-  authDomain: "quizspark-65dbd.firebaseapp.com",
-  projectId: "quizspark-65dbd",
-  storageBucket: "quizspark-65dbd.firebasestorage.app",
-  messagingSenderId: "328231530287",
-  appId: "1:328231530287:web:9a2f4bb9b92b5faa267bda"
+  apiKey: "PASTE_YOUR_API_KEY_HERE",
+  authDomain: "PASTE_YOUR_AUTH_DOMAIN_HERE",
+  projectId: "PASTE_YOUR_PROJECT_ID_HERE",
+  storageBucket: "PASTE_YOUR_STORAGE_BUCKET_HERE",
+  messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID_HERE",
+  appId: "PASTE_YOUR_APP_ID_HERE"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// ACCOUNT ELEMENTS
+/* =====================================
+   ACCOUNT ELEMENTS
+===================================== */
+
 const nameInput = document.getElementById("name");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const authMessage = document.getElementById("authMessage");
 
 function showMessage(message) {
-  authMessage.innerText = message;
+  authMessage.textContent = message;
 }
 
-// CREATE ACCOUNT
-document.getElementById("signupBtn").onclick =
-async function () {
-
+document.getElementById("signupBtn").onclick = async () => {
   const name = nameInput.value.trim();
   const email = emailInput.value.trim();
   const password = passwordInput.value;
 
   if (!name || !email || !password) {
-    showMessage("Please fill in all fields.");
+    showMessage("Please enter your name, email and password.");
     return;
   }
 
   if (password.length < 6) {
-    showMessage("Password must be at least 6 characters.");
+    showMessage("Your password must contain at least 6 characters.");
     return;
   }
 
   try {
-
-    const credential =
-      await createUserWithEmailAndPassword(
-        auth, email, password
-      );
+    const credential = await createUserWithEmailAndPassword(
+      auth, email, password
+    );
 
     await updateProfile(credential.user, {
       displayName: name
     });
 
     showMessage("Account created successfully!");
-
   } catch (error) {
     showMessage(error.message);
   }
 };
 
-// EMAIL LOGIN
-document.getElementById("loginBtn").onclick =
-async function () {
-
+document.getElementById("loginBtn").onclick = async () => {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
 
@@ -319,215 +283,286 @@ async function () {
   }
 
   try {
-
-    await signInWithEmailAndPassword(
-      auth, email, password
-    );
-
+    await signInWithEmailAndPassword(auth, email, password);
     showMessage("Welcome back!");
-
   } catch (error) {
     showMessage(error.message);
   }
 };
 
-// GOOGLE LOGIN
-document.getElementById("googleBtn").onclick =
-async function () {
-
+document.getElementById("googleBtn").onclick = async () => {
   try {
-
     await signInWithPopup(auth, provider);
-
     showMessage("Google sign-in successful!");
-
   } catch (error) {
     showMessage(error.message);
   }
 };
 
-// SIGN OUT
-document.getElementById("logoutBtn").onclick =
-async function () {
-
+document.getElementById("logoutBtn").onclick = async () => {
   try {
-
     await signOut(auth);
-
     showMessage("You have signed out.");
-
   } catch (error) {
     showMessage(error.message);
   }
 };
 
-// CHECK PLAYER LOGIN STATUS
 onAuthStateChanged(auth, (user) => {
+  const authSection = document.getElementById("authSection");
+  const userSection = document.getElementById("userSection");
 
   if (user) {
+    authSection.classList.add("hidden");
+    userSection.classList.remove("hidden");
 
-    document.getElementById("authSection")
-      .classList.add("hidden");
-
-    document.getElementById("userSection")
-      .classList.remove("hidden");
-
-    document.getElementById("welcome").innerText =
+    document.getElementById("welcome").textContent =
       "Welcome, " + (user.displayName || user.email) + "!";
-
   } else {
-
-    document.getElementById("authSection")
-      .classList.remove("hidden");
-
-    document.getElementById("userSection")
-      .classList.add("hidden");
-
+    authSection.classList.remove("hidden");
+    userSection.classList.add("hidden");
   }
-
 });
 
-// QUIZ QUESTIONS
-const questions = [
+/* =====================================
+   QUESTION BANK
+   25 GENERAL KNOWLEDGE QUESTIONS,
+   EACH ASKED IN TWO DIFFERENT WAYS.
+===================================== */
 
-{
-  q: "What is the capital of France?",
-  a: ["London", "Paris", "Rome", "Madrid"],
-  correct: 1
-},
+const facts = [
+  ["What is the capital of France?", "Which city is the capital of France?", "Paris", ["London", "Rome", "Madrid"]],
+  ["Which planet is called the Red Planet?", "Mars is known by what nickname?", "Mars", ["Venus", "Jupiter", "Mercury"]],
+  ["How many days are in a week?", "A standard week contains how many days?", "7", ["5", "6", "8"]],
+  ["Which animal is called the King of the Jungle?", "The lion is often called what?", "King of the Jungle", ["King of the Ocean", "Forest Giant", "Desert King"]],
+  ["What is the largest ocean on Earth?", "Which ocean is the biggest?", "Pacific Ocean", ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean"]],
+  ["What is the chemical symbol for water?", "H2O is the chemical formula for what?", "Water", ["Oxygen", "Hydrogen", "Salt"]],
+  ["How many sides does a triangle have?", "A three-sided shape is called what?", "3", ["4", "5", "6"]],
+  ["Which country is famous for the Great Wall?", "The Great Wall is located in which country?", "China", ["Japan", "India", "Thailand"]],
+  ["What is the fastest land animal?", "Which animal can run fastest on land?", "Cheetah", ["Lion", "Horse", "Leopard"]],
+  ["Which star is closest to Earth?", "Earth's nearest star is what?", "The Sun", ["Sirius", "Polaris", "The Moon"]],
+  ["What is the largest planet in our solar system?", "Which planet is biggest?", "Jupiter", ["Earth", "Mars", "Saturn"]],
+  ["How many continents are there?", "Earth is commonly divided into how many continents?", "7", ["5", "6", "8"]],
+  ["What is the capital of Japan?", "Tokyo is the capital of which country?", "Japan", ["China", "South Korea", "Vietnam"]],
+  ["Which gas do humans need to breathe?", "Humans need which gas for respiration?", "Oxygen", ["Carbon dioxide", "Helium", "Nitrogen"]],
+  ["What is the freezing point of water in Celsius?", "At what Celsius temperature does water freeze?", "0°C", ["10°C", "50°C", "100°C"]],
+  ["Which organ pumps blood around the body?", "What organ circulates blood?", "The heart", ["The lungs", "The brain", "The liver"]],
+  ["How many hours are in one day?", "One full day contains how many hours?", "24", ["12", "18", "36"]],
+  ["Which language is primarily spoken in Brazil?", "Brazil's main language is what?", "Portuguese", ["Spanish", "French", "English"]],
+  ["What is the capital of Nigeria?", "Abuja is the capital of which country?", "Nigeria", ["Ghana", "Kenya", "Egypt"]],
+  ["Which instrument has black and white keys?", "What musical instrument uses black and white keys?", "Piano", ["Drum", "Flute", "Trumpet"]],
+  ["What is the biggest mammal?", "Which mammal is the largest in the world?", "Blue whale", ["Elephant", "Giraffe", "Hippopotamus"]],
+  ["Which planet is famous for its rings?", "Saturn is especially known for what?", "Rings", ["Oceans", "Red clouds", "Two moons"]],
+  ["How many months are in a year?", "A calendar year has how many months?", "12", ["10", "11", "13"]],
+  ["What is the capital of Italy?", "Rome is the capital of which country?", "Italy", ["Greece", "Spain", "Portugal"]],
+  ["Which part of a plant absorbs water?", "A plant mainly takes up water through what?", "Roots", ["Flowers", "Leaves", "Fruit"]]
+];
 
-{
-  q: "Which planet is known as the Red Planet?",
-  a: ["Earth", "Venus", "Mars", "Jupiter"],
-  correct: 2
-},
+const questions = [];
 
-{
-  q: "How many days are in a week?",
-  a: ["5", "6", "7", "8"],
-  correct: 2
-},
+facts.forEach(([q1, q2, answer, wrong]) => {
+  questions.push({
+    q: q1,
+    a: [answer, ...wrong],
+    correct: 0
+  });
 
-{
-  q: "Which animal is called the King of the Jungle?",
-  a: ["Tiger", "Lion", "Elephant", "Leopard"],
-  correct: 1
-},
+  questions.push({
+    q: q2,
+    a: [answer, ...wrong],
+    correct: 0
+  });
+});
 
-{
-  q: "What is 10 + 5?",
-  a: ["12", "15", "20", "25"],
-  correct: 1
+/* =====================================
+   100 MATHS QUESTIONS
+===================================== */
+
+function makeMathQuestion(question, answer) {
+  const wrongAnswers = [
+    answer + 2,
+    answer + 5,
+    Math.max(0, answer - 3)
+  ];
+
+  const options = [answer, ...wrongAnswers]
+    .map(String);
+
+  return {
+    q: question,
+    a: options,
+    correct: 0
+  };
 }
 
-];
+for (let i = 0; i < 25; i++) {
+  const a = i + 5;
+  const b = (i % 9) + 2;
+  const answer = a + b;
+  questions.push(makeMathQuestion(
+    `Maths: What is ${a} + ${b}?`,
+    answer
+  ));
+}
+
+for (let i = 0; i < 25; i++) {
+  const a = i + 20;
+  const b = (i % 10) + 2;
+  const answer = a - b;
+  questions.push(makeMathQuestion(
+    `Maths: What is ${a} - ${b}?`,
+    answer
+  ));
+}
+
+for (let i = 0; i < 25; i++) {
+  const a = (i % 12) + 2;
+  const b = (i % 8) + 2;
+  const answer = a * b;
+  questions.push(makeMathQuestion(
+    `Maths: What is ${a} × ${b}?`,
+    answer
+  ));
+}
+
+for (let i = 0; i < 25; i++) {
+  const b = (i % 9) + 2;
+  const answer = (i % 12) + 2;
+  const a = b * answer;
+  questions.push(makeMathQuestion(
+    `Maths: What is ${a} ÷ ${b}?`,
+    answer
+  ));
+}
+
+/* =====================================
+   GAME SETTINGS
+===================================== */
 
 let current = 0;
 let points = 0;
 let locked = false;
+let gameQuestions = [];
 
-// START QUIZ
+const questionElement = document.getElementById("question");
+const answersElement = document.getElementById("answers");
+const resultElement = document.getElementById("result");
+const scoreElement = document.getElementById("score");
+const progressElement = document.getElementById("progress");
+const startButton = document.getElementById("startBtn");
+
+function shuffle(array) {
+  const copy = [...array];
+
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+
+  return copy;
+}
+
 function startQuiz() {
-
   current = 0;
   points = 0;
   locked = false;
 
-  document.getElementById("start").style.display = "none";
+  gameQuestions = shuffle(questions);
+
+  scoreElement.textContent = "Points: 0";
+  startButton.classList.add("hidden");
 
   showQuestion();
 }
 
-// SHOW QUESTION
 function showQuestion() {
-
-  document.getElementById("score").innerText =
-    "Points: " + points;
-
-  if (current >= questions.length) {
-
-    document.getElementById("question").innerText =
-      "Quiz Completed!";
-
-    document.getElementById("answers").innerHTML = "";
-
-    document.getElementById("result").innerText =
-      "Congratulations! You earned " + points + " points!";
-
-    document.getElementById("start").innerText =
-      "Play Again";
-
-    document.getElementById("start").style.display =
-      "block";
-
+  if (current >= gameQuestions.length) {
+    finishQuiz();
     return;
   }
 
-  const q = questions[current];
+  const q = gameQuestions[current];
 
-  document.getElementById("question").innerText = q.q;
+  questionElement.textContent = q.q;
+  progressElement.textContent =
+    `Question ${current + 1} of ${gameQuestions.length}`;
 
-  document.getElementById("result").innerText =
-    "Question " + (current + 1) +
-    " of " + questions.length;
+  resultElement.textContent =
+    `Correct answer reward: ${(current + 1) * 10} points`;
 
-  const answers = document.getElementById("answers");
+  answersElement.innerHTML = "";
 
-  answers.innerHTML = "";
+  const shuffledAnswers = shuffle(
+    q.a.map((answer, index) => ({
+      answer,
+      isCorrect: index === q.correct
+    }))
+  );
 
-  q.a.forEach((answer, index) => {
+  shuffledAnswers.forEach((item) => {
+    const button = document.createElement("button");
+    button.className = "answer";
+    button.textContent = item.answer;
 
-    const btn = document.createElement("button");
+    button.onclick = () => checkAnswer(item.isCorrect, button);
 
-    btn.innerText = answer;
-
-    btn.onclick = () => checkAnswer(index);
-
-    answers.appendChild(btn);
-
+    answersElement.appendChild(button);
   });
-
 }
 
-// CHECK ANSWER
-function checkAnswer(index) {
-
+function checkAnswer(isCorrect, selectedButton) {
   if (locked) return;
 
   locked = true;
 
-  if (index === questions[current].correct) {
+  const buttons = answersElement.querySelectorAll("button");
+  buttons.forEach(button => button.disabled = true);
 
-    points += 10;
+  if (isCorrect) {
+    const reward = (current + 1) * 10;
+    points += reward;
 
-    document.getElementById("result").innerText =
-      "Correct! +10 points!";
-
+    selectedButton.classList.add("correct");
+    resultElement.textContent = `Correct! You earned ${reward} points!`;
   } else {
+    selectedButton.classList.add("wrong");
+    resultElement.textContent = "Not quite! Keep learning and try the next one.";
 
-    document.getElementById("result").innerText =
-      "Wrong answer! Keep going!";
+    const q = gameQuestions[current];
+    const correctAnswer = q.a[q.correct];
 
+    buttons.forEach(button => {
+      if (button.textContent === correctAnswer) {
+        button.classList.add("correct");
+      }
+    });
   }
 
-  document.getElementById("score").innerText =
-    "Points: " + points;
+  scoreElement.textContent = "Points: " + points;
 
   setTimeout(() => {
-
     current++;
-
     locked = false;
-
     showQuestion();
-
-  }, 1000);
-
+  }, 1200);
 }
 
-document.getElementById("start").onclick = startQuiz;
+function finishQuiz() {
+  questionElement.textContent = "🏆 Quiz Completed!";
+  answersElement.innerHTML = "";
+  progressElement.textContent = "You completed all 150 questions!";
+  resultElement.textContent =
+    `Amazing effort! Your final score is ${points} points.`;
+
+  startButton.textContent = "Play Again";
+  startButton.classList.remove("hidden");
+}
+
+startButton.onclick = startQuiz;
 
 </script>
-
 </body>
-</html>
+  </html>
+  
+
+  
