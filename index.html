@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -901,5 +902,405 @@ onAuthStateChanged(auth,async user => {
 });
 
 
-// ======================
-  
+// ====================================
+// 13. GENERAL KNOWLEDGE QUESTIONS
+// ====================================
+
+const facts = [
+["What is the capital of France?","Paris",["London","Rome","Madrid"]],
+["Which planet is called the Red Planet?","Mars",["Venus","Jupiter","Mercury"]],
+["How many days are in a week?","7",["5","6","8"]],
+["Which animal is called the King of the Jungle?","Lion",["Tiger","Elephant","Leopard"]],
+["What is the largest ocean?","Pacific Ocean",["Atlantic Ocean","Indian Ocean","Arctic Ocean"]],
+["What is the chemical formula for water?","H2O",["CO2","O2","NaCl"]],
+["How many sides does a triangle have?","3",["4","5","6"]],
+["Which country has the Great Wall?","China",["Japan","India","Thailand"]],
+["What is the fastest land animal?","Cheetah",["Lion","Horse","Leopard"]],
+["Which star is closest to Earth?","The Sun",["Sirius","Polaris","The Moon"]],
+["What is the largest planet?","Jupiter",["Earth","Mars","Saturn"]],
+["How many continents are there?","7",["5","6","8"]],
+["What is the capital of Japan?","Tokyo",["Beijing","Seoul","Bangkok"]],
+["Which gas do humans need to breathe?","Oxygen",["Carbon dioxide","Helium","Hydrogen"]],
+["At what temperature does water freeze in Celsius?","0°C",["10°C","50°C","100°C"]],
+["Which organ pumps blood?","Heart",["Lungs","Brain","Liver"]],
+["How many hours are in a day?","24",["12","18","36"]],
+["Which language is spoken in Brazil?","Portuguese",["Spanish","French","English"]],
+["What is the capital of Nigeria?","Abuja",["Lagos","Accra","Nairobi"]],
+["Which instrument has black and white keys?","Piano",["Drum","Flute","Trumpet"]],
+["What is the biggest mammal?","Blue whale",["Elephant","Giraffe","Hippopotamus"]],
+["Which planet is famous for its rings?","Saturn",["Earth","Mars","Venus"]],
+["How many months are in a year?","12",["10","11","13"]],
+["What is the capital of Italy?","Rome",["Athens","Madrid","Lisbon"]],
+["Which part of a plant absorbs water?","Roots",["Flowers","Leaves","Fruit"]],
+["What is the largest continent?","Asia",["Africa","Europe","Australia"]],
+["Which animal lays eggs?","Chicken",["Dog","Cat","Cow"]],
+["How many colours are in a rainbow?","7",["5","6","8"]],
+["What is the opposite of north?","South",["East","West","Up"]],
+["Which month comes after June?","July",["May","August","September"]],
+["What do bees produce?","Honey",["Milk","Wax only","Silk"]],
+["Which is the closest planet to the Sun?","Mercury",["Venus","Earth","Mars"]],
+["What is the capital of Ghana?","Accra",["Kumasi","Lagos","Dakar"]],
+["Which animal is known for its long neck?","Giraffe",["Zebra","Lion","Camel"]],
+["What is the main source of energy for Earth?","The Sun",["The Moon","Wind","Coal"]],
+["How many legs does a spider have?","8",["6","10","12"]],
+["Which country is home to the pyramids of Giza?","Egypt",["Greece","Mexico","India"]],
+["What is the largest land animal?","African elephant",["Rhino","Hippo","Giraffe"]],
+["Which blood cells help fight infection?","White blood cells",["Red blood cells","Platelets","Plasma"]],
+["What is the capital of the United Kingdom?","London",["Manchester","Edinburgh","Liverpool"]],
+["Which ocean lies between Africa and Australia?","Indian Ocean",["Pacific Ocean","Atlantic Ocean","Arctic Ocean"]],
+["What is the hardest natural substance?","Diamond",["Gold","Iron","Silver"]],
+["Which animal is famous for changing colour?","Chameleon",["Rabbit","Horse","Dog"]],
+["How many wheels does a bicycle have?","2",["1","3","4"]],
+["What is the capital of Kenya?","Nairobi",["Mombasa","Kampala","Kigali"]],
+["Which planet do we live on?","Earth",["Mars","Venus","Jupiter"]],
+["What is the largest internal human organ?","Liver",["Heart","Brain","Kidney"]],
+["Which season comes after spring?","Summer",["Winter","Autumn","Rainy season"]],
+["What do you call a baby dog?","Puppy",["Kitten","Calf","Cub"]],
+["Which metal is liquid at room temperature?","Mercury",["Iron","Copper","Gold"]]
+];
+
+
+// ====================================
+// 14. BUILD EXACTLY 150 QUESTIONS
+// ====================================
+
+function addQuestion(q,correct,wrong) {
+  questions.push({
+    q,
+    a:shuffle([correct,...wrong]),
+    correct:0
+  });
+}
+
+// Shuffle answers and preserve the correct position.
+function createQuestion(q,correct,wrong) {
+  const options = shuffle([correct,...wrong]);
+  return {
+    q,
+    a:options,
+    correct:options.indexOf(correct)
+  };
+}
+
+function shuffle(array) {
+  const copy = [...array];
+
+  for(let i=copy.length-1;i>0;i--) {
+    const j=Math.floor(Math.random()*(i+1));
+    [copy[i],copy[j]]=[copy[j],copy[i]];
+  }
+
+  return copy;
+}
+
+questions = [];
+
+facts.forEach(([q,a,w]) => {
+  questions.push(createQuestion(q,a,w));
+});
+
+// 50 General knowledge questions + 100 Maths questions.
+
+for(let i=0;i<25;i++) {
+  const a=i+5;
+  const b=(i%9)+2;
+  const answer=a+b;
+
+  questions.push(createQuestion(
+    `Maths: What is ${a} + ${b}?`,
+    String(answer),
+    [String(answer+2),String(answer+5),String(Math.max(0,answer-3))]
+  ));
+}
+
+for(let i=0;i<25;i++) {
+  const a=i+20;
+  const b=(i%10)+2;
+  const answer=a-b;
+
+  questions.push(createQuestion(
+    `Maths: What is ${a} - ${b}?`,
+    String(answer),
+    [String(answer+2),String(answer+5),String(Math.max(0,answer-3))]
+  ));
+}
+
+for(let i=0;i<25;i++) {
+  const a=(i%12)+2;
+  const b=(i%8)+2;
+  const answer=a*b;
+
+  questions.push(createQuestion(
+    `Maths: What is ${a} × ${b}?`,
+    String(answer),
+    [String(answer+2),String(answer+5),String(Math.max(0,answer-3))]
+  ));
+}
+
+for(let i=0;i<25;i++) {
+  const b=(i%9)+2;
+  const answer=(i%12)+2;
+  const a=b*answer;
+
+  questions.push(createQuestion(
+    `Maths: What is ${a} ÷ ${b}?`,
+    String(answer),
+    [String(answer+2),String(answer+5),String(Math.max(0,answer-3))]
+  ));
+}
+
+
+// ====================================
+// 15. QUIZ START
+// ====================================
+
+$("startBtn").onclick = () => {
+  if (!currentUser || gameRunning || savingGame) return;
+
+  currentQuestion = 0;
+  gameScore = 0;
+  answered = false;
+  gameRunning = true;
+
+  questions = shuffle(questions);
+
+  $("startBtn").classList.add("hidden");
+  $("nextBtn").classList.add("hidden");
+
+  $("gamePoints").textContent = "0";
+  gameMessage("Good luck! Choose the correct answer.");
+
+  showQuestion();
+};
+
+
+// ====================================
+// 16. DISPLAY QUESTION
+// ====================================
+
+function showQuestion() {
+  if(currentQuestion>=questions.length) {
+    finishQuiz();
+    return;
+  }
+
+  answered = false;
+
+  const q=questions[currentQuestion];
+
+  $("question").textContent=q.q;
+  $("questionNumber").textContent=
+    `${currentQuestion+1}/150`;
+
+  $("progressFill").style.width=
+    `${(currentQuestion/150)*100}%`;
+
+  $("answers").replaceChildren();
+
+  q.a.forEach((answer,index) => {
+    const button=document.createElement("button");
+
+    button.className="answer";
+    button.textContent=answer;
+
+    button.onclick=()=>checkAnswer(index,button);
+
+    $("answers").appendChild(button);
+  });
+
+  $("nextBtn").classList.add("hidden");
+  gameMessage("Select your answer.");
+}
+
+
+// ====================================
+// 17. CHECK ANSWER
+// ====================================
+
+function checkAnswer(index,button) {
+  if(answered || !gameRunning) return;
+
+  answered=true;
+
+  const q=questions[currentQuestion];
+  const buttons=$("answers").querySelectorAll("button");
+
+  buttons.forEach((b,i)=>{
+    b.disabled=true;
+
+    if(i===q.correct) b.classList.add("correct");
+  });
+
+  if(index===q.correct) {
+    gameScore+=10;
+    $("gamePoints").textContent=gameScore;
+    gameMessage("🎉 Correct! You earned 10 points.");
+  } else {
+    button.classList.add("wrong");
+    gameMessage("Not quite! The correct answer is "+q.a[q.correct]+".");
+  }
+
+  $("nextBtn").classList.remove("hidden");
+  $("nextBtn").textContent=
+    currentQuestion===149 ? "Finish Quiz" : "Next Question →";
+}
+
+
+// ====================================
+// 18. NEXT QUESTION
+// ====================================
+
+$("nextBtn").onclick=()=>{
+  if(!answered || !gameRunning) return;
+
+  currentQuestion++;
+
+  if(currentQuestion>=questions.length) {
+    finishQuiz();
+  } else {
+    showQuestion();
+  }
+};
+
+
+// ====================================
+// 19. FINISH AND SAVE GAME
+// ====================================
+
+async function finishQuiz() {
+  if(!gameRunning || savingGame) return;
+
+  gameRunning=false;
+  savingGame=true;
+
+  $("answers").replaceChildren();
+  $("question").textContent="Quiz Completed! 🎉";
+  $("progressFill").style.width="100%";
+
+  $("nextBtn").classList.add("hidden");
+  $("startBtn").classList.add("hidden");
+
+  gameMessage(
+    `You scored ${gameScore} points out of 1500. Saving your result...`
+  );
+
+  try {
+    if(!currentUser) throw new Error("Please sign in again.");
+
+    const ref=doc(db,"players",currentUser.uid);
+
+    await runTransaction(db,async transaction=>{
+      const snapshot=await transaction.get(ref);
+
+      if(!snapshot.exists()) {
+        throw new Error("Player profile not found.");
+      }
+
+      const data=snapshot.data();
+
+      transaction.update(ref,{
+        points:(Number(data.points)||0)+gameScore,
+        gamesPlayed:(Number(data.gamesPlayed)||0)+1,
+        correctAnswers:(Number(data.correctAnswers)||0)+(gameScore/10),
+        updatedAt:serverTimestamp()
+      });
+    });
+
+    await loadProfile(currentUser);
+
+    gameMessage(
+      `🏆 Congratulations! You earned ${gameScore} points. Your new balance is ${savedPoints}.`
+    );
+
+    $("startBtn").textContent="Play Again";
+    $("startBtn").classList.remove("hidden");
+
+    await loadLeaderboard();
+
+  } catch(error) {
+    gameMessage(
+      "Your result could not be saved: "+friendlyError(error)
+    );
+
+    $("startBtn").textContent="Try Again";
+    $("startBtn").classList.remove("hidden");
+
+  } finally {
+    savingGame=false;
+  }
+}
+
+
+// ====================================
+// 20. LEADERBOARD
+// ====================================
+
+async function loadLeaderboard() {
+  if(!currentUser) return;
+
+  $("leaderboard").innerHTML=
+    '<p class="muted">Loading leaderboard...</p>';
+
+  try {
+    const q=query(
+      collection(db,"players"),
+      orderBy("points","desc"),
+      limit(20)
+    );
+
+    const snapshot=await getDocs(q);
+
+    $("leaderboard").replaceChildren();
+
+    if(snapshot.empty) {
+      $("leaderboard").textContent="No players yet.";
+      return;
+    }
+
+    let position=1;
+
+    snapshot.forEach(player=>{
+      const data=player.data();
+
+      const row=document.createElement("div");
+      row.className="rank-row";
+
+      const left=document.createElement("span");
+      left.className="rank-number";
+      left.textContent=
+        `${position===1?"🥇":position===2?"🥈":position===3?"🥉":position+". "}`;
+
+      const name=document.createElement("span");
+      name.textContent=data.name||"Player";
+      name.style.flex="1";
+
+      const points=document.createElement("span");
+      points.className="rank-points";
+      points.textContent=(Number(data.points)||0).toLocaleString()+" ⚡";
+
+      row.append(left,name,points);
+      $("leaderboard").appendChild(row);
+
+      position++;
+    });
+
+  } catch(error) {
+    $("leaderboard").textContent=friendlyError(error);
+  }
+}
+
+$("refreshLeaderboard").onclick=loadLeaderboard;
+
+
+// ====================================
+// 21. INITIAL SETTINGS
+// ====================================
+
+$("gamePoints").textContent="0";
+$("questionNumber").textContent="0/150";
+
+console.log("QuizSpark initialized with",questions.length,"questions.");
+
+</script>
+</body>
+</html>
