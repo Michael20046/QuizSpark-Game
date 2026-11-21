@@ -1,319 +1,98 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101044">
-<meta name="description" content="QuizSpark - Learn, play, discover and grow smarter.">
-<title>QuizSpark - Learn, Play and Grow</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101632">
+<meta name="description" content="QuizSpark — learn, play, challenge yourself and grow smarter.">
+<title>QuizSpark — Learn, Play and Grow</title>
 <link rel="icon" href="./quizspark-logo.png">
-
 <style>
-:root {
-  --bg:#090d22;
-  --panel:#151d39;
-  --panel2:#202b4a;
-  --yellow:#ffcb38;
-  --blue:#38bdf8;
-  --muted:#a8b3cb;
-  --green:#22c55e;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:white;
-  font-family:Arial,sans-serif;padding-bottom:85px
-}
-button,input,select{font:inherit}
-button{cursor:pointer}
-header{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:15px;background:#101632;position:sticky;top:0;
-  z-index:5;border-bottom:1px solid #293554
-}
-.brand{font-size:21px;font-weight:bold;color:var(--yellow)}
-.header-points{
-  background:#293554;padding:9px 12px;border-radius:20px;
-  color:var(--yellow);font-size:12px
-}
-main{max-width:700px;margin:auto;padding:15px}
-.page{display:none}
-.page.active{display:block}
-.card{
-  background:var(--panel);border:1px solid #293554;
-  border-radius:17px;padding:17px;margin-bottom:15px
-}
-.hero{
-  background:linear-gradient(135deg,#24216b,#124b76);
-  padding:23px 18px;border-radius:20px;margin-bottom:17px
-}
-.hero h1{color:var(--yellow);margin-top:0;font-size:27px}
-.hero p,.muted{color:var(--muted);line-height:1.6}
-h2{font-size:21px}
-.grid,.category-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:11px
-}
-.stat{background:var(--panel2);border-radius:13px;padding:14px}
-.stat span{font-size:12px;color:var(--muted)}
-.stat strong{
-  display:block;color:var(--yellow);font-size:23px;margin-top:7px
-}
-.primary,.secondary,.google{
-  width:100%;border:0;border-radius:11px;padding:13px;
-  font-weight:bold;margin-top:8px
-}
-.primary{background:linear-gradient(90deg,#e99b16,#ffcf40);color:#171717}
-.secondary{background:#34415e;color:white}
-.google{background:white;color:#222}
-input,select{
-  width:100%;padding:13px;border:1px solid #475569;
-  border-radius:10px;background:#0c1530;color:white;margin:7px 0 13px
-}
-label{display:block;color:var(--muted);font-size:13px}
-.message{font-size:13px;color:var(--blue);overflow-wrap:anywhere;line-height:1.5}
-.hidden{display:none!important}
-.bottom-nav{
-  position:fixed;bottom:0;left:0;right:0;background:#111831;
-  border-top:1px solid #34415e;display:grid;
-  grid-template-columns:repeat(5,1fr);
-  padding:8px 3px calc(8px + env(safe-area-inset-bottom));z-index:10
-}
-.nav-btn{border:0;background:transparent;color:#a8b3cb;font-size:10px;padding:5px 0}
-.nav-btn .symbol{display:block;font-size:21px;margin-bottom:4px}
-.nav-btn.active{color:var(--yellow)}
-.category{
-  background:var(--panel2);border:1px solid #34415e;
-  border-radius:13px;padding:14px;text-align:left;
-  color:white;min-height:90px
-}
-.category strong{display:block;margin-top:7px}
-.category small{color:var(--muted)}
-.category.selected{border:2px solid var(--yellow)}
-.lesson{background:var(--panel2);padding:14px;border-radius:12px;margin:10px 0}
-.lesson p{color:var(--muted);line-height:1.6;font-size:14px}
-.answer{
-  display:block;width:100%;padding:14px;margin:9px 0;
-  text-align:left;background:#293554;color:white;
-  border:1px solid #475569;border-radius:11px
-}
-.answer.correct{background:#166534;border-color:#22c55e}
-.answer.wrong{background:#991b1b;border-color:#ef4444}
-.answer:disabled{cursor:default}
-.progress-track{height:8px;background:#34415e;border-radius:10px;overflow:hidden;margin:12px 0}
-.progress-fill{height:100%;width:0;background:var(--yellow)}
-.rank-row{
-  display:flex;justify-content:space-between;padding:12px 4px;
-  border-bottom:1px solid #34415e;gap:10px
-}
-.yellow{color:var(--yellow)}
-.avatar{
-  width:70px;height:70px;border-radius:50%;background:#34415e;
-  display:grid;place-items:center;font-size:30px;margin:auto
-}
-footer{text-align:center;color:#71809e;font-size:11px;padding:20px}
-@media(max-width:380px){
-  .nav-btn{font-size:9px}
-  .nav-btn .symbol{font-size:18px}
-}
+:root{--bg:#090d22;--panel:#151d39;--panel2:#202b4a;--line:#34415e;--yellow:#ffcb38;--blue:#38bdf8;--muted:#a8b3cb;--green:#22c55e;--red:#ef4444}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#fff;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:#101632;position:sticky;top:0;z-index:5;border-bottom:1px solid #293554}
+.brand{font-size:21px;font-weight:800;color:var(--yellow);letter-spacing:.2px}.points-pill{background:#293554;color:var(--yellow);border-radius:22px;padding:9px 12px;font-size:12px;font-weight:700}
+main{max-width:760px;margin:auto;padding:15px}.page{display:none}.page.active{display:block}
+.card{background:var(--panel);border:1px solid #293554;border-radius:17px;padding:17px;margin-bottom:15px}
+.hero{background:linear-gradient(135deg,#24216b,#124b76);padding:23px 18px;border-radius:20px;margin-bottom:17px}
+.hero h1{color:var(--yellow);margin:0 0 9px;font-size:27px}.hero p,.muted{color:var(--muted);line-height:1.6}
+h2{font-size:21px;margin:8px 0 14px}h3{font-size:17px;margin:8px 0 12px}
+.grid,.category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.stat{background:var(--panel2);border-radius:13px;padding:14px}.stat span{font-size:12px;color:var(--muted)}.stat strong{display:block;color:var(--yellow);font-size:23px;margin-top:7px}
+.primary,.secondary,.google{width:100%;border:0;border-radius:11px;padding:13px;font-weight:750;margin-top:8px}
+.primary{background:linear-gradient(90deg,#e99b16,#ffcf40);color:#171717}.secondary{background:#34415e;color:white}.google{background:#fff;color:#222}
+input,select{width:100%;padding:13px;border:1px solid #475569;border-radius:10px;background:#0c1530;color:white;margin:7px 0 13px}
+label{display:block;color:var(--muted);font-size:13px}input:focus,select:focus,button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.message{font-size:13px;color:var(--blue);overflow-wrap:anywhere;line-height:1.5;min-height:18px}.error{color:#fca5a5}.success{color:#86efac}
+.hidden{display:none!important}.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#111831;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 3px calc(8px + env(safe-area-inset-bottom));z-index:10}
+.nav-btn{border:0;background:transparent;color:var(--muted);font-size:10px;padding:5px 0}.nav-btn .symbol{display:block;font-size:21px;margin-bottom:4px}.nav-btn.active{color:var(--yellow)}
+.category{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:14px;text-align:left;color:white;min-height:88px}
+.category strong{display:block;margin-top:7px}.category small{color:var(--muted)}.category.selected{border:2px solid var(--yellow)}
+.lesson{background:var(--panel2);padding:14px;border-radius:12px;margin:10px 0}.lesson p{color:var(--muted);line-height:1.6;font-size:14px}
+.answer{display:block;width:100%;padding:14px;margin:9px 0;text-align:left;background:#293554;color:white;border:1px solid #475569;border-radius:11px}
+.answer.correct{background:#166534;border-color:var(--green)}.answer.wrong{background:#991b1b;border-color:var(--red)}.answer:disabled{cursor:default}
+.progress-track{height:8px;background:#34415e;border-radius:10px;overflow:hidden;margin:12px 0}.progress-fill{height:100%;width:0;background:var(--yellow);transition:width .2s}
+.rank-row{display:flex;align-items:center;justify-content:space-between;padding:12px 4px;border-bottom:1px solid var(--line);gap:10px}.yellow{color:var(--yellow)}
+.avatar{width:70px;height:70px;border-radius:50%;background:#34415e;display:grid;place-items:center;font-size:30px;margin:auto}
+footer{text-align:center;color:#71809e;font-size:11px;padding:20px}.small{font-size:12px;color:var(--muted)}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.toolbar button{flex:1}
+@media(max-width:380px){.nav-btn{font-size:9px}.nav-btn .symbol{font-size:18px}.hero h1{font-size:24px}}
 </style>
 </head>
-
 <body>
-<header>
-  <div class="brand">⚡ QuizSpark</div>
-  <div class="header-points" id="headerPoints">⚡ 0 Points</div>
-</header>
-
+<header><div class="brand">⚡ QuizSpark</div><div class="points-pill" id="headerPoints">⚡ 0 Points</div></header>
 <main>
-
-<!-- ACCOUNT -->
 <section id="authPage" class="page active">
-  <div class="hero">
-    <h1>Welcome to QuizSpark! ⚡</h1>
-    <p>Learn more. Play more. Grow smarter. Education and entertainment for everyone.</p>
-  </div>
-  <div class="card">
-    <h2>Your Account</h2>
-    <div id="signupFields">
-      <label>Your name</label>
-      <input id="name" placeholder="Enter your name" autocomplete="name">
-    </div>
-    <label>Email address</label>
-    <input id="email" type="email" placeholder="Email address" autocomplete="email">
-    <label>Password</label>
-    <input id="password" type="password" placeholder="Minimum 6 characters" autocomplete="current-password">
-    <button class="primary" id="signupBtn">Create Account</button>
-    <button class="secondary" id="loginBtn">Sign In</button>
-    <button class="secondary" id="forgotBtn">Forgot Password?</button>
-    <button class="google" id="googleBtn">🌐 Continue with Google</button>
-    <p id="authMessage" class="message">Sign in or create an account.</p>
-  </div>
+ <div class="hero"><h1>Welcome to QuizSpark! ⚡</h1><p>Learn more. Play more. Grow smarter. Build knowledge one question at a time.</p></div>
+ <div class="card"><h2>Your Account</h2>
+  <div id="signupFields"><label for="name">Your name</label><input id="name" placeholder="Enter your name" autocomplete="name" maxlength="50"></div>
+  <label for="email">Email address</label><input id="email" type="email" placeholder="Email address" autocomplete="email">
+  <label for="password">Password</label><input id="password" type="password" placeholder="At least 6 characters" autocomplete="current-password">
+  <button class="primary" id="signupBtn">Create Account</button><button class="secondary" id="loginBtn">Sign In</button>
+  <button class="secondary" id="forgotBtn">Forgot Password?</button><button class="google" id="googleBtn">🌐 Continue with Google</button>
+  <p id="authMessage" class="message" aria-live="polite">Sign in or create an account to continue.</p>
+ </div>
 </section>
-
-<!-- HOME -->
 <section id="homePage" class="page">
-  <div class="hero">
-    <h1 id="homeGreeting">Hello, Player! 👋</h1>
-    <p>Discover something new every day. Learn, play and challenge yourself!</p>
-    <button class="primary" onclick="showPage('learn')">📚 Explore Learning Centre</button>
-    <button class="secondary" onclick="showPage('play')">🎮 Enter Quiz Arena</button>
-  </div>
-  <h2>Your Dashboard</h2>
-  <div class="grid">
-    <div class="stat"><span>⚡ Total Points</span><strong id="homePoints">0</strong></div>
-    <div class="stat"><span>🎮 Games Played</span><strong id="gamesPlayed">0</strong></div>
-    <div class="stat"><span>🏆 Correct Answers</span><strong id="correctAnswers">0</strong></div>
-    <div class="stat"><span>📖 Lessons Completed</span><strong id="lessonsCompleted">0</strong></div>
-  </div>
-  <div class="card" style="margin-top:15px">
-    <h3>🌟 Keep Growing</h3>
-    <p class="muted">Read a lesson or test your knowledge.</p>
-    <button class="primary" onclick="showPage('learn')">Start Learning</button>
-  </div>
+ <div class="hero"><h1 id="homeGreeting">Hello, Player! 👋</h1><p>Discover something new every day. Learn, play and challenge yourself.</p>
+ <button class="primary" onclick="showPage('learn')">📚 Explore Learning Centre</button><button class="secondary" onclick="showPage('play')">🎮 Enter Quiz Arena</button></div>
+ <h2>Your Dashboard</h2><div class="grid">
+ <div class="stat"><span>⚡ Total Points</span><strong id="homePoints">0</strong></div><div class="stat"><span>🎮 Games Played</span><strong id="gamesPlayed">0</strong></div>
+ <div class="stat"><span>🏆 Correct Answers</span><strong id="correctAnswers">0</strong></div><div class="stat"><span>📖 Lessons Completed</span><strong id="lessonsCompleted">0</strong></div></div>
+ <div class="card" style="margin-top:15px"><h3>🌟 Keep Growing</h3><p class="muted">A little learning every day makes a difference.</p><button class="primary" onclick="showPage('learn')">Start Learning</button></div>
 </section>
-
-<!-- LEARNING -->
 <section id="learnPage" class="page">
-  <div class="hero">
-    <h1>📚 Learning Centre</h1>
-    <p>Knowledge is power. Explore subjects and develop useful skills.</p>
-  </div>
-  <div class="card">
-    <h3>Choose Your Learning Area</h3>
-    <div class="category-grid" id="learningCategories"></div>
-  </div>
-  <div class="card">
-    <h3 id="lessonHeading">Explore Lessons</h3>
-    <div id="lessonList"><p class="muted">Choose an area above.</p></div>
-  </div>
-  <div class="card">
-    <h3>🎥 Video Learning</h3>
-    <input id="videoSearch" placeholder="What do you want to learn?">
-    <button class="primary" id="videoBtn">Find Educational Videos</button>
-  </div>
+ <div class="hero"><h1>📚 Learning Centre</h1><p>Explore useful subjects and develop skills at your own pace.</p></div>
+ <div class="card"><h3>Choose Your Learning Area</h3><div class="category-grid" id="learningCategories"></div></div>
+ <div class="card"><h3 id="lessonHeading">Explore Lessons</h3><div id="lessonList"><p class="muted">Choose an area above.</p></div></div>
+ <div class="card"><h3>🎥 Video Learning</h3><label for="videoSearch">Search for an educational topic</label><input id="videoSearch" placeholder="e.g. Basic algebra"><button class="primary" id="videoBtn">Find Educational Videos</button></div>
 </section>
-
-<section id="lessonPage" class="page">
-  <div class="card">
-    <button class="secondary" onclick="showPage('learn')">← Back to Learning Centre</button>
-    <h2 id="readerTitle">Lesson</h2>
-    <div id="readerContent" class="muted"></div>
-    <button class="primary" id="completeLessonBtn">Mark Lesson as Completed ✓</button>
-    <p id="lessonMessage" class="message"></p>
-  </div>
-</section>
-
-<!-- QUIZ -->
+<section id="lessonPage" class="page"><div class="card"><button class="secondary" onclick="showPage('learn')">← Back to Learning Centre</button><h2 id="readerTitle">Lesson</h2><div id="readerContent" class="muted"></div><button class="primary" id="completeLessonBtn">Mark Lesson as Completed ✓</button><p id="lessonMessage" class="message" aria-live="polite"></p></div></section>
 <section id="playPage" class="page">
-  <div class="hero">
-    <h1>🎮 Quiz Arena</h1>
-    <p>Choose a subject, select your difficulty and challenge yourself.</p>
-  </div>
-  <div class="card" id="quizSetup">
-    <h3>1. Choose a Category</h3>
-    <div class="category-grid" id="quizCategories"></div>
-    <h3 style="margin-top:20px">2. Choose Difficulty</h3>
-    <select id="difficulty">
-      <option value="Beginner">Beginner</option>
-      <option value="Intermediate">Intermediate</option>
-      <option value="Advanced">Advanced</option>
-    </select>
-    <h3>3. Number of Questions</h3>
-    <select id="questionCount">
-      <option value="5">5 Questions</option>
-      <option value="10" selected>10 Questions</option>
-    </select>
-    <button class="primary" id="startBtn">Start My Quiz 🚀</button>
-    <p class="muted">Earn 10 points for every correct answer.</p>
-  </div>
-  <div class="card hidden" id="quizGame">
-    <div class="grid">
-      <div class="stat"><span>Current Score</span><strong id="gamePoints">0</strong></div>
-      <div class="stat"><span>Question</span><strong id="questionNumber">0/10</strong></div>
-    </div>
-    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-    <h3 id="question">Question</h3>
-    <div id="answers"></div>
-    <p id="gameMessage" class="message"></p>
-    <button class="primary hidden" id="nextBtn">Next Question →</button>
-    <button class="secondary" id="quitBtn">Quit Quiz</button>
-  </div>
+ <div class="hero"><h1>🎮 Quiz Arena</h1><p>Choose a subject, select your difficulty and challenge yourself.</p></div>
+ <div class="card" id="quizSetup"><h3>1. Choose a Category</h3><div class="category-grid" id="quizCategories"></div>
+ <h3 style="margin-top:20px">2. Choose Difficulty</h3><select id="difficulty"><option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option><option value="Advanced">Advanced</option></select>
+ <h3>3. Number of Questions</h3><select id="questionCount"><option value="5">5 Questions</option><option value="10" selected>10 Questions</option></select>
+ <button class="primary" id="startBtn">Start My Quiz 🚀</button><p class="muted">Earn 10 points for every correct answer.</p></div>
+ <div class="card hidden" id="quizGame"><div class="grid"><div class="stat"><span>Current Score</span><strong id="gamePoints">0</strong></div><div class="stat"><span>Question</span><strong id="questionNumber">0/0</strong></div></div>
+ <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><h3 id="question">Question</h3><div id="answers"></div><p id="gameMessage" class="message" aria-live="polite"></p>
+ <button class="primary hidden" id="nextBtn">Next Question →</button><button class="secondary" id="quitBtn">Quit Quiz</button></div>
 </section>
-
-<!-- LEADERBOARD -->
-<section id="leaderboardPage" class="page">
-  <div class="hero">
-    <h1>🏆 Leaderboard</h1>
-    <p>See how you rank among QuizSpark players.</p>
-  </div>
-  <div class="card">
-    <div id="leaderboard">Loading players...</div>
-    <button class="secondary" id="refreshLeaderboard">Refresh</button>
-  </div>
-</section>
-
-<!-- WALLET -->
-<section id="walletPage" class="page">
-  <div class="hero">
-    <h1>💰 My Wallet</h1>
-    <p>Keep track of your learning and gaming points.</p>
-  </div>
-  <div class="card">
-    <p class="muted">Your points balance</p>
-    <h1 class="yellow" id="walletPoints">0 ⚡</h1>
-    <button class="primary" onclick="showPage('play')">Earn More Points</button>
-  </div>
-  <div class="card">
-    <h3>Important Information</h3>
-    <p class="muted">Points are in-app rewards. They are not cash and cannot currently be withdrawn.</p>
-  </div>
-</section>
-
-<!-- PROFILE -->
-<section id="profilePage" class="page">
-  <div class="card" style="text-align:center">
-    <div class="avatar">👤</div>
-    <h2 id="profileName">Player</h2>
-    <p id="profileEmail" class="muted"></p>
-    <h2 id="profilePoints" class="yellow">0 Points</h2>
-  </div>
-  <div class="card">
-    <h3>Player Information</h3>
-    <p class="muted">Games played: <strong id="profileGames">0</strong></p>
-    <p class="muted">Correct answers: <strong id="profileCorrect">0</strong></p>
-    <p class="muted">Lessons completed: <strong id="profileLessons">0</strong></p>
-    <button class="secondary" id="logoutBtn">Sign Out</button>
-  </div>
-</section>
-
+<section id="leaderboardPage" class="page"><div class="hero"><h1>🏆 Leaderboard</h1><p>Celebrate progress and see the top QuizSpark players.</p></div><div class="card"><div id="leaderboard">Open this page to load players.</div><button class="secondary" id="refreshLeaderboard">Refresh</button></div></section>
+<section id="walletPage" class="page"><div class="hero"><h1>💰 My Wallet</h1><p>Keep track of your learning and gaming points.</p></div><div class="card"><p class="muted">Your points balance</p><h1 class="yellow" id="walletPoints">0 ⚡</h1><button class="primary" onclick="showPage('play')">Earn More Points</button></div><div class="card"><h3>Important Information</h3><p class="muted">Points are in-app rewards. They are not cash and cannot currently be withdrawn.</p></div></section>
+<section id="profilePage" class="page"><div class="card" style="text-align:center"><div class="avatar">👤</div><h2 id="profileName">Player</h2><p id="profileEmail" class="muted"></p><h2 id="profilePoints" class="yellow">0 Points</h2></div>
+ <div class="card"><h3>Player Information</h3><p class="muted">Games played: <strong id="profileGames">0</strong></p><p class="muted">Correct answers: <strong id="profileCorrect">0</strong></p><p class="muted">Lessons completed: <strong id="profileLessons">0</strong></p><button class="secondary" id="logoutBtn">Sign Out</button></div></section>
 </main>
-
-<nav class="bottom-nav hidden" id="bottomNav">
-  <button class="nav-btn active" data-page="home"><span class="symbol">🏠</span>Home</button>
-  <button class="nav-btn" data-page="play"><span class="symbol">🎮</span>Play</button>
-  <button class="nav-btn" data-page="leaderboard"><span class="symbol">🏆</span>Ranks</button>
-  <button class="nav-btn" data-page="wallet"><span class="symbol">💰</span>Wallet</button>
-  <button class="nav-btn" data-page="profile"><span class="symbol">👤</span>Profile</button>
-</nav>
-
-<footer>© 2026 QuizSpark. Learn More. Play More. Grow Smarter.</footer>
-
+<nav class="bottom-nav hidden" id="bottomNav" aria-label="Main navigation">
+ <button class="nav-btn active" data-page="home"><span class="symbol">🏠</span>Home</button><button class="nav-btn" data-page="play"><span class="symbol">🎮</span>Play</button><button class="nav-btn" data-page="leaderboard"><span class="symbol">🏆</span>Ranks</button><button class="nav-btn" data-page="wallet"><span class="symbol">💰</span>Wallet</button><button class="nav-btn" data-page="profile"><span class="symbol">👤</span>Profile</button>
+</nav><footer>© 2026 QuizSpark. Learn More. Play More. Grow Smarter.</footer>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,GoogleAuthProvider,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged,updateProfile,sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,getDoc,setDoc,runTransaction,collection,query,orderBy,limit,getDocs,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-  getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,
-  GoogleAuthProvider,signInWithRedirect,getRedirectResult,
-  signOut,onAuthStateChanged,updateProfile,sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-  getFirestore,doc,getDoc,setDoc,runTransaction,
-  collection,query,orderBy,limit,getDocs,serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-/* FIREBASE CONFIGURATION */
+/* Your existing Firebase web app configuration */
 const firebaseConfig={
  apiKey:"AIzaSyBpADv380nomzd15tNPmruoYcok4VQ29VQ",
  authDomain:"quizspark-65dbd.firebaseapp.com",
@@ -322,756 +101,261 @@ const firebaseConfig={
  messagingSenderId:"328231530287",
  appId:"1:328231530287:web:9a2f4bb9b92b5faa267bda"
 };
-
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
-const googleProvider=new GoogleAuthProvider();
-
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),googleProvider=new GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt:"select_account"});
-
 const $=id=>document.getElementById(id);
-
-let currentUser=null;
-let savedPoints=0,games=0,correctTotal=0,lessonsDone=[];
-let selectedCategory="General Knowledge";
-let quizQuestions=[],questionIndex=0,score=0,answered=false;
-let gameRunning=false,saving=false,currentLessonId=null;
+let currentUser=null,savedPoints=0,games=0,correctTotal=0,lessonsDone=[];
+let selectedCategory="General Knowledge",quizQuestions=[],questionIndex=0,score=0,answered=false,gameRunning=false,saving=false,currentLessonId=null;
 
 const categories=[
- ["General Knowledge","🌍","World facts"],
- ["Mathematics","➗","Numbers and calculations"],
- ["English","📚","Grammar and vocabulary"],
- ["Science","🔬","Discover science"],
- ["Sports","⚽","Sports knowledge"],
- ["Funny Questions","😂","Fun challenges"],
- ["Riddles","🧩","Think carefully"],
- ["Story Questions","📖","Read and understand"],
- ["Business & Money","💰","Financial knowledge"],
- ["Technology","💻","Digital world"],
- ["Who Is Richest?","🏆","Wealth and business"],
- ["Life Skills","💡","Everyday knowledge"]
+ ["General Knowledge","🌍","World facts"],["Mathematics","➗","Numbers and calculations"],["English","📚","Grammar and vocabulary"],["Science","🔬","Discover science"],["Sports","⚽","Sports knowledge"],["Funny Questions","😂","Fun challenges"],["Riddles","🧩","Think carefully"],["Story Questions","📖","Read and understand"],["Business & Money","💰","Financial knowledge"],["Technology","💻","Digital world"],["Who Is Richest?","🏆","Wealth and business"],["Life Skills","💡","Everyday knowledge"]
 ];
-
-/* LEARNING LIBRARY */
 const lessons={
  "School":[
-  {id:"math1",title:"Introduction to Mathematics",body:"Mathematics helps us understand numbers, quantities and patterns. Addition combines quantities. Subtraction finds the difference. Multiplication is repeated addition. Division shares quantities into equal groups."},
-  {id:"eng1",title:"English Grammar Basics",body:"A noun names a person, place, animal or thing. A verb describes an action or state. An adjective describes a noun. A sentence usually begins with a capital letter and ends with suitable punctuation."},
-  {id:"science1",title:"Introduction to Science",body:"Science studies the natural world through observation and experiments. Biology studies living things. Chemistry studies substances. Physics studies matter, energy, forces and motion."},
-  {id:"history1",title:"Understanding History",body:"History is the study of past events and people. Historians use documents, objects and other evidence to understand how societies changed over time."}
- ],
+ {id:"math1",title:"Introduction to Mathematics",body:"Mathematics helps us understand numbers, quantities and patterns. Addition combines quantities. Subtraction finds the difference. Multiplication is repeated addition. Division shares quantities into equal groups."},
+ {id:"eng1",title:"English Grammar Basics",body:"A noun names a person, place, animal or thing. A verb describes an action or state. An adjective describes a noun. A sentence usually begins with a capital letter and ends with suitable punctuation."},
+ {id:"science1",title:"Introduction to Science",body:"Science studies the natural world through observation and experiments. Biology studies living things. Chemistry studies substances. Physics studies matter, energy, forces and motion."},
+ {id:"history1",title:"Understanding History",body:"History is the study of past events and people. Historians use documents, objects and other evidence to understand how societies changed over time."}],
  "Business":[
-  {id:"biz1",title:"What Is Entrepreneurship?",body:"Entrepreneurship involves identifying a need, developing a product or service and organising resources to serve customers. Entrepreneurs research customers, plan carefully and manage costs."},
-  {id:"biz2",title:"Understanding Saving",body:"Saving means keeping part of the money you receive for future needs. A budget helps you track income and expenses. Saving regularly can help prepare for emergencies."},
-  {id:"biz3",title:"Introduction to Marketing",body:"Marketing helps a business understand customers and communicate the value of its products. It includes researching an audience, setting prices and promoting products."}
- ],
+ {id:"biz1",title:"What Is Entrepreneurship?",body:"Entrepreneurship involves identifying a need, developing a product or service and organising resources to serve customers. Entrepreneurs research customers, plan carefully and manage costs."},
+ {id:"biz2",title:"Understanding Saving",body:"Saving means keeping part of the money you receive for future needs. A budget helps you track income and expenses. Saving regularly can help prepare for emergencies."},
+ {id:"biz3",title:"Introduction to Marketing",body:"Marketing helps a business understand customers and communicate the value of its products. It includes researching an audience, setting prices and promoting products."}],
  "Technology":[
-  {id:"tech1",title:"Introduction to Computers",body:"A computer receives input, processes information, stores data and produces output. Hardware refers to physical components. Software consists of programs and instructions."},
-  {id:"tech2",title:"Understanding the Internet",body:"The internet connects computers and devices around the world. It supports websites, communication and learning. Use strong passwords and protect personal information."},
-  {id:"tech3",title:"Introduction to Artificial Intelligence",body:"Artificial intelligence refers to computer systems designed to perform tasks such as recognising patterns, understanding language and making predictions. AI results should be checked."}
- ],
+ {id:"tech1",title:"Introduction to Computers",body:"A computer receives input, processes information, stores data and produces output. Hardware refers to physical components. Software consists of programs and instructions."},
+ {id:"tech2",title:"Understanding the Internet",body:"The internet connects computers and devices around the world. It supports websites, communication and learning. Use strong passwords and protect personal information."},
+ {id:"tech3",title:"Introduction to Artificial Intelligence",body:"Artificial intelligence refers to computer systems designed to perform tasks such as recognising patterns, understanding language and making predictions. AI results should be checked."}],
  "Life Skills":[
-  {id:"life1",title:"Communication Skills",body:"Good communication involves listening carefully, expressing ideas clearly and respecting other people's perspectives."},
-  {id:"life2",title:"Time Management",body:"Set priorities, break large tasks into smaller steps, create a realistic schedule and allow time for rest."},
-  {id:"life3",title:"Critical Thinking",body:"Critical thinking means examining information before accepting a conclusion. Ask what evidence supports a claim and consider other explanations."}
- ],
+ {id:"life1",title:"Communication Skills",body:"Good communication involves listening carefully, expressing ideas clearly and respecting other people's perspectives."},
+ {id:"life2",title:"Time Management",body:"Set priorities, break large tasks into smaller steps, create a realistic schedule and allow time for rest."},
+ {id:"life3",title:"Critical Thinking",body:"Critical thinking means examining information before accepting a conclusion. Ask what evidence supports a claim and consider other explanations."}],
  "General Knowledge":[
-  {id:"gen1",title:"Our World and Continents",body:"The world is commonly divided into seven continents: Africa, Antarctica, Asia, Europe, North America, South America and Australia."},
-  {id:"gen2",title:"The Solar System",body:"Our solar system includes the Sun, eight planets, dwarf planets, moons, asteroids and comets. Earth is the third planet from the Sun."}
- ]
+ {id:"gen1",title:"Our World and Continents",body:"The world is commonly divided into seven continents: Africa, Antarctica, Asia, Europe, North America, South America and Australia."},
+ {id:"gen2",title:"The Solar System",body:"Our solar system includes the Sun, eight planets, dwarf planets, moons, asteroids and comets. Earth is the third planet from the Sun."}]
 };
-
-/* QUESTION BANK */
 const bank={
  "General Knowledge":[
-  ["What is the capital of Nigeria?","Abuja",["Lagos","Kano","Accra"]],
-  ["Which is the largest ocean?","Pacific Ocean",["Atlantic Ocean","Indian Ocean","Arctic Ocean"]],
-  ["How many continents are there?","7",["5","6","8"]],
-  ["What is the capital of Japan?","Tokyo",["Seoul","Beijing","Bangkok"]],
-  ["Which country has the Great Wall?","China",["India","Japan","Thailand"]],
-  ["Which is the largest continent?","Asia",["Africa","Europe","Australia"]],
-  ["What is the capital of Ghana?","Accra",["Lagos","Nairobi","Dakar"]],
-  ["Which star is closest to Earth?","The Sun",["Sirius","Polaris","Vega"]]
- ],
+ ["What is the capital of Nigeria?","Abuja",["Lagos","Kano","Accra"]],["Which is the largest ocean?","Pacific Ocean",["Atlantic Ocean","Indian Ocean","Arctic Ocean"]],["How many continents are there?","7",["5","6","8"]],["What is the capital of Japan?","Tokyo",["Seoul","Beijing","Bangkok"]],["Which country has the Great Wall?","China",["India","Japan","Thailand"]],["Which is the largest continent?","Asia",["Africa","Europe","Australia"]],["What is the capital of Ghana?","Accra",["Lagos","Nairobi","Dakar"]],["Which star is closest to Earth?","The Sun",["Sirius","Polaris","Vega"]]],
  "Mathematics":[
-  ["What is 8 + 7?","15",["14","16","17"]],
-  ["What is 12 × 4?","48",["36","42","52"]],
-  ["What is 100 ÷ 5?","20",["15","25","30"]],
-  ["What is 45 - 18?","27",["23","28","33"]],
-  ["What is half of 90?","45",["40","50","55"]],
-  ["What is 9 × 9?","81",["72","79","89"]],
-  ["What is 144 ÷ 12?","12",["10","14","16"]],
-  ["What is 25% of 200?","50",["25","40","75"]]
- ],
+ ["What is 8 + 7?","15",["14","16","17"]],["What is 12 × 4?","48",["36","42","52"]],["What is 100 ÷ 5?","20",["15","25","30"]],["What is 45 - 18?","27",["23","28","33"]],["What is half of 90?","45",["40","50","55"]],["What is 9 × 9?","81",["72","79","89"]],["What is 144 ÷ 12?","12",["10","14","16"]],["What is 25% of 200?","50",["25","40","75"]]],
  "English":[
-  ["What is the plural of child?","Children",["Childs","Childes","Childrens"]],
-  ["Which word is a noun?","Teacher",["Quickly","Beautiful","Running"]],
-  ["What is the opposite of ancient?","Modern",["Old","Historic","Past"]],
-  ["Choose the correct spelling.","Beautiful",["Beutiful","Beautifull","Butiful"]],
-  ["Which is a verb?","Run",["Table","Blue","Happiness"]],
-  ["What is the past tense of go?","Went",["Goed","Gone","Going"]],
-  ["Which punctuation ends a question?","Question mark",["Full stop","Comma","Colon"]],
-  ["What is a synonym for happy?","Joyful",["Angry","Sad","Tired"]]
- ],
+ ["What is the plural of child?","Children",["Childs","Childes","Childrens"]],["Which word is a noun?","Teacher",["Quickly","Beautiful","Running"]],["What is the opposite of ancient?","Modern",["Old","Historic","Past"]],["Choose the correct spelling.","Beautiful",["Beutiful","Beautifull","Butiful"]],["Which is a verb?","Run",["Table","Blue","Happiness"]],["What is the past tense of go?","Went",["Goed","Gone","Going"]],["Which punctuation ends a question?","Question mark",["Full stop","Comma","Colon"]],["What is a synonym for happy?","Joyful",["Angry","Sad","Tired"]]],
  "Science":[
-  ["Which planet is called the Red Planet?","Mars",["Venus","Jupiter","Mercury"]],
-  ["What is the chemical formula for water?","H2O",["CO2","O2","NaCl"]],
-  ["Which organ pumps blood?","Heart",["Lungs","Brain","Liver"]],
-  ["Which gas do humans need to breathe?","Oxygen",["Helium","Hydrogen","Neon"]],
-  ["What is the largest planet?","Jupiter",["Earth","Mars","Saturn"]],
-  ["What is the centre of an atom called?","Nucleus",["Cell","Electron","Molecule"]],
-  ["Which part of a plant absorbs water?","Roots",["Flowers","Leaves","Fruit"]],
-  ["What force pulls objects toward Earth?","Gravity",["Friction","Magnetism","Electricity"]]
- ],
+ ["Which planet is called the Red Planet?","Mars",["Venus","Jupiter","Mercury"]],["What is the chemical formula for water?","H2O",["CO2","O2","NaCl"]],["Which organ pumps blood?","Heart",["Lungs","Brain","Liver"]],["Which gas do humans need to breathe?","Oxygen",["Helium","Hydrogen","Neon"]],["What is the largest planet?","Jupiter",["Earth","Mars","Saturn"]],["What is the centre of an atom called?","Nucleus",["Cell","Electron","Molecule"]],["Which part of a plant absorbs water?","Roots",["Flowers","Leaves","Fruit"]],["What force pulls objects toward Earth?","Gravity",["Friction","Magnetism","Electricity"]]],
  "Sports":[
-  ["How many players does a football team have on the field?","11",["9","10","12"]],
-  ["Which sport uses a racket and shuttlecock?","Badminton",["Tennis","Cricket","Golf"]],
-  ["How many rings are on the Olympic symbol?","5",["4","6","7"]],
-  ["Which sport is played at Wimbledon?","Tennis",["Football","Rugby","Basketball"]],
-  ["What is the length of a marathon approximately?","42.195 km",["21 km","30 km","50 km"]],
-  ["Which sport uses a bat and wickets?","Cricket",["Basketball","Swimming","Boxing"]],
-  ["In football, what is a hat-trick?","Three goals by one player",["Two goals","Four goals","A penalty"]],
-  ["Which sport uses a hoop?","Basketball",["Tennis","Golf","Swimming"]]
- ],
+ ["How many players does a football team have on the field?","11",["9","10","12"]],["Which sport uses a racket and shuttlecock?","Badminton",["Tennis","Cricket","Golf"]],["How many rings are on the Olympic symbol?","5",["4","6","7"]],["Which sport is played at Wimbledon?","Tennis",["Football","Rugby","Basketball"]],["What is the length of a marathon approximately?","42.195 km",["21 km","30 km","50 km"]],["Which sport uses a bat and wickets?","Cricket",["Basketball","Swimming","Boxing"]],["In football, what is a hat-trick?","Three goals by one player",["Two goals","Four goals","A penalty"]],["Which sport uses a hoop?","Basketball",["Tennis","Golf","Swimming"]]],
  "Funny Questions":[
-  ["What has hands but cannot clap?","A clock",["A robot","A tree","A chair"]],
-  ["What gets wetter as it dries?","A towel",["A sponge","A river","A cloud"]],
-  ["What has a neck but no head?","A bottle",["A shirt","A snake","A tree"]],
-  ["What has many keys but opens no locks?","A piano",["A door","A map","A phone"]],
-  ["What goes up but never comes down?","Your age",["A balloon","A bird","Smoke"]],
-  ["What has one eye but cannot see?","A needle",["A camera","A person","A fish"]],
-  ["What can travel around the world while staying in a corner?","A stamp",["A plane","A map","A clock"]],
-  ["What has teeth but cannot eat?","A comb",["A lion","A fork","A shark"]]
- ],
+ ["What has hands but cannot clap?","A clock",["A robot","A tree","A chair"]],["What gets wetter as it dries?","A towel",["A sponge","A river","A cloud"]],["What has a neck but no head?","A bottle",["A shirt","A snake","A tree"]],["What has many keys but opens no locks?","A piano",["A door","A map","A phone"]],["What goes up but never comes down?","Your age",["A balloon","A bird","Smoke"]],["What has one eye but cannot see?","A needle",["A camera","A person","A fish"]],["What can travel around the world while staying in a corner?","A stamp",["A plane","A map","A clock"]],["What has teeth but cannot eat?","A comb",["A lion","A fork","A shark"]]],
  "Riddles":[
-  ["I speak without a mouth and hear without ears. What am I?","An echo",["A radio","A book","A bell"]],
-  ["The more you take, the more you leave behind. What are they?","Footsteps",["Coins","Books","Pictures"]],
-  ["What has cities but no houses?","A map",["A village","A country","A road"]],
-  ["What has a face and two hands but no arms?","A clock",["A doll","A statue","A mirror"]],
-  ["What has a head and a tail but no body?","A coin",["A snake","A dog","A fish"]],
-  ["What runs but never walks?","A river",["A person","A horse","A child"]],
-  ["What can you catch but not throw?","A cold",["A ball","A stone","A stick"]],
-  ["What has pages but is not a book?","A calendar",["A phone","A table","A bag"]]
- ],
+ ["I speak without a mouth and hear without ears. What am I?","An echo",["A radio","A book","A bell"]],["The more you take, the more you leave behind. What are they?","Footsteps",["Coins","Books","Pictures"]],["What has cities but no houses?","A map",["A village","A country","A road"]],["What has a face and two hands but no arms?","A clock",["A doll","A statue","A mirror"]],["What has a head and a tail but no body?","A coin",["A snake","A dog","A fish"]],["What runs but never walks?","A river",["A person","A horse","A child"]],["What can you catch but not throw?","A cold",["A ball","A stone","A stick"]],["What has pages but is not a book?","A calendar",["A phone","A table","A bag"]]],
  "Story Questions":[
-  ["Ada saved money every week to buy a book. What did she save?","Money",["Food","Water","Clothes"]],
-  ["Tunde planted seeds and watered them daily. What was he growing?","Plants",["Fish","Cars","Books"]],
-  ["Musa helped an elderly neighbour carry groceries. What quality did he show?","Kindness",["Anger","Carelessness","Pride"]],
-  ["Amina studied every evening and passed her exam. What helped her succeed?","Consistent study",["Luck alone","Avoiding books","Skipping class"]],
-  ["A farmer planted maize before the rainy season. What did the farmer plant?","Maize",["Rice","Beans","Wheat"]],
-  ["Chika shared her lunch with a friend. What did she demonstrate?","Generosity",["Selfishness","Dishonesty","Impatience"]],
-  ["A boy checked both sides before crossing. What was he practising?","Road safety",["Cooking","Swimming","Shopping"]],
-  ["A girl read instructions before using a machine. Why?","To use it correctly and safely",["To waste time","To break it","To ignore it"]]
- ],
+ ["Ada saved money every week to buy a book. What did she save?","Money",["Food","Water","Clothes"]],["Tunde planted seeds and watered them daily. What was he growing?","Plants",["Fish","Cars","Books"]],["Musa helped an elderly neighbour carry groceries. What quality did he show?","Kindness",["Anger","Carelessness","Pride"]],["Amina studied every evening and passed her exam. What helped her succeed?","Consistent study",["Luck alone","Avoiding books","Skipping class"]],["A farmer planted maize before the rainy season. What did the farmer plant?","Maize",["Rice","Beans","Wheat"]],["Chika shared her lunch with a friend. What did she demonstrate?","Generosity",["Selfishness","Dishonesty","Impatience"]],["A boy checked both sides before crossing. What was he practising?","Road safety",["Cooking","Swimming","Shopping"]],["A girl read instructions before using a machine. Why?","To use it correctly and safely",["To waste time","To break it","To ignore it"]]],
  "Business & Money":[
-  ["What is a budget?","A plan for income and spending",["A loan","A bank building","A receipt"]],
-  ["What does profit mean?","Revenue minus costs",["Total expenses","A personal loan","A tax bill"]],
-  ["What is saving?","Keeping money for future use",["Spending everything","Borrowing money","Losing money"]],
-  ["Who is an entrepreneur?","Someone who starts or runs a business",["Only a customer","A tourist","A referee"]],
-  ["What is a customer?","A person who buys goods or services",["A supplier only","A banknote","A building"]],
-  ["What is an investment?","Putting resources into something for future returns",["Throwing money away","A shopping list","A salary slip"]],
-  ["What is a business expense?","A cost of running a business",["A customer's name","A company logo","A profit"]],
-  ["Why do businesses research customers?","To understand their needs",["To ignore them","To avoid feedback","To stop selling"]]
- ],
+ ["What is a budget?","A plan for income and spending",["A loan","A bank building","A receipt"]],["What does profit mean?","Revenue minus costs",["Total expenses","A personal loan","A tax bill"]],["What is saving?","Keeping money for future use",["Spending everything","Borrowing money","Losing money"]],["Who is an entrepreneur?","Someone who starts or runs a business",["Only a customer","A tourist","A referee"]],["What is a customer?","A person who buys goods or services",["A supplier only","A banknote","A building"]],["What is an investment?","Putting resources into something for future returns",["Throwing money away","A shopping list","A salary slip"]],["What is a business expense?","A cost of running a business",["A customer's name","A company logo","A profit"]],["Why do businesses research customers?","To understand their needs",["To ignore them","To avoid feedback","To stop selling"]]],
  "Technology":[
-  ["What does CPU stand for?","Central Processing Unit",["Computer Power Utility","Central Program User","Control Processing Unit"]],
-  ["What is a web browser used for?","Accessing websites",["Washing clothes","Printing money","Charging batteries"]],
-  ["Which is an example of an operating system?","Android",["Google Search","Wi-Fi","Bluetooth"]],
-  ["What does AI stand for?","Artificial Intelligence",["Automatic Internet","Advanced Input","Applied Information"]],
-  ["What is a strong password?","A long, unique password",["123456","Your first name","password"]],
-  ["What does email allow you to do?","Send electronic messages",["Print food","Repair a screen","Charge a phone"]],
-  ["What is cloud storage?","Storing data on remote internet servers",["A weather forecast","A computer fan","A keyboard"]],
-  ["What is phishing?","A trick to steal personal information",["A safe backup","A video format","A computer game"]]
- ],
+ ["What does CPU stand for?","Central Processing Unit",["Computer Power Utility","Central Program User","Control Processing Unit"]],["What is a web browser used for?","Accessing websites",["Washing clothes","Printing money","Charging batteries"]],["Which is an example of an operating system?","Android",["Google Search","Wi-Fi","Bluetooth"]],["What does AI stand for?","Artificial Intelligence",["Automatic Internet","Advanced Input","Applied Information"]],["What is a strong password?","A long, unique password",["123456","Your first name","password"]],["What does email allow you to do?","Send electronic messages",["Print food","Repair a screen","Charge a phone"]],["What is cloud storage?","Storing data on remote internet servers",["A weather forecast","A computer fan","A keyboard"]],["What is phishing?","A trick to steal personal information",["A safe backup","A video format","A computer game"]]],
  "Who Is Richest?":[
-  ["Which publication tracks billionaire wealth?","Forbes",["NASA","UNESCO","WHO"]],
-  ["What does net worth measure?","Assets minus liabilities",["Monthly salary only","Daily expenses","Cash in one pocket"]],
-  ["Can billionaire rankings change over time?","Yes",["No, never","Only every 100 years","Only on weekends"]],
-  ["What is an asset?","Something of value that you own",["A debt only","An expense","A tax"]],
-  ["What is a share in a company?","A unit of ownership",["A shopping receipt","A bank loan","A tax return"]],
-  ["What can affect estimated wealth?","Changes in asset values",["The weather only","Shoe size","Birthday"]],
-  ["Is revenue the same as profit?","No",["Yes, always","Only for banks","Only for shops"]]
- ],
+ ["Which publication tracks billionaire wealth?","Forbes",["NASA","UNESCO","WHO"]],["What does net worth measure?","Assets minus liabilities",["Monthly salary only","Daily expenses","Cash in one pocket"]],["Can billionaire rankings change over time?","Yes",["No, never","Only every 100 years","Only on weekends"]],["What is an asset?","Something of value that you own",["A debt only","An expense","A tax"]],["What is a share in a company?","A unit of ownership",["A shopping receipt","A bank loan","A tax return"]],["What can affect estimated wealth?","Changes in asset values",["The weather only","Shoe size","Birthday"]],["Is revenue the same as profit?","No",["Yes, always","Only for banks","Only for shops"]]],
  "Life Skills":[
-  ["What is active listening?","Giving attention and understanding",["Interrupting constantly","Ignoring people","Changing the topic"]],
-  ["What helps manage time?","Prioritising tasks",["Avoiding plans","Doing everything at once","Never resting"]],
-  ["What is empathy?","Understanding another person's feelings",["Making fun of people","Ignoring others","Always agreeing"]],
-  ["What is a healthy way to handle disagreement?","Discuss respectfully",["Shout louder","Use insults","Refuse to listen"]],
-  ["What is critical thinking?","Evaluating information and evidence",["Believing every claim","Guessing only","Avoiding questions"]],
-  ["What is teamwork?","Working together toward a shared goal",["Competing against teammates","Avoiding responsibility","Working without communication"]],
-  ["What is a goal?","A result you want to achieve",["An excuse","A random thought","A punishment"]],
-  ["What is a useful study habit?","Regular revision",["Never practising","Only guessing","Avoiding feedback"]]
- ]
+ ["What is active listening?","Giving attention and understanding",["Interrupting constantly","Ignoring people","Changing the topic"]],["What helps manage time?","Prioritising tasks",["Avoiding plans","Doing everything at once","Never resting"]],["What is empathy?","Understanding another person's feelings",["Making fun of people","Ignoring others","Always agreeing"]],["What is a healthy way to handle disagreement?","Discuss respectfully",["Shout louder","Use insults","Refuse to listen"]],["What is critical thinking?","Evaluating information and evidence",["Believing every claim","Guessing only","Avoiding questions"]],["What is teamwork?","Working together toward a shared goal",["Competing against teammates","Avoiding responsibility","Working without communication"]],["What is a goal?","A result you want to achieve",["An excuse","A random thought","A punishment"]],["What is a useful study habit?","Regular revision",["Never practising","Only guessing","Avoiding feedback"]]]
 };
-
-/* EXTRA ADVANCED QUESTIONS */
 const advancedExtras={
- "Mathematics":[
-  ["Solve: 15 × 12","180",["160","170","190"]],
-  ["What is 3/4 of 80?","60",["40","50","70"]],
-  ["What is the square root of 169?","13",["12","14","15"]]
- ],
- "Science":[
-  ["What is the SI unit of force?","Newton",["Joule","Watt","Pascal"]],
-  ["What is the pH of a neutral solution at 25°C?","7",["0","5","14"]],
-  ["Which organelle produces most cellular ATP?","Mitochondrion",["Ribosome","Nucleus","Golgi apparatus"]]
- ],
- "English":[
-  ["Which is a metaphor?","Time is a thief",["As cold as ice","He ran quickly","The sun is bright"]],
-  ["What is the passive form of 'She wrote the letter'?","The letter was written by her",["She was writing","The letter writes her","She writes the letter"]],
-  ["What is an antonym?","A word with an opposite meaning",["A word with the same meaning","A type of noun","A punctuation mark"]]
- ]
+ "Mathematics":[["Solve: 15 × 12","180",["160","170","190"]],["What is 3/4 of 80?","60",["40","50","70"]],["What is the square root of 169?","13",["12","14","15"]]],
+ "Science":[["What is the SI unit of force?","Newton",["Joule","Watt","Pascal"]],["What is the pH of a neutral solution at 25°C?","7",["0","5","14"]],["Which organelle produces most cellular ATP?","Mitochondrion",["Ribosome","Nucleus","Golgi apparatus"]]],
+ "English":[["Which is a metaphor?","Time is a thief",["As cold as ice","He ran quickly","The sun is bright"]],["What is the passive form of 'She wrote the letter'?","The letter was written by her",["She was writing","The letter writes her","She writes the letter"]],["What is an antonym?","A word with an opposite meaning",["A word with the same meaning","A type of noun","A punctuation mark"]]]
 };
 
-function shuffle(array){
- const a=[...array];
- for(let i=a.length-1;i>0;i--){
-  const j=Math.floor(Math.random()*(i+1));
-  [a[i],a[j]]=[a[j],a[i]];
- }
- return a;
-}
-
-function authMessage(text){$("authMessage").textContent=text}
-function gameMessage(text){$("gameMessage").textContent=text}
-
+function shuffle(list){const a=[...list];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function setMessage(id,text,type=""){const el=$(id);el.textContent=text;el.className="message "+type;}
 function friendlyError(error){
  console.error(error);
+ const code=error?.code||"";
  const messages={
-  "auth/email-already-in-use":"This email already has an account. Please sign in.",
-  "auth/invalid-email":"Enter a valid email address.",
-  "auth/weak-password":"Password must contain at least 6 characters.",
-  "auth/invalid-credential":"Incorrect email or password.",
-  "auth/user-not-found":"No account found.",
-  "auth/popup-closed-by-user":"Google sign-in was cancelled.",
-  "auth/unauthorized-domain":"Add your website domain to Firebase Authorized Domains.",
-  "permission-denied":"Database access denied. Check Firestore rules.",
-  "unavailable":"Connection problem. Please try again."
+ "auth/email-already-in-use":"This email already has an account. Please sign in.",
+ "auth/invalid-email":"Enter a valid email address.",
+ "auth/weak-password":"Choose a password with at least 6 characters.",
+ "auth/invalid-credential":"The email or password is incorrect.",
+ "auth/user-not-found":"No account was found for this email.",
+ "auth/wrong-password":"The email or password is incorrect.",
+ "auth/unauthorized-domain":"Add this website domain under Firebase Authentication → Settings → Authorized domains.",
+ "auth/operation-not-allowed":"Enable this sign-in method in Firebase Authentication.",
+ "auth/network-request-failed":"Network problem. Check your internet connection and try again.",
+ "permission-denied":"Firestore denied this request. Check your Firestore Security Rules.",
+ "unavailable":"Firebase is temporarily unavailable. Please try again."
  };
- return messages[error.code]||error.message||"Something went wrong.";
+ return messages[code]||error?.message||"Something went wrong. Please try again.";
 }
-
-/* NAVIGATION */
 window.showPage=function(page){
  if(!currentUser)return;
+ const target=$(page+"Page");if(!target)return;
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
- $(page+"Page").classList.add("active");
- document.querySelectorAll(".nav-btn").forEach(b=>
-  b.classList.toggle("active",b.dataset.page===page)
- );
+ target.classList.add("active");
+ document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
  if(page==="leaderboard")loadLeaderboard();
  if(["home","wallet","profile"].includes(page))updateDashboard();
- window.scrollTo(0,0);
+ window.scrollTo({top:0,behavior:"smooth"});
 };
+document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
 
-document.querySelectorAll(".nav-btn").forEach(b=>{
- b.onclick=()=>showPage(b.dataset.page);
-});
-
-/* PLAYER PROFILE */
 async function createProfile(user){
- const ref=doc(db,"players",user.uid);
- const snap=await getDoc(ref);
-
+ const ref=doc(db,"players",user.uid),snap=await getDoc(ref);
  if(!snap.exists()){
-  await setDoc(ref,{
-   name:user.displayName||"Player",
-   email:user.email||"",
-   points:0,
-   gamesPlayed:0,
-   correctAnswers:0,
-   lessonsCompleted:[],
-   createdAt:serverTimestamp()
-  });
+  await setDoc(ref,{name:user.displayName||"Player",email:user.email||"",points:0,gamesPlayed:0,correctAnswers:0,lessonsCompleted:[],createdAt:serverTimestamp()});
  }else{
-  await setDoc(ref,{
-   name:user.displayName||snap.data().name||"Player",
-   email:user.email||""
-  },{merge:true});
+  await setDoc(ref,{name:user.displayName||snap.data().name||"Player",email:user.email||""},{merge:true});
  }
 }
-
 async function loadProfile(user){
- const snap=await getDoc(doc(db,"players",user.uid));
- if(!snap.exists())throw new Error("Player profile not found.");
-
- const data=snap.data();
- savedPoints=Number(data.points)||0;
- games=Number(data.gamesPlayed)||0;
- correctTotal=Number(data.correctAnswers)||0;
- lessonsDone=Array.isArray(data.lessonsCompleted)?data.lessonsCompleted:[];
- updateDashboard();
+ const snap=await getDoc(doc(db,"players",user.uid));if(!snap.exists())throw new Error("Player profile not found.");
+ const data=snap.data();savedPoints=Number(data.points)||0;games=Number(data.gamesPlayed)||0;correctTotal=Number(data.correctAnswers)||0;
+ lessonsDone=Array.isArray(data.lessonsCompleted)?data.lessonsCompleted:[];updateDashboard();
 }
-
 function updateDashboard(){
  const name=currentUser?.displayName||"Player";
-
- $("homeGreeting").textContent="Hello, "+name+"! 👋";
- $("homePoints").textContent=savedPoints.toLocaleString();
- $("headerPoints").textContent="⚡ "+savedPoints.toLocaleString()+" Points";
- $("walletPoints").textContent=savedPoints.toLocaleString()+" ⚡";
- $("profilePoints").textContent=savedPoints.toLocaleString()+" Points";
- $("gamesPlayed").textContent=games;
- $("profileGames").textContent=games;
- $("correctAnswers").textContent=correctTotal;
- $("profileCorrect").textContent=correctTotal;
- $("profileName").textContent=name;
- $("profileEmail").textContent=currentUser?.email||"";
- $("lessonsCompleted").textContent=lessonsDone.length;
- $("profileLessons").textContent=lessonsDone.length;
+ $("homeGreeting").textContent="Hello, "+name+"! 👋";$("homePoints").textContent=savedPoints.toLocaleString();
+ $("headerPoints").textContent="⚡ "+savedPoints.toLocaleString()+" Points";$("walletPoints").textContent=savedPoints.toLocaleString()+" ⚡";
+ $("profilePoints").textContent=savedPoints.toLocaleString()+" Points";$("gamesPlayed").textContent=games;$("profileGames").textContent=games;
+ $("correctAnswers").textContent=correctTotal;$("profileCorrect").textContent=correctTotal;$("profileName").textContent=name;
+ $("profileEmail").textContent=currentUser?.email||"";$("lessonsCompleted").textContent=lessonsDone.length;$("profileLessons").textContent=lessonsDone.length;
 }
-
-/* EMAIL SIGN UP */
 $("signupBtn").onclick=async()=>{
- const name=$("name").value.trim();
- const email=$("email").value.trim();
- const password=$("password").value;
-
- if(!name||!email||!password)return authMessage("Complete all fields.");
- if(password.length<6)return authMessage("Password must contain at least 6 characters.");
-
- try{
-  authMessage("Creating your account...");
-  const result=await createUserWithEmailAndPassword(auth,email,password);
-  await updateProfile(result.user,{displayName:name});
-  await createProfile(result.user);
-  await loadProfile(result.user);
-  authMessage("Welcome to QuizSpark!");
- }catch(e){authMessage(friendlyError(e));}
+ const name=$("name").value.trim(),email=$("email").value.trim(),password=$("password").value;
+ if(!name||!email||!password)return setMessage("authMessage","Please complete all fields.","error");
+ if(name.length>50)return setMessage("authMessage","Your name must be 50 characters or fewer.","error");
+ if(password.length<6)return setMessage("authMessage","Password must contain at least 6 characters.","error");
+ try{setMessage("authMessage","Creating your account...");const result=await createUserWithEmailAndPassword(auth,email,password);await updateProfile(result.user,{displayName:name});await createProfile(result.user);await loadProfile(result.user);setMessage("authMessage","Welcome to QuizSpark!","success");}
+ catch(e){setMessage("authMessage",friendlyError(e),"error");}
 };
-
-/* EMAIL SIGN IN */
 $("loginBtn").onclick=async()=>{
- const email=$("email").value.trim();
- const password=$("password").value;
-
- if(!email||!password)return authMessage("Enter your email and password.");
-
- try{
-  authMessage("Signing in...");
-  await signInWithEmailAndPassword(auth,email,password);
- }catch(e){authMessage(friendlyError(e));}
+ const email=$("email").value.trim(),password=$("password").value;
+ if(!email||!password)return setMessage("authMessage","Enter your email and password.","error");
+ try{setMessage("authMessage","Signing in...");await signInWithEmailAndPassword(auth,email,password);}
+ catch(e){setMessage("authMessage",friendlyError(e),"error");}
 };
-
-/* GOOGLE SIGN IN - MOBILE FRIENDLY REDIRECT */
 $("googleBtn").onclick=async()=>{
- try{
-  authMessage("Connecting to Google...");
-  await signInWithRedirect(auth,googleProvider);
- }catch(e){authMessage(friendlyError(e));}
+ try{setMessage("authMessage","Connecting to Google...");await signInWithRedirect(auth,googleProvider);}
+ catch(e){setMessage("authMessage",friendlyError(e),"error");}
 };
-
-/* HANDLE GOOGLE REDIRECT */
-getRedirectResult(auth).catch(e=>{
- authMessage(friendlyError(e));
-});
-
-/* PASSWORD RESET */
+try{const redirectResult=await getRedirectResult(auth);if(redirectResult?.user){setMessage("authMessage","Google sign-in successful.","success");}}
+catch(e){setMessage("authMessage",friendlyError(e),"error");}
 $("forgotBtn").onclick=async()=>{
- const email=$("email").value.trim();
- if(!email)return authMessage("Enter your email first.");
-
- try{
-  await sendPasswordResetEmail(auth,email);
-  authMessage("Password reset email sent. Check your inbox.");
- }catch(e){authMessage(friendlyError(e));}
+ const email=$("email").value.trim();if(!email)return setMessage("authMessage","Enter your email address first.","error");
+ try{await sendPasswordResetEmail(auth,email);setMessage("authMessage","Password reset email sent. Check your inbox.","success");}
+ catch(e){setMessage("authMessage",friendlyError(e),"error");}
 };
-
-$("logoutBtn").onclick=async()=>{
- try{await signOut(auth);}
- catch(e){alert(friendlyError(e));}
-};
-
-/* AUTH STATE */
+$("logoutBtn").onclick=async()=>{try{if(gameRunning&&!confirm("You have an unfinished quiz. Sign out anyway?"))return;await signOut(auth);}catch(e){alert(friendlyError(e));}};
 onAuthStateChanged(auth,async user=>{
  currentUser=user;
-
  if(!user){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  $("authPage").classList.remove("hidden");
-  $("authPage").classList.add("active");
-  $("bottomNav").classList.add("hidden");
-  $("signupFields").classList.remove("hidden");
-
-  savedPoints=games=correctTotal=0;
-  lessonsDone=[];
-  updateDashboard();
-  return;
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));$("authPage").classList.add("active");$("authPage").classList.remove("hidden");
+  $("bottomNav").classList.add("hidden");$("signupFields").classList.remove("hidden");
+  savedPoints=games=correctTotal=0;lessonsDone=[];updateDashboard();return;
  }
-
- $("authPage").classList.remove("active");
- $("authPage").classList.add("hidden");
- $("signupFields").classList.add("hidden");
- $("bottomNav").classList.remove("hidden");
-
- try{
-  await createProfile(user);
-  if(auth.currentUser?.uid!==user.uid)return;
-  await loadProfile(user);
-  showPage("home");
- }catch(e){
-  authMessage(friendlyError(e));
- }
+ $("authPage").classList.remove("active");$("authPage").classList.add("hidden");$("signupFields").classList.add("hidden");$("bottomNav").classList.remove("hidden");
+ try{await createProfile(user);if(auth.currentUser?.uid!==user.uid)return;await loadProfile(user);showPage("home");}
+ catch(e){setMessage("authMessage",friendlyError(e),"error");}
 });
 
-/* LEARNING CENTRE */
 function buildLearningCategories(){
- const items=[
-  ["School","🎓","School subjects"],
-  ["Business","💼","Business and money"],
-  ["Technology","💻","Digital knowledge"],
-  ["Life Skills","💡","Everyday skills"],
-  ["General Knowledge","🌍","Explore the world"]
- ];
-
+ const items=[["School","🎓","School subjects"],["Business","💼","Business and money"],["Technology","💻","Digital knowledge"],["Life Skills","💡","Everyday skills"],["General Knowledge","🌍","Explore the world"]];
  $("learningCategories").replaceChildren();
-
- items.forEach(([name,icon,description])=>{
-  const button=document.createElement("button");
-  button.className="category";
-  button.innerHTML=`${icon}<strong>${name}</strong><small>${description}</small>`;
-  button.onclick=()=>displayLessons(name);
-  $("learningCategories").appendChild(button);
- });
+ items.forEach(([name,icon,description])=>{const b=document.createElement("button");b.className="category";b.innerHTML=`${icon}<strong>${name}</strong><small>${description}</small>`;b.onclick=()=>displayLessons(name);$("learningCategories").appendChild(b);});
 }
-
 function displayLessons(category){
- $("lessonHeading").textContent=category+" Lessons";
- $("lessonList").replaceChildren();
-
+ $("lessonHeading").textContent=category+" Lessons";$("lessonList").replaceChildren();
  const list=lessons[category]||[];
-
- if(!list.length){
-  $("lessonList").textContent="More lessons coming soon.";
-  return;
- }
-
+ if(!list.length){$("lessonList").textContent="More lessons coming soon.";return;}
  list.forEach(item=>{
-  const card=document.createElement("div");
-  card.className="lesson";
-
-  const heading=document.createElement("h3");
-  heading.textContent=item.title;
-
-  const status=document.createElement("p");
-  status.textContent=lessonsDone.includes(item.id)?"✓ Completed":"Written lesson";
-
-  const button=document.createElement("button");
-  button.className="primary";
-  button.textContent="Read Lesson";
-  button.onclick=()=>openLesson(category,item.id);
-
-  card.append(heading,status,button);
-  $("lessonList").appendChild(card);
+  const card=document.createElement("div");card.className="lesson";const h=document.createElement("h3");h.textContent=item.title;
+  const status=document.createElement("p");status.textContent=lessonsDone.includes(item.id)?"✓ Completed":"Written lesson";
+  const b=document.createElement("button");b.className="primary";b.textContent="Read Lesson";b.onclick=()=>openLesson(category,item.id);
+  card.append(h,status,b);$("lessonList").appendChild(card);
  });
 }
-
 function openLesson(category,id){
- const item=(lessons[category]||[]).find(x=>x.id===id);
- if(!item)return;
-
- currentLessonId=id;
- $("readerTitle").textContent=item.title;
- $("readerContent").textContent=item.body;
+ const item=(lessons[category]||[]).find(x=>x.id===id);if(!item)return;
+ currentLessonId=id;$("readerTitle").textContent=item.title;$("readerContent").textContent=item.body;
  $("lessonMessage").textContent=lessonsDone.includes(id)?"You have completed this lesson.":"Read the lesson and mark it complete when finished.";
- $("completeLessonBtn").textContent=lessonsDone.includes(id)?"Already Completed ✓":"Mark Lesson as Completed ✓";
- $("completeLessonBtn").disabled=lessonsDone.includes(id);
-
- showPage("lesson");
+ $("completeLessonBtn").textContent=lessonsDone.includes(id)?"Already Completed ✓":"Mark Lesson as Completed ✓";$("completeLessonBtn").disabled=lessonsDone.includes(id);showPage("lesson");
 }
-
 $("completeLessonBtn").onclick=async()=>{
  if(!currentUser||!currentLessonId||lessonsDone.includes(currentLessonId))return;
-
+ const btn=$("completeLessonBtn");btn.disabled=true;
  try{
   const ref=doc(db,"players",currentUser.uid);
-
-  await runTransaction(db,async tx=>{
-   const snap=await tx.get(ref);
-   if(!snap.exists())throw new Error("Profile not found.");
-
-   const data=snap.data();
-   const completed=Array.isArray(data.lessonsCompleted)?data.lessonsCompleted:[];
-
-   if(!completed.includes(currentLessonId)){
-    tx.update(ref,{lessonsCompleted:[...completed,currentLessonId]});
-   }
+  await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw new Error("Profile not found.");
+   const completed=Array.isArray(snap.data().lessonsCompleted)?snap.data().lessonsCompleted:[];
+   if(!completed.includes(currentLessonId))tx.update(ref,{lessonsCompleted:[...completed,currentLessonId]});
   });
-
-  await loadProfile(currentUser);
-  $("lessonMessage").textContent="Lesson completed! Great work.";
-  $("completeLessonBtn").textContent="Completed ✓";
-  $("completeLessonBtn").disabled=true;
-
- }catch(e){
-  $("lessonMessage").textContent=friendlyError(e);
- }
+  await loadProfile(currentUser);$("lessonMessage").textContent="Lesson completed! Great work.";$("completeLessonBtn").textContent="Completed ✓";
+ }catch(e){btn.disabled=false;$("lessonMessage").textContent=friendlyError(e);}
 };
-
 $("videoBtn").onclick=()=>{
- const topic=$("videoSearch").value.trim();
- if(!topic)return alert("Enter a topic you want to learn.");
-
- const url="https://www.youtube.com/results?search_query="+
-  encodeURIComponent(topic+" educational lesson");
-
- window.open(url,"_blank","noopener");
+ const topic=$("videoSearch").value.trim();if(!topic)return alert("Enter a topic you want to learn.");
+ window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(topic+" educational lesson"),"_blank","noopener,noreferrer");
 };
-
-/* QUIZ CATEGORIES */
 function buildQuizCategories(){
- const holder=$("quizCategories");
- holder.replaceChildren();
-
- categories.forEach(([name,icon,description])=>{
-  const button=document.createElement("button");
-  button.className="category"+(name===selectedCategory?" selected":"");
-  button.innerHTML=`${icon}<strong>${name}</strong><small>${description}</small>`;
-
-  button.onclick=()=>{
-   selectedCategory=name;
-   buildQuizCategories();
-  };
-
-  holder.appendChild(button);
- });
+ const holder=$("quizCategories");holder.replaceChildren();
+ categories.forEach(([name,icon,description])=>{const b=document.createElement("button");b.className="category"+(name===selectedCategory?" selected":"");
+ b.innerHTML=`${icon}<strong>${name}</strong><small>${description}</small>`;b.onclick=()=>{selectedCategory=name;buildQuizCategories();};holder.appendChild(b);});
 }
-
-/* CREATE QUESTIONS */
 function makeQuiz(){
- let source=[...(bank[selectedCategory]||bank["General Knowledge"])];
- const difficulty=$("difficulty").value;
-
- if(difficulty==="Advanced"&&advancedExtras[selectedCategory]){
-  source.push(...advancedExtras[selectedCategory]);
- }
-
+ let source=[...(bank[selectedCategory]||bank["General Knowledge"])],difficulty=$("difficulty").value;
+ if(difficulty==="Advanced"&&advancedExtras[selectedCategory])source.push(...advancedExtras[selectedCategory]);
  if(selectedCategory==="Mathematics"&&difficulty!=="Beginner"){
-  for(let i=0;i<12;i++){
-   const a=10+i*2;
-   const b=3+(i%8);
-   const answer=a*b;
-
-   source.push([
-    `Calculate ${a} × ${b}.`,
-    String(answer),
-    [String(answer+2),String(answer-3),String(answer+10)]
-   ]);
-  }
+  for(let i=0;i<12;i++){const a=10+i*2,b=3+(i%8),answer=a*b;source.push([`Calculate ${a} × ${b}.`,String(answer),[String(answer+2),String(answer-3),String(answer+10)]]);}
  }
-
- if(difficulty==="Beginner"){
-  source=source.slice(0,Math.max(5,source.length-2));
- }
-
- return shuffle(source).slice(0,Number($("questionCount").value)).map(
-  ([q,correct,wrong])=>{
-   const options=shuffle([correct,...wrong]);
-   return {q,a:options,correct:options.indexOf(correct)};
-  }
- );
+ if(difficulty==="Beginner")source=source.slice(0,Math.max(5,source.length-2));
+ return shuffle(source).slice(0,Math.min(Number($("questionCount").value),source.length)).map(([q,correct,wrong])=>{const options=shuffle([correct,...wrong]);return{q,a:options,correct:options.indexOf(correct)};});
 }
-
-/* START QUIZ */
 $("startBtn").onclick=()=>{
- if(!currentUser||gameRunning||saving)return;
-
- quizQuestions=makeQuiz();
-
- if(!quizQuestions.length)return;
-
- questionIndex=0;
- score=0;
- answered=false;
- gameRunning=true;
-
- $("quizSetup").classList.add("hidden");
- $("quizGame").classList.remove("hidden");
- $("gamePoints").textContent="0";
-
- showQuestion();
+ if(!currentUser||gameRunning||saving)return;quizQuestions=makeQuiz();if(!quizQuestions.length)return;
+ questionIndex=0;score=0;answered=false;gameRunning=true;$("quizSetup").classList.add("hidden");$("quizGame").classList.remove("hidden");$("gamePoints").textContent="0";showQuestion();
 };
-
 function showQuestion(){
- if(questionIndex>=quizQuestions.length){
-  finishQuiz();
-  return;
- }
-
- answered=false;
-
- const q=quizQuestions[questionIndex];
-
- $("question").textContent=q.q;
- $("questionNumber").textContent=(questionIndex+1)+"/"+quizQuestions.length;
- $("progressFill").style.width=(questionIndex/quizQuestions.length*100)+"%";
- $("answers").replaceChildren();
-
- q.a.forEach((answer,index)=>{
-  const button=document.createElement("button");
-  button.className="answer";
-  button.textContent=answer;
-  button.onclick=()=>checkAnswer(index,button);
-  $("answers").appendChild(button);
- });
-
- $("nextBtn").classList.add("hidden");
- gameMessage("Choose the correct answer.");
+ if(questionIndex>=quizQuestions.length){finishQuiz();return;}
+ answered=false;const q=quizQuestions[questionIndex];$("question").textContent=q.q;
+ $("questionNumber").textContent=(questionIndex+1)+"/"+quizQuestions.length;$("progressFill").style.width=(questionIndex/quizQuestions.length*100)+"%";$("answers").replaceChildren();
+ q.a.forEach((answer,index)=>{const b=document.createElement("button");b.className="answer";b.textContent=answer;b.onclick=()=>checkAnswer(index,b);$("answers").appendChild(b);});
+ $("nextBtn").classList.add("hidden");setMessage("gameMessage","Choose the correct answer.");
 }
-
-/* CHECK ANSWER */
 function checkAnswer(index,button){
- if(answered||!gameRunning)return;
-
- answered=true;
-
- const q=quizQuestions[questionIndex];
- const buttons=$("answers").querySelectorAll("button");
-
- buttons.forEach((b,i)=>{
-  b.disabled=true;
-  if(i===q.correct)b.classList.add("correct");
- });
-
- if(index===q.correct){
-  score+=10;
-  $("gamePoints").textContent=score;
-  gameMessage("🎉 Correct! You earned 10 points.");
- }else{
-  button.classList.add("wrong");
-  gameMessage("The correct answer is "+q.a[q.correct]+".");
- }
-
- $("nextBtn").classList.remove("hidden");
- $("nextBtn").textContent=
-  questionIndex===quizQuestions.length-1?"Finish Quiz":"Next Question →";
+ if(answered||!gameRunning)return;answered=true;const q=quizQuestions[questionIndex],buttons=$("answers").querySelectorAll("button");
+ buttons.forEach((b,i)=>{b.disabled=true;if(i===q.correct)b.classList.add("correct");});
+ if(index===q.correct){score+=10;$("gamePoints").textContent=score;setMessage("gameMessage","🎉 Correct! You earned 10 points.","success");}
+ else{button.classList.add("wrong");setMessage("gameMessage","The correct answer is "+q.a[q.correct]+".","error");}
+ $("nextBtn").classList.remove("hidden");$("nextBtn").textContent=questionIndex===quizQuestions.length-1?"Finish Quiz":"Next Question →";
 }
-
-/* NEXT QUESTION */
-$("nextBtn").onclick=()=>{
- if(!answered||!gameRunning)return;
- questionIndex++;
- showQuestion();
-};
-
-/* QUIT QUIZ */
-$("quitBtn").onclick=()=>{
- if(!gameRunning)return;
-
- if(!confirm("Are you sure you want to quit? Your unfinished score will not be saved."))return;
-
- gameRunning=false;
- $("quizGame").classList.add("hidden");
- $("quizSetup").classList.remove("hidden");
-};
-
-/* SAVE QUIZ SCORE */
+$("nextBtn").onclick=()=>{if(!answered||!gameRunning)return;questionIndex++;showQuestion();};
+$("quitBtn").onclick=()=>{if(!gameRunning)return;if(!confirm("Quit this quiz? Your unfinished score will not be saved."))return;gameRunning=false;$("quizGame").classList.add("hidden");$("quizSetup").classList.remove("hidden");};
 async function finishQuiz(){
- if(!gameRunning||saving)return;
-
- gameRunning=false;
- saving=true;
-
- $("answers").replaceChildren();
- $("question").textContent="Quiz Completed! 🎉";
- $("progressFill").style.width="100%";
- $("nextBtn").classList.add("hidden");
-
- gameMessage("You scored "+score+" points. Saving your result...");
-
+ if(!gameRunning||saving)return;gameRunning=false;saving=true;$("answers").replaceChildren();$("question").textContent="Quiz Completed! 🎉";$("progressFill").style.width="100%";$("nextBtn").classList.add("hidden");
+ setMessage("gameMessage","You scored "+score+" points. Saving your result...");
  try{
-  const ref=doc(db,"players",currentUser.uid);
-
-  await runTransaction(db,async tx=>{
-   const snap=await tx.get(ref);
-   if(!snap.exists())throw new Error("Profile not found.");
-
-   const data=snap.data();
-
-   tx.update(ref,{
-    points:(Number(data.points)||0)+score,
-    gamesPlayed:(Number(data.gamesPlayed)||0)+1,
-    correctAnswers:(Number(data.correctAnswers)||0)+(score/10),
-    updatedAt:serverTimestamp()
-   });
+  const ref=doc(db,"players",currentUser.uid),earnedCorrect=score/10;
+  await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw new Error("Player profile not found.");
+   const data=snap.data();tx.update(ref,{points:(Number(data.points)||0)+score,gamesPlayed:(Number(data.gamesPlayed)||0)+1,correctAnswers:(Number(data.correctAnswers)||0)+earnedCorrect,updatedAt:serverTimestamp()});
   });
-
-  await loadProfile(currentUser);
-
-  gameMessage("🏆 Congratulations! You earned "+score+
-   " points. Your new balance is "+savedPoints+".");
-
+  await loadProfile(currentUser);setMessage("gameMessage","🏆 Congratulations! You earned "+score+" points. Your new balance is "+savedPoints+".","success");
   await loadLeaderboard();
-
- }catch(e){
-  gameMessage("Could not save your score: "+friendlyError(e));
- }finally{
-  saving=false;
-  $("quizSetup").classList.remove("hidden");
- }
+ }catch(e){setMessage("gameMessage","Could not save your score: "+friendlyError(e),"error");}
+ finally{saving=false;$("quizSetup").classList.remove("hidden");}
 }
-
-/* LEADERBOARD */
 async function loadLeaderboard(){
- if(!currentUser)return;
-
- $("leaderboard").textContent="Loading leaderboard...";
-
+ if(!currentUser)return;$("leaderboard").textContent="Loading leaderboard...";
  try{
-  const q=query(
-   collection(db,"players"),
-   orderBy("points","desc"),
-   limit(20)
-  );
-
-  const snap=await getDocs(q);
-  $("leaderboard").replaceChildren();
-
-  if(snap.empty){
-   $("leaderboard").textContent="No players yet.";
-   return;
-  }
-
-  let position=1;
-
-  snap.forEach(player=>{
-   const data=player.data();
-   const row=document.createElement("div");
-   row.className="rank-row";
-
-   const rank=document.createElement("strong");
-   rank.className="yellow";
-   rank.textContent=
-    position===1?"🥇":
-    position===2?"🥈":
-    position===3?"🥉":position+".";
-
-   const name=document.createElement("span");
-   name.textContent=data.name||"Player";
-   name.style.flex="1";
-
-   const points=document.createElement("strong");
-   points.className="yellow";
-   points.textContent=(Number(data.points)||0).toLocaleString()+" ⚡";
-
-   row.append(rank,name,points);
-   $("leaderboard").appendChild(row);
-   position++;
+  const q=query(collection(db,"players"),orderBy("points","desc"),limit(20)),snap=await getDocs(q);$("leaderboard").replaceChildren();
+  if(snap.empty){$("leaderboard").textContent="No players yet.";return;}
+  let position=1;snap.forEach(player=>{const data=player.data(),row=document.createElement("div");row.className="rank-row";
+   const rank=document.createElement("strong");rank.className="yellow";rank.textContent=position===1?"🥇":position===2?"🥈":position===3?"🥉":position+".";
+   const name=document.createElement("span");name.textContent=data.name||"Player";name.style.flex="1";
+   const points=document.createElement("strong");points.className="yellow";points.textContent=(Number(data.points)||0).toLocaleString()+" ⚡";
+   row.append(rank,name,points);$("leaderboard").appendChild(row);position++;
   });
-
- }catch(e){
-  $("leaderboard").textContent=friendlyError(e);
- }
+ }catch(e){$("leaderboard").textContent=friendlyError(e);}
 }
-
 $("refreshLeaderboard").onclick=loadLeaderboard;
-
-/* INITIALISE APP */
-buildLearningCategories();
-buildQuizCategories();
-
-console.log("QuizSpark is ready.");
+buildLearningCategories();buildQuizCategories();
+console.log("QuizSpark initialised.");
 </script>
 </body>
 </html>
