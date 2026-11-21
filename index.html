@@ -4,301 +4,537 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>QuizSpark - Play, Learn and Earn!</title>
-
-<meta name="description" content="Play 150 exciting quiz questions, test your knowledge and earn points with QuizSpark.">
 <meta name="theme-color" content="#101044">
+<meta name="description" content="QuizSpark - Play, learn and earn points!">
+<title>QuizSpark - Play, Learn and Earn</title>
 
-<meta property="og:title" content="QuizSpark - Play, Learn and Earn!">
-<meta property="og:description" content="Challenge yourself with 150 exciting quiz questions.">
-<meta property="og:url" content="https://michael20046.github.io/QuizSpark-Game/">
-<meta property="og:image" content="https://michael20046.github.io/QuizSpark-Game/quizspark-logo.png">
-
-<link rel="icon" type="image/png" href="./quizspark-logo.png">
+<link rel="icon" href="./quizspark-logo.png">
 <link rel="apple-touch-icon" href="./quizspark-logo.png">
 
 <style>
-* {
-  box-sizing: border-box;
+:root {
+  --bg:#090d22;
+  --panel:#151d39;
+  --panel2:#202b4a;
+  --yellow:#ffcb38;
+  --blue:#38bdf8;
+  --muted:#a8b3cb;
+  --green:#22c55e;
+  --red:#ef4444;
 }
+
+* {box-sizing:border-box}
 
 body {
-  margin: 0;
-  padding: 16px;
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
-  color: white;
-  text-align: center;
-  background: linear-gradient(145deg, #080d27, #171044, #101827);
+  margin:0;
+  background:var(--bg);
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:85px;
 }
 
-.container {
-  width: 100%;
-  max-width: 520px;
-  margin: 20px auto;
-  padding: 22px;
-  background: #1e293b;
-  border: 1px solid #475569;
-  border-radius: 20px;
-  box-shadow: 0 12px 40px rgba(0,0,0,.35);
+button,input {font:inherit}
+button {cursor:pointer}
+
+header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:17px;
+  background:#101632;
+  position:sticky;
+  top:0;
+  z-index:5;
+  border-bottom:1px solid #293554;
 }
 
-.logo {
-  display: block;
-  width: 170px;
-  max-width: 75%;
-  height: auto;
-  margin: 0 auto 12px;
-  border-radius: 16px;
+.brand {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:21px;
+  font-weight:bold;
+  color:var(--yellow);
 }
 
-h1 {
-  color: #facc15;
+.brand img {
+  width:40px;
+  height:40px;
+  object-fit:contain;
+  border-radius:9px;
 }
 
-h2 {
-  color: #38bdf8;
+.header-points {
+  background:#293554;
+  padding:9px 12px;
+  border-radius:20px;
+  color:var(--yellow);
+  font-size:13px;
+  font-weight:bold;
 }
 
-p {
-  line-height: 1.5;
+main {
+  max-width:650px;
+  margin:auto;
+  padding:16px;
 }
 
-input {
-  display: block;
-  width: 100%;
-  padding: 14px;
-  margin: 10px 0;
-  border: 0;
-  border-radius: 9px;
-  font-size: 16px;
+.page {display:none}
+.page.active {display:block}
+
+.card {
+  background:var(--panel);
+  border:1px solid #293554;
+  border-radius:17px;
+  padding:18px;
+  margin-bottom:15px;
 }
 
-button {
-  display: block;
-  width: 100%;
-  padding: 14px;
-  margin: 10px 0;
-  border: 0;
-  border-radius: 10px;
-  background: linear-gradient(90deg, #d97706, #facc15);
-  color: #171717;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
+.hero {
+  background:linear-gradient(135deg,#24216b,#124b76);
+  padding:25px 20px;
+  border-radius:20px;
+  margin-bottom:18px;
 }
 
-button:disabled {
-  opacity: .55;
-  cursor: not-allowed;
+.hero h1 {
+  color:var(--yellow);
+  font-size:29px;
+  margin:0 0 10px;
+}
+
+.hero p {color:#dbeafe;line-height:1.6}
+
+h2 {font-size:21px}
+h3 {margin-top:0}
+
+.muted {color:var(--muted)}
+.yellow {color:var(--yellow)}
+
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.stat {
+  background:var(--panel2);
+  border-radius:14px;
+  padding:16px 12px;
+}
+
+.stat strong {
+  display:block;
+  font-size:23px;
+  color:var(--yellow);
+  margin-top:8px;
+}
+
+.stat span {font-size:13px;color:var(--muted)}
+
+.primary {
+  background:linear-gradient(90deg,#e99b16,#ffcf40);
+  color:#171717;
+  border:0;
+  border-radius:11px;
+  padding:14px;
+  font-weight:bold;
+  width:100%;
 }
 
 .secondary {
-  background: #475569;
-  color: white;
+  background:#34415e;
+  color:white;
+  border:0;
+  border-radius:11px;
+  padding:13px;
+  width:100%;
+  margin-top:9px;
 }
 
 .google {
-  background: white;
-  color: #222;
+  background:white;
+  color:#222;
+  border:0;
+  border-radius:11px;
+  padding:13px;
+  width:100%;
+  font-weight:bold;
+  margin-top:9px;
 }
 
+input {
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #475569;
+  background:#0c1530;
+  color:white;
+  margin:7px 0 12px;
+  outline:none;
+}
+
+input:focus {border-color:var(--blue)}
+
+label {
+  display:block;
+  text-align:left;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#111831;
+  border-top:1px solid #34415e;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  padding:8px 3px calc(8px + env(safe-area-inset-bottom));
+  z-index:10;
+}
+
+.nav-btn {
+  border:0;
+  background:transparent;
+  color:#a8b3cb;
+  font-size:11px;
+  padding:5px 0;
+}
+
+.nav-btn .symbol {
+  display:block;
+  font-size:21px;
+  margin-bottom:4px;
+}
+
+.nav-btn.active {color:var(--yellow)}
+
 .answer {
-  background: #334155;
-  color: white;
-  text-align: left;
+  display:block;
+  width:100%;
+  padding:15px;
+  margin:10px 0;
+  text-align:left;
+  background:#293554;
+  color:white;
+  border:1px solid #475569;
+  border-radius:11px;
 }
 
 .answer.correct {
-  background: #15803d;
+  background:#166534;
+  border-color:#22c55e;
 }
 
 .answer.wrong {
-  background: #b91c1c;
+  background:#991b1b;
+  border-color:#ef4444;
 }
 
-.hidden {
-  display: none !important;
+.answer:disabled {cursor:default}
+
+.progress-track {
+  height:8px;
+  background:#34415e;
+  border-radius:10px;
+  overflow:hidden;
+  margin:12px 0;
 }
 
-#score {
-  color: #facc15;
-  font-size: 23px;
-  font-weight: bold;
+.progress-fill {
+  height:100%;
+  width:0;
+  background:var(--yellow);
+  transition:width .2s;
 }
 
-#progress {
-  color: #cbd5e1;
-  font-size: 14px;
+.rank-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:13px 5px;
+  border-bottom:1px solid #34415e;
+  gap:10px;
 }
 
-#result {
-  min-height: 25px;
-  font-weight: bold;
-  color: #4ade80;
-  overflow-wrap: anywhere;
+.rank-number {color:var(--yellow);font-weight:bold}
+.rank-points {color:var(--yellow);font-weight:bold}
+
+.message {
+  font-size:13px;
+  color:var(--blue);
+  overflow-wrap:anywhere;
+  min-height:20px;
 }
 
-#authMessage {
-  color: #38bdf8;
-  overflow-wrap: anywhere;
-}
+.hidden {display:none!important}
 
-#question {
-  min-height: 65px;
-  line-height: 1.4;
-}
-
-#playerPoints {
-  color: #facc15;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-#answers button {
-  min-height: 48px;
-}
-
-hr {
-  border: 0;
-  border-top: 1px solid #475569;
-  margin: 22px 0;
+.avatar {
+  width:75px;
+  height:75px;
+  border-radius:50%;
+  background:#34415e;
+  display:grid;
+  place-items:center;
+  font-size:32px;
+  margin:auto;
 }
 
 footer {
-  margin-top: 25px;
-  color: #94a3b8;
-  font-size: 12px;
+  text-align:center;
+  color:#71809e;
+  font-size:11px;
+  padding:20px;
 }
 
-@media (max-width: 480px) {
-  .container {
-    padding: 17px;
-  }
-
-  .logo {
-    width: 145px;
-  }
+@media(max-width:380px) {
+  .nav-btn {font-size:10px}
+  .nav-btn .symbol {font-size:18px}
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<header>
+  <div class="brand">
+    <img src="./quizspark-logo.png" alt="QuizSpark"
+         onerror="this.style.display='none'">
+    QuizSpark
+  </div>
+  <div class="header-points" id="headerPoints">⚡ 0 Points</div>
+</header>
 
-  <img
-    src="./quizspark-logo.png"
-    alt="QuizSpark Logo"
-    class="logo"
-    onerror="this.style.display='none'"
-  >
+<main>
 
-  <h1>⚡ QuizSpark</h1>
-  <p>Play, learn and earn points!</p>
+<!-- AUTHENTICATION -->
 
-  <!-- PLAYER ACCOUNT -->
+<section id="authPage" class="page active">
 
-  <section id="authSection">
+  <div class="hero">
+    <h1>⚡ Welcome to QuizSpark!</h1>
+    <p>Challenge your mind, answer exciting questions and earn points as you play.</p>
+  </div>
 
+  <div class="card">
     <h2>Player Account</h2>
+    <p class="muted">Create an account or sign in to continue.</p>
 
-    <input
-      id="name"
-      type="text"
-      placeholder="Your name"
-      autocomplete="name"
-    >
+    <div id="signupFields">
+      <label>Your name</label>
+      <input id="name" placeholder="Enter your name"
+             autocomplete="name">
+    </div>
 
-    <input
-      id="email"
-      type="email"
-      placeholder="Email address"
-      autocomplete="email"
-    >
+    <label>Email address</label>
+    <input id="email" type="email" placeholder="Enter your email"
+           autocomplete="email">
 
-    <input
-      id="password"
-      type="password"
-      placeholder="Password (minimum 6 characters)"
-      autocomplete="current-password"
-    >
+    <label>Password</label>
+    <input id="password" type="password"
+           placeholder="Minimum 6 characters"
+           autocomplete="current-password">
 
-    <button id="signupBtn">Create Account</button>
+    <button class="primary" id="signupBtn">Create Account</button>
+    <button class="secondary" id="loginBtn">Sign In</button>
+    <button class="secondary" id="forgotBtn">Forgot Password?</button>
+    <button class="google" id="googleBtn">🌐 Continue with Google</button>
 
-    <button id="loginBtn" class="secondary">
-      Sign In
-    </button>
-
-    <button id="googleBtn" class="google">
-      Continue with Google
-    </button>
-
-    <p id="authMessage">
-      Create an account or sign in to play.
+    <p id="authMessage" class="message" aria-live="polite">
+      Welcome! Sign in to start playing.
     </p>
+  </div>
 
-  </section>
+</section>
 
-  <!-- SIGNED-IN PLAYER -->
+<!-- HOME -->
 
-  <section id="userSection" class="hidden">
+<section id="homePage" class="page">
 
-    <p id="welcome"></p>
-
-    <p id="playerPoints">
-      Your saved points: 0
-    </p>
-
-    <button id="logoutBtn" class="secondary">
-      Sign Out
+  <div class="hero">
+    <h1 id="homeGreeting">Hello, Player! 👋</h1>
+    <p>Your next challenge is waiting. Play, learn and climb the leaderboard!</p>
+    <button class="primary" onclick="showPage('play')">
+      Start Playing →
     </button>
+  </div>
 
-  </section>
+  <h2>Your Dashboard</h2>
 
-  <hr>
+  <div class="grid">
+    <div class="stat">
+      <span>⚡ Total Points</span>
+      <strong id="homePoints">0</strong>
+    </div>
+    <div class="stat">
+      <span>🎮 Games Played</span>
+      <strong id="gamesPlayed">0</strong>
+    </div>
+    <div class="stat">
+      <span>🏆 Correct Answers</span>
+      <strong id="correctAnswers">0</strong>
+    </div>
+    <div class="stat">
+      <span>📚 Questions</span>
+      <strong>150</strong>
+    </div>
+  </div>
 
-  <!-- QUIZ GAME -->
+  <div class="card" style="margin-top:17px">
+    <h3>Ready for a challenge?</h3>
+    <p class="muted">Test your knowledge and earn 10 points for each correct answer.</p>
+    <button class="primary" onclick="showPage('play')">Play Quiz Now</button>
+  </div>
 
-  <section id="gameSection">
+</section>
 
-    <h3 id="score">Points: 0</h3>
+<!-- PLAY -->
 
-    <p id="progress">
-      150 questions waiting for you!
-    </p>
+<section id="playPage" class="page">
 
-    <h2 id="question">
-      Ready to test your knowledge?
-    </h2>
+  <div class="card">
+    <h2>🎮 Quiz Arena</h2>
+    <p class="muted">150 questions. Four options. One correct answer.</p>
+
+    <div class="grid">
+      <div class="stat">
+        <span>Current Score</span>
+        <strong id="gamePoints">0</strong>
+      </div>
+      <div class="stat">
+        <span>Question</span>
+        <strong id="questionNumber">0/150</strong>
+      </div>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <h3 id="question">Ready to play?</h3>
 
     <div id="answers"></div>
 
-    <p id="result">
-      Sign in and press Start Quiz when ready.
+    <p id="gameMessage" class="message" aria-live="polite">
+      Press Start Quiz when ready.
     </p>
 
-    <button id="startBtn" disabled>
-      Start Quiz
+    <button class="primary" id="startBtn">Start Quiz</button>
+    <button class="secondary hidden" id="nextBtn">Next Question →</button>
+  </div>
+
+  <div class="card">
+    <h3>How to earn points</h3>
+    <p class="muted">Every correct answer earns 10 points. Your points are added to your player account after completing a game.</p>
+  </div>
+
+</section>
+
+<!-- LEADERBOARD -->
+
+<section id="leaderboardPage" class="page">
+
+  <div class="hero">
+    <h1>🏆 Leaderboard</h1>
+    <p>See how you compare with other QuizSpark players.</p>
+  </div>
+
+  <div class="card">
+    <h3>Top Players</h3>
+    <div id="leaderboard">
+      <p class="muted">Sign in to load the leaderboard.</p>
+    </div>
+    <button class="secondary" id="refreshLeaderboard">
+      Refresh Leaderboard
     </button>
+  </div>
 
-  </section>
+</section>
 
-  <footer>
-    © 2026 QuizSpark. All rights reserved.
-  </footer>
+<!-- WALLET -->
 
-</div>
+<section id="walletPage" class="page">
+
+  <div class="hero">
+    <h1>💰 My Wallet</h1>
+    <p>Your QuizSpark points balance.</p>
+  </div>
+
+  <div class="card">
+    <p class="muted">Total Available Points</p>
+    <h1 class="yellow" id="walletPoints">0 ⚡</h1>
+    <hr>
+    <p class="muted">
+      Earn more points by answering quiz questions correctly.
+    </p>
+    <button class="primary" onclick="showPage('play')">
+      Earn More Points
+    </button>
+  </div>
+
+  <div class="card">
+    <h3>About Your Points</h3>
+    <p class="muted">
+      Points are in-app game rewards. They are not cash and do not represent a withdrawable monetary balance.
+    </p>
+  </div>
+
+</section>
+
+<!-- PROFILE -->
+
+<section id="profilePage" class="page">
+
+  <div class="card" style="text-align:center">
+    <div class="avatar">👤</div>
+    <h2 id="profileName">Player</h2>
+    <p class="muted" id="profileEmail"></p>
+    <h2 class="yellow" id="profilePoints">0 Points</h2>
+  </div>
+
+  <div class="card">
+    <h3>Player Information</h3>
+    <p class="muted">Account: <span id="accountType">Firebase</span></p>
+    <p class="muted">Games played: <strong id="profileGames">0</strong></p>
+    <p class="muted">Correct answers: <strong id="profileCorrect">0</strong></p>
+    <button class="secondary" id="logoutBtn">Sign Out</button>
+  </div>
+
+</section>
+
+</main>
+
+<nav class="bottom-nav hidden" id="bottomNav">
+  <button class="nav-btn active" data-page="home">
+    <span class="symbol">🏠</span>Home
+  </button>
+  <button class="nav-btn" data-page="play">
+    <span class="symbol">🎮</span>Play
+  </button>
+  <button class="nav-btn" data-page="leaderboard">
+    <span class="symbol">🏆</span>Leaderboard
+  </button>
+  <button class="nav-btn" data-page="wallet">
+    <span class="symbol">💰</span>Wallet
+  </button>
+  <button class="nav-btn" data-page="profile">
+    <span class="symbol">👤</span>Profile
+  </button>
+</nav>
+
+<footer>© 2026 QuizSpark. All rights reserved.</footer>
 
 <script type="module">
 
-/* =====================================
-   1. FIREBASE IMPORTS
-===================================== */
+// ====================================
+// 1. FIREBASE IMPORTS
+// ====================================
 
-import { initializeApp } from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getAuth,
@@ -308,9 +544,9 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
-  updateProfile
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  updateProfile,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
   getFirestore,
@@ -318,14 +554,18 @@ import {
   getDoc,
   setDoc,
   runTransaction,
+  collection,
+  query,
+  orderBy,
+  limit,
+  getDocs,
   serverTimestamp
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-/* =====================================
-   2. FIREBASE CONFIGURATION
-===================================== */
+// ====================================
+// 2. FIREBASE CONFIGURATION
+// ====================================
 
 const firebaseConfig = {
   apiKey: "AIzaSyBpADv380nomzd15tNPmruoYcok4VQ29VQ",
@@ -337,680 +577,329 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
-
 const db = getFirestore(app);
 
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({prompt:"select_account"});
 
-provider.setCustomParameters({
-  prompt: "select_account"
+
+// ====================================
+// 3. APPLICATION STATE
+// ====================================
+
+let currentUser = null;
+let savedPoints = 0;
+let games = 0;
+let correctTotal = 0;
+
+let questions = [];
+let currentQuestion = 0;
+let gameScore = 0;
+let gameRunning = false;
+let answered = false;
+let savingGame = false;
+
+
+// ====================================
+// 4. ELEMENT HELPERS
+// ====================================
+
+const $ = id => document.getElementById(id);
+
+function message(text) {
+  $("authMessage").textContent = text;
+}
+
+function gameMessage(text) {
+  $("gameMessage").textContent = text;
+}
+
+function friendlyError(error) {
+  console.error(error);
+
+  const errors = {
+    "auth/email-already-in-use":"This email already has an account. Please sign in.",
+    "auth/invalid-email":"Enter a valid email address.",
+    "auth/weak-password":"Password must contain at least 6 characters.",
+    "auth/invalid-credential":"Incorrect email or password.",
+    "auth/user-not-found":"No account found. Please register.",
+    "auth/wrong-password":"Incorrect password.",
+    "auth/popup-closed-by-user":"Google sign-in was cancelled.",
+    "auth/popup-blocked":"Allow pop-ups and try Google sign-in again.",
+    "auth/unauthorized-domain":"Add your GitHub Pages domain to Firebase Authorized Domains.",
+    "auth/api-key-not-valid.-please-pass-a-valid-api-key.":"Firebase API key is invalid. Check your Firebase configuration.",
+    "permission-denied":"Firestore denied access. Check your database rules.",
+    "unavailable":"Connection problem. Please try again."
+  };
+
+  return errors[error.code] || error.message || "Something went wrong.";
+}
+
+
+// ====================================
+// 5. NAVIGATION
+// ====================================
+
+window.showPage = function(page) {
+  if (!currentUser) return;
+
+  document.querySelectorAll(".page").forEach(p => {
+    p.classList.remove("active");
+  });
+
+  const target = $(page + "Page");
+  if (target) target.classList.add("active");
+
+  document.querySelectorAll(".nav-btn").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.page === page
+    );
+  });
+
+  if (page === "leaderboard") loadLeaderboard();
+  if (page === "home" || page === "wallet" || page === "profile") {
+    updateDashboard();
+  }
+
+  window.scrollTo(0,0);
+};
+
+document.querySelectorAll(".nav-btn").forEach(button => {
+  button.addEventListener("click", () => {
+    showPage(button.dataset.page);
+  });
 });
 
 
-/* =====================================
-   3. PAGE ELEMENTS
-===================================== */
+// ====================================
+// 6. ACCOUNT PROFILE
+// ====================================
 
-const nameInput = document.getElementById("name");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-
-const authMessage = document.getElementById("authMessage");
-
-const authSection = document.getElementById("authSection");
-const userSection = document.getElementById("userSection");
-
-const welcomeElement = document.getElementById("welcome");
-const playerPointsElement = document.getElementById("playerPoints");
-
-const questionElement = document.getElementById("question");
-const answersElement = document.getElementById("answers");
-const resultElement = document.getElementById("result");
-
-const scoreElement = document.getElementById("score");
-const progressElement = document.getElementById("progress");
-
-const startButton = document.getElementById("startBtn");
-
-
-/* =====================================
-   4. APPLICATION STATE
-===================================== */
-
-let current = 0;
-let points = 0;
-let locked = false;
-
-let gameQuestions = [];
-
-let gameCompleted = false;
-let pointsSaved = false;
-let gameId = null;
-
-let profileLoading = false;
-let currentUser = null;
-
-
-/* =====================================
-   5. MESSAGE HANDLING
-===================================== */
-
-function showMessage(message) {
-  authMessage.textContent = message;
-}
-
-function showFriendlyError(error) {
-
-  const messages = {
-    "auth/email-already-in-use":
-      "This email already has an account. Please sign in.",
-
-    "auth/invalid-email":
-      "Please enter a valid email address.",
-
-    "auth/weak-password":
-      "Your password must contain at least 6 characters.",
-
-    "auth/invalid-credential":
-      "Incorrect email or password.",
-
-    "auth/user-not-found":
-      "No account was found. Please create an account.",
-
-    "auth/wrong-password":
-      "Incorrect password.",
-
-    "auth/popup-closed-by-user":
-      "Google sign-in was cancelled.",
-
-    "auth/popup-blocked":
-      "Your browser blocked the Google sign-in window. Allow pop-ups and try again.",
-
-    "auth/unauthorized-domain":
-      "This website is not authorized in Firebase. Add your GitHub Pages domain to Firebase Authorized Domains.",
-
-    "auth/api-key-not-valid":
-      "Your Firebase API key is invalid. Check your Firebase web app configuration.",
-
-    "permission-denied":
-      "Firebase denied access. Please check your Firestore security rules.",
-
-    "unavailable":
-      "Internet connection problem. Please try again."
-  };
-
-  const message =
-    messages[error.code] ||
-    error.message ||
-    "Something went wrong. Please try again.";
-
-  showMessage(message);
-
-  console.error("QuizSpark error:", error);
-}
-
-
-/* =====================================
-   6. PLAYER PROFILE
-===================================== */
-
-async function createPlayerProfile(user) {
-
-  const playerRef = doc(db, "players", user.uid);
-
-  const snapshot = await getDoc(playerRef);
+async function createProfile(user) {
+  const ref = doc(db,"players",user.uid);
+  const snapshot = await getDoc(ref);
 
   if (!snapshot.exists()) {
-
-    await setDoc(playerRef, {
-      name: user.displayName || user.email || "Player",
-      email: user.email || "",
-      points: 0,
-      createdAt: serverTimestamp()
+    await setDoc(ref,{
+      name:user.displayName || "Player",
+      email:user.email || "",
+      points:0,
+      gamesPlayed:0,
+      correctAnswers:0,
+      createdAt:serverTimestamp()
     });
-
-  } else {
-
-    const data = snapshot.data();
-
-    if (
-      user.displayName &&
-      data.name !== user.displayName
-    ) {
-
-      await setDoc(playerRef, {
-        name: user.displayName
-      }, { merge: true });
-
-    }
+  } else if (user.displayName) {
+    await setDoc(ref,{
+      name:user.displayName
+    },{merge:true});
   }
+}
 
-  await loadPlayerPoints(user);
+async function loadProfile(user) {
+  const snapshot = await getDoc(doc(db,"players",user.uid));
+
+  if (!snapshot.exists()) throw new Error("Player profile not found.");
+
+  const data = snapshot.data();
+
+  savedPoints = Number(data.points) || 0;
+  games = Number(data.gamesPlayed) || 0;
+  correctTotal = Number(data.correctAnswers) || 0;
+
+  updateDashboard();
+}
+
+function updateDashboard() {
+  const name = currentUser?.displayName || "Player";
+
+  $("homeGreeting").textContent = "Hello, " + name + "! 👋";
+  $("homePoints").textContent = savedPoints.toLocaleString();
+  $("headerPoints").textContent = "⚡ " + savedPoints.toLocaleString() + " Points";
+  $("walletPoints").textContent = savedPoints.toLocaleString() + " ⚡";
+  $("playerPoints").textContent = savedPoints.toLocaleString() + " Points";
+  $("profilePoints").textContent = savedPoints.toLocaleString() + " Points";
+
+  $("gamesPlayed").textContent = games;
+  $("profileGames").textContent = games;
+  $("correctAnswers").textContent = correctTotal;
+  $("profileCorrect").textContent = correctTotal;
+
+  $("profileName").textContent = name;
+  $("profileEmail").textContent = currentUser?.email || "";
 }
 
 
-/* =====================================
-   7. LOAD SAVED POINTS
-===================================== */
+// ====================================
+// 7. EMAIL REGISTRATION
+// ====================================
 
-async function loadPlayerPoints(user) {
-
-  const playerRef = doc(db, "players", user.uid);
-
-  const snapshot = await getDoc(playerRef);
-
-  if (!snapshot.exists()) {
-    throw new Error("Player profile does not exist.");
-  }
-
-  const savedPoints = Number(snapshot.data().points) || 0;
-
-  playerPointsElement.textContent =
-    "Your saved points: " + savedPoints.toLocaleString();
-
-}
-
-
-/* =====================================
-   8. CREATE ACCOUNT
-===================================== */
-
-document.getElementById("signupBtn").onclick =
-async function() {
-
-  const name = nameInput.value.trim();
-
-  const email = emailInput.value.trim();
-
-  const password = passwordInput.value;
+$("signupBtn").onclick = async () => {
+  const name = $("name").value.trim();
+  const email = $("email").value.trim();
+  const password = $("password").value;
 
   if (!name || !email || !password) {
-
-    showMessage(
-      "Please enter your name, email and password."
-    );
-
+    message("Please complete all fields.");
     return;
   }
 
   if (password.length < 6) {
-
-    showMessage(
-      "Your password must contain at least 6 characters."
-    );
-
+    message("Password must contain at least 6 characters.");
     return;
   }
 
   try {
+    message("Creating your account...");
 
-    showMessage("Creating your account...");
-
-    const credential =
-      await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-    await updateProfile(credential.user, {
-      displayName: name
-    });
-
-    await createPlayerProfile(credential.user);
-
-    showMessage(
-      "Account created successfully! Welcome to QuizSpark."
+    const credential = await createUserWithEmailAndPassword(
+      auth,email,password
     );
 
-  } catch (error) {
+    await updateProfile(credential.user,{displayName:name});
 
-    showFriendlyError(error);
+    await createProfile(credential.user);
+    await loadProfile(credential.user);
 
+    message("Welcome to QuizSpark!");
+
+  } catch(error) {
+    message(friendlyError(error));
   }
-
 };
 
 
-/* =====================================
-   9. EMAIL SIGN IN
-===================================== */
+// ====================================
+// 8. EMAIL LOGIN
+// ====================================
 
-document.getElementById("loginBtn").onclick =
-async function() {
-
-  const email = emailInput.value.trim();
-
-  const password = passwordInput.value;
+$("loginBtn").onclick = async () => {
+  const email = $("email").value.trim();
+  const password = $("password").value;
 
   if (!email || !password) {
-
-    showMessage("Enter your email and password.");
-
+    message("Enter your email and password.");
     return;
   }
 
   try {
+    message("Signing in...");
 
-    showMessage("Signing you in...");
+    await signInWithEmailAndPassword(auth,email,password);
 
-    await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    message("Welcome back!");
 
-    showMessage("Welcome back to QuizSpark!");
-
-  } catch (error) {
-
-    showFriendlyError(error);
-
+  } catch(error) {
+    message(friendlyError(error));
   }
-
 };
 
 
-/* =====================================
-   10. GOOGLE SIGN IN
-===================================== */
+// ====================================
+// 9. GOOGLE LOGIN
+// ====================================
 
-document.getElementById("googleBtn").onclick =
-async function() {
-
+$("googleBtn").onclick = async () => {
   try {
+    message("Connecting to Google...");
 
-    showMessage("Connecting to Google...");
+    await signInWithPopup(auth,googleProvider);
 
-    await signInWithPopup(auth, provider);
+    message("Google sign-in successful!");
 
-    showMessage("Google sign-in successful!");
-
-  } catch (error) {
-
-    showFriendlyError(error);
-
+  } catch(error) {
+    message(friendlyError(error));
   }
-
 };
 
 
-/* =====================================
-   11. SIGN OUT
-===================================== */
+// ====================================
+// 10. PASSWORD RESET
+// ====================================
 
-document.getElementById("logoutBtn").onclick =
-async function() {
+$("forgotBtn").onclick = async () => {
+  const email = $("email").value.trim();
+
+  if (!email) {
+    message("Enter your email address first.");
+    return;
+  }
 
   try {
+    await sendPasswordResetEmail(auth,email);
+    message("Password reset email sent. Check your inbox.");
+  } catch(error) {
+    message(friendlyError(error));
+  }
+};
 
+
+// ====================================
+// 11. SIGN OUT
+// ====================================
+
+$("logoutBtn").onclick = async () => {
+  try {
     await signOut(auth);
-
-    showMessage("You have signed out.");
-
-    resetGameDisplay();
-
-  } catch (error) {
-
-    showFriendlyError(error);
-
+  } catch(error) {
+    alert(friendlyError(error));
   }
-
 };
 
 
-/* =====================================
-   12. AUTHENTICATION STATE
-===================================== */
+// ====================================
+// 12. AUTHENTICATION LISTENER
+// ====================================
 
-onAuthStateChanged(auth, async function(user) {
-
+onAuthStateChanged(auth,async user => {
   currentUser = user;
 
-  if (user) {
+  if (!user) {
+    $("authPage").classList.add("active");
+    $("homePage").classList.remove("active");
+    $("playPage").classList.remove("active");
+    $("leaderboardPage").classList.remove("active");
+    $("walletPage").classList.remove("active");
+    $("profilePage").classList.remove("active");
 
-    authSection.classList.add("hidden");
+    $("bottomNav").classList.add("hidden");
+    $("authPage").classList.remove("hidden");
+    $("signupFields").classList.remove("hidden");
 
-    userSection.classList.remove("hidden");
+    savedPoints = 0;
+    games = 0;
+    correctTotal = 0;
 
-    welcomeElement.textContent =
-      "Welcome, " + (user.displayName || user.email) + "!";
-
-    startButton.disabled = true;
-
-    resultElement.textContent =
-      "Loading your player account...";
-
-    profileLoading = true;
-
-    try {
-
-      await createPlayerProfile(user);
-
-      if (auth.currentUser?.uid !== user.uid) return;
-
-      startButton.disabled = false;
-
-      resultElement.textContent =
-        "Your account is ready. Press Start Quiz!";
-
-    } catch (error) {
-
-      showFriendlyError(error);
-
-      resultElement.textContent =
-        "Your player account could not load. Please try again.";
-
-    } finally {
-
-      profileLoading = false;
-
-    }
-
-  } else {
-
-    authSection.classList.remove("hidden");
-
-    userSection.classList.add("hidden");
-
-    startButton.disabled = true;
-
-    playerPointsElement.textContent =
-      "Your saved points: 0";
-
-    welcomeElement.textContent = "";
-
-    resultElement.textContent =
-      "Please sign in before playing.";
-
-    profileLoading = false;
-
+    updateDashboard();
+    message("Sign in or create an account to play.");
+    return;
   }
 
+  $("authPage").classList.remove("active");
+  $("authPage").classList.add("hidden");
+  $("signupFields").classList.add("hidden");
+  $("bottomNav").classList.remove("hidden");
+
+  try {
+    message("Loading your account...");
+
+    await createProfile(user);
+
+    if (auth.currentUser?.uid !== user.uid) return;
+
+    await loadProfile(user);
+
+    if (auth.currentUser?.uid !== user.uid) return;
+
+    showPage("home");
+
+  } catch(error) {
+    message(friendlyError(error));
+    gameMessage("Could not load your account. Check Firestore rules.");
+  }
 });
 
 
-/* =====================================
-   13. QUESTION BANK
-===================================== */
-
-const facts = [
-
-["What is the capital of France?", "Which city is the capital of France?", "Paris", ["London", "Rome", "Madrid"]],
-
-["Which planet is called the Red Planet?", "Mars is known by what nickname?", "Mars", ["Venus", "Jupiter", "Mercury"]],
-
-["How many days are in a week?", "A standard week contains how many days?", "7", ["5", "6", "8"]],
-
-["Which animal is called the King of the Jungle?", "The lion is often called what?", "King of the Jungle", ["King of the Ocean", "Forest Giant", "Desert King"]],
-
-["What is the largest ocean on Earth?", "Which ocean is the biggest?", "Pacific Ocean", ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean"]],
-
-["What is the chemical symbol for water?", "H2O is the chemical formula for what?", "Water", ["Oxygen", "Hydrogen", "Salt"]],
-
-["How many sides does a triangle have?", "A three-sided shape is called what?", "3", ["4", "5", "6"]],
-
-["Which country is famous for the Great Wall?", "The Great Wall is located in which country?", "China", ["Japan", "India", "Thailand"]],
-
-["What is the fastest land animal?", "Which animal can run fastest on land?", "Cheetah", ["Lion", "Horse", "Leopard"]],
-
-["Which star is closest to Earth?", "Earth's nearest star is what?", "The Sun", ["Sirius", "Polaris", "The Moon"]],
-
-["What is the largest planet in our solar system?", "Which planet is biggest?", "Jupiter", ["Earth", "Mars", "Saturn"]],
-
-["How many continents are there?", "Earth is commonly divided into how many continents?", "7", ["5", "6", "8"]],
-
-["What is the capital of Japan?", "Tokyo is the capital of which country?", "Japan", ["China", "South Korea", "Vietnam"]],
-
-["Which gas do humans need to breathe?", "Humans need which gas for respiration?", "Oxygen", ["Carbon dioxide", "Helium", "Nitrogen"]],
-
-["What is the freezing point of water in Celsius?", "At what Celsius temperature does water freeze?", "0°C", ["10°C", "50°C", "100°C"]],
-
-["Which organ pumps blood around the body?", "What organ circulates blood?", "The heart", ["The lungs", "The brain", "The liver"]],
-
-["How many hours are in one day?", "One full day contains how many hours?", "24", ["12", "18", "36"]],
-
-["Which language is primarily spoken in Brazil?", "Brazil's main language is what?", "Portuguese", ["Spanish", "French", "English"]],
-
-["What is the capital of Nigeria?", "Abuja is the capital of which country?", "Nigeria", ["Ghana", "Kenya", "Egypt"]],
-
-["Which instrument has black and white keys?", "What musical instrument uses black and white keys?", "Piano", ["Drum", "Flute", "Trumpet"]],
-
-["What is the biggest mammal?", "Which mammal is the largest in the world?", "Blue whale", ["Elephant", "Giraffe", "Hippopotamus"]],
-
-["Which planet is famous for its rings?", "Saturn is especially known for what?", "Rings", ["Oceans", "Red clouds", "Two moons"]],
-
-["How many months are in a year?", "A calendar year has how many months?", "12", ["10", "11", "13"]],
-
-["What is the capital of Italy?", "Rome is the capital of which country?", "Italy", ["Greece", "Spain", "Portugal"]],
-
-["Which part of a plant absorbs water?", "A plant mainly takes up water through what?", "Roots", ["Flowers", "Leaves", "Fruit"]]
-
-];
-
-
-/* =====================================
-   14. GENERATE GENERAL KNOWLEDGE
-===================================== */
-
-const questions = [];
-
-facts.forEach(([q1, q2, answer, wrong]) => {
-
-  questions.push({
-    q: q1,
-    a: [answer, ...wrong],
-    correct: 0
-  });
-
-  questions.push({
-    q: q2,
-    a: [answer, ...wrong],
-    correct: 0
-  });
-
-});
-
-
-/* =====================================
-   15. GENERATE MATHS QUESTIONS
-===================================== */
-
-function makeMathQuestion(question, answer) {
-
-  const wrongAnswers = [
-    answer + 2,
-    answer + 5,
-    Math.max(0, answer - 3)
-  ];
-
-  return {
-
-    q: question,
-
-    a: [answer, ...wrongAnswers].map(String),
-
-    correct: 0
-
-  };
-
-}
-
-
-/* 25 ADDITION QUESTIONS */
-
-for (let i = 0; i < 25; i++) {
-
-  const a = i + 5;
-
-  const b = (i % 9) + 2;
-
-  questions.push(
-    makeMathQuestion(
-      `Maths: What is ${a} + ${b}?`,
-      a + b
-    )
-  );
-
-}
-
-
-/* 25 SUBTRACTION QUESTIONS */
-
-for (let i = 0; i < 25; i++) {
-
-  const a = i + 20;
-
-  const b = (i % 10) + 2;
-
-  questions.push(
-    makeMathQuestion(
-      `Maths: What is ${a} - ${b}?`,
-      a - b
-    )
-  );
-
-}
-
-
-/* 25 MULTIPLICATION QUESTIONS */
-
-for (let i = 0; i < 25; i++) {
-
-  const a = (i % 12) + 2;
-
-  const b = (i % 8) + 2;
-
-  questions.push(
-    makeMathQuestion(
-      `Maths: What is ${a} × ${b}?`,
-      a * b
-    )
-  );
-
-}
-
-
-/* 25 DIVISION QUESTIONS */
-
-for (let i = 0; i < 25; i++) {
-
-  const b = (i % 9) + 2;
-
-  const answer = (i % 12) + 2;
-
-  const a = b * answer;
-
-  questions.push(
-    makeMathQuestion(
-      `Maths: What is ${a} ÷ ${b}?`,
-      answer
-    )
-  );
-
-}
-
-
-/* =====================================
-   16. SHUFFLE FUNCTION
-===================================== */
-
-function shuffle(array) {
-
-  const copy = [...array];
-
-  for (let i = copy.length - 1; i > 0; i--) {
-
-    const j = Math.floor(Math.random() * (i + 1));
-
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-
-  }
-
-  return copy;
-
-}
-
-
-/* =====================================
-   17. START QUIZ
-===================================== */
-
-function startQuiz() {
-
-  if (!auth.currentUser || profileLoading) {
-
-    resultElement.textContent =
-      "Please sign in before playing.";
-
-    return;
-
-  }
-
-  if (gameCompleted && !pointsSaved) {
-
-    saveGamePoints();
-
-    return;
-
-  }
-
-  current = 0;
-
-  points = 0;
-
-  locked = false;
-
-  gameCompleted = false;
-
-  pointsSaved = false;
-
-  gameId =
-    "game_" + Date.now() + "_" +
-    Math.random().toString(36).slice(2);
-
-  gameQuestions = shuffle(questions);
-
-  scoreElement.textContent = "Points: 0";
-
-  startButton.classList.add("hidden");
-
-  showQuestion();
-
-}
-
-
-/* =====================================
-   18. SHOW QUESTION
-===================================== */
-
-function showQuestion() {
-
-  if (current >= gameQuestions.length) {
-
-    finishQuiz();
-
-    return;
-
-  }
-
-  const q = gameQuestions[current];
-
-  questionElement.textContent = q.q;
-
-  progressElement.textContent =
-    `Question ${current + 1} of ${gameQuestions.length}`;
-
-  resultElement.textContent =
-    `Correct answer reward: ${(current + 1) * 10} points`;
-
-  answersElement.replaceChildren();
-
-  const shuffledAnswers = shuffle(
-
-    q.a.map((answer, index) => ({
-
-      answer: an
+// ======================
   
