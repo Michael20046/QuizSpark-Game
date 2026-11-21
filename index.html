@@ -4,18 +4,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>QuizSpark - Play, Learn and Earn!</title>
+
 <meta name="description" content="Play 150 exciting quiz questions, test your knowledge and earn points with QuizSpark.">
 <meta name="theme-color" content="#101044">
+
 <meta property="og:title" content="QuizSpark - Play, Learn and Earn!">
 <meta property="og:description" content="Challenge yourself with 150 exciting quiz questions.">
 <meta property="og:url" content="https://michael20046.github.io/QuizSpark-Game/">
 <meta property="og:image" content="https://michael20046.github.io/QuizSpark-Game/quizspark-logo.png">
+
 <link rel="icon" type="image/png" href="./quizspark-logo.png">
 <link rel="apple-touch-icon" href="./quizspark-logo.png">
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -47,9 +53,17 @@ body {
   border-radius: 16px;
 }
 
-h1 { color: #facc15; }
-h2 { color: #38bdf8; }
-p { line-height: 1.5; }
+h1 {
+  color: #facc15;
+}
+
+h2 {
+  color: #38bdf8;
+}
+
+p {
+  line-height: 1.5;
+}
 
 input {
   display: block;
@@ -96,10 +110,17 @@ button:disabled {
   text-align: left;
 }
 
-.answer.correct { background: #15803d; }
-.answer.wrong { background: #b91c1c; }
+.answer.correct {
+  background: #15803d;
+}
 
-.hidden { display: none !important; }
+.answer.wrong {
+  background: #b91c1c;
+}
+
+.hidden {
+  display: none !important;
+}
 
 #score {
   color: #facc15;
@@ -116,6 +137,7 @@ button:disabled {
   min-height: 25px;
   font-weight: bold;
   color: #4ade80;
+  overflow-wrap: anywhere;
 }
 
 #authMessage {
@@ -128,6 +150,22 @@ button:disabled {
   line-height: 1.4;
 }
 
+#playerPoints {
+  color: #facc15;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+#answers button {
+  min-height: 48px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #475569;
+  margin: 22px 0;
+}
+
 footer {
   margin-top: 25px;
   color: #94a3b8;
@@ -135,59 +173,129 @@ footer {
 }
 
 @media (max-width: 480px) {
-  .container { padding: 17px; }
-  .logo { width: 145px; }
+  .container {
+    padding: 17px;
+  }
+
+  .logo {
+    width: 145px;
+  }
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
-  <img src="./quizspark-logo.png"
-       alt="QuizSpark Gold Logo"
-       class="logo">
+  <img
+    src="./quizspark-logo.png"
+    alt="QuizSpark Logo"
+    class="logo"
+    onerror="this.style.display='none'"
+  >
 
   <h1>⚡ QuizSpark</h1>
   <p>Play, learn and earn points!</p>
 
+  <!-- PLAYER ACCOUNT -->
+
   <section id="authSection">
+
     <h2>Player Account</h2>
 
-    <input id="name" type="text" placeholder="Your name">
-    <input id="email" type="email" placeholder="Email address">
-    <input id="password" type="password" placeholder="Password">
+    <input
+      id="name"
+      type="text"
+      placeholder="Your name"
+      autocomplete="name"
+    >
+
+    <input
+      id="email"
+      type="email"
+      placeholder="Email address"
+      autocomplete="email"
+    >
+
+    <input
+      id="password"
+      type="password"
+      placeholder="Password (minimum 6 characters)"
+      autocomplete="current-password"
+    >
 
     <button id="signupBtn">Create Account</button>
-    <button id="loginBtn" class="secondary">Sign In</button>
-    <button id="googleBtn" class="google">Continue with Google</button>
 
-    <p id="authMessage">Create an account or sign in to play.</p>
+    <button id="loginBtn" class="secondary">
+      Sign In
+    </button>
+
+    <button id="googleBtn" class="google">
+      Continue with Google
+    </button>
+
+    <p id="authMessage">
+      Create an account or sign in to play.
+    </p>
+
   </section>
 
+  <!-- SIGNED-IN PLAYER -->
+
   <section id="userSection" class="hidden">
+
     <p id="welcome"></p>
-    <p id="playerPoints">Your saved points: 0</p>
-    <button id="logoutBtn" class="secondary">Sign Out</button>
+
+    <p id="playerPoints">
+      Your saved points: 0
+    </p>
+
+    <button id="logoutBtn" class="secondary">
+      Sign Out
+    </button>
+
   </section>
 
   <hr>
 
+  <!-- QUIZ GAME -->
+
   <section id="gameSection">
+
     <h3 id="score">Points: 0</h3>
-    <p id="progress">150 questions waiting for you!</p>
-    <h2 id="question">Ready to test your knowledge?</h2>
+
+    <p id="progress">
+      150 questions waiting for you!
+    </p>
+
+    <h2 id="question">
+      Ready to test your knowledge?
+    </h2>
+
     <div id="answers"></div>
-    <p id="result">Press Start Quiz when you're ready.</p>
-    <button id="startBtn">Start Quiz</button>
+
+    <p id="result">
+      Sign in and press Start Quiz when ready.
+    </p>
+
+    <button id="startBtn" disabled>
+      Start Quiz
+    </button>
+
   </section>
 
   <footer>
     © 2026 QuizSpark. All rights reserved.
   </footer>
+
 </div>
 
 <script type="module">
+
+/* =====================================
+   1. FIREBASE IMPORTS
+===================================== */
 
 import { initializeApp } from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -208,11 +316,16 @@ import {
   getFirestore,
   doc,
   getDoc,
-  setDoc
+  setDoc,
+  runTransaction,
+  serverTimestamp
 } from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* FIREBASE CONFIGURATION */
+
+/* =====================================
+   2. FIREBASE CONFIGURATION
+===================================== */
 
 const firebaseConfig = {
   apiKey: "AIzaSyBpADv380nomzd15tNPmruoYcok4VQ29VQ",
@@ -224,182 +337,489 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
+
 const db = getFirestore(app);
+
 const provider = new GoogleAuthProvider();
 
-/* ACCOUNT ELEMENTS */
+provider.setCustomParameters({
+  prompt: "select_account"
+});
+
+
+/* =====================================
+   3. PAGE ELEMENTS
+===================================== */
 
 const nameInput = document.getElementById("name");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
+
 const authMessage = document.getElementById("authMessage");
+
+const authSection = document.getElementById("authSection");
+const userSection = document.getElementById("userSection");
+
+const welcomeElement = document.getElementById("welcome");
+const playerPointsElement = document.getElementById("playerPoints");
+
+const questionElement = document.getElementById("question");
+const answersElement = document.getElementById("answers");
+const resultElement = document.getElementById("result");
+
+const scoreElement = document.getElementById("score");
+const progressElement = document.getElementById("progress");
+
+const startButton = document.getElementById("startBtn");
+
+
+/* =====================================
+   4. APPLICATION STATE
+===================================== */
+
+let current = 0;
+let points = 0;
+let locked = false;
+
+let gameQuestions = [];
+
+let gameCompleted = false;
+let pointsSaved = false;
+let gameId = null;
+
+let profileLoading = false;
+let currentUser = null;
+
+
+/* =====================================
+   5. MESSAGE HANDLING
+===================================== */
 
 function showMessage(message) {
   authMessage.textContent = message;
 }
 
-/* CREATE PLAYER PROFILE */
+function showFriendlyError(error) {
 
-async function createPlayerProfile(user) {
-  const playerRef = doc(db, "players", user.uid);
-  const playerSnapshot = await getDoc(playerRef);
+  const messages = {
+    "auth/email-already-in-use":
+      "This email already has an account. Please sign in.",
 
-  if (!playerSnapshot.exists()) {
-    await setDoc(playerRef, {
-      name: user.displayName || user.email || "Player",
-      points: 0
-    });
-  }
+    "auth/invalid-email":
+      "Please enter a valid email address.",
 
-  const savedPlayer = await getDoc(playerRef);
+    "auth/weak-password":
+      "Your password must contain at least 6 characters.",
 
-  document.getElementById("playerPoints").textContent =
-    "Your saved points: " + (savedPlayer.data().points || 0);
+    "auth/invalid-credential":
+      "Incorrect email or password.",
+
+    "auth/user-not-found":
+      "No account was found. Please create an account.",
+
+    "auth/wrong-password":
+      "Incorrect password.",
+
+    "auth/popup-closed-by-user":
+      "Google sign-in was cancelled.",
+
+    "auth/popup-blocked":
+      "Your browser blocked the Google sign-in window. Allow pop-ups and try again.",
+
+    "auth/unauthorized-domain":
+      "This website is not authorized in Firebase. Add your GitHub Pages domain to Firebase Authorized Domains.",
+
+    "auth/api-key-not-valid":
+      "Your Firebase API key is invalid. Check your Firebase web app configuration.",
+
+    "permission-denied":
+      "Firebase denied access. Please check your Firestore security rules.",
+
+    "unavailable":
+      "Internet connection problem. Please try again."
+  };
+
+  const message =
+    messages[error.code] ||
+    error.message ||
+    "Something went wrong. Please try again.";
+
+  showMessage(message);
+
+  console.error("QuizSpark error:", error);
 }
 
-/* SIGN UP */
 
-document.getElementById("signupBtn").onclick = async () => {
+/* =====================================
+   6. PLAYER PROFILE
+===================================== */
+
+async function createPlayerProfile(user) {
+
+  const playerRef = doc(db, "players", user.uid);
+
+  const snapshot = await getDoc(playerRef);
+
+  if (!snapshot.exists()) {
+
+    await setDoc(playerRef, {
+      name: user.displayName || user.email || "Player",
+      email: user.email || "",
+      points: 0,
+      createdAt: serverTimestamp()
+    });
+
+  } else {
+
+    const data = snapshot.data();
+
+    if (
+      user.displayName &&
+      data.name !== user.displayName
+    ) {
+
+      await setDoc(playerRef, {
+        name: user.displayName
+      }, { merge: true });
+
+    }
+  }
+
+  await loadPlayerPoints(user);
+}
+
+
+/* =====================================
+   7. LOAD SAVED POINTS
+===================================== */
+
+async function loadPlayerPoints(user) {
+
+  const playerRef = doc(db, "players", user.uid);
+
+  const snapshot = await getDoc(playerRef);
+
+  if (!snapshot.exists()) {
+    throw new Error("Player profile does not exist.");
+  }
+
+  const savedPoints = Number(snapshot.data().points) || 0;
+
+  playerPointsElement.textContent =
+    "Your saved points: " + savedPoints.toLocaleString();
+
+}
+
+
+/* =====================================
+   8. CREATE ACCOUNT
+===================================== */
+
+document.getElementById("signupBtn").onclick =
+async function() {
+
   const name = nameInput.value.trim();
+
   const email = emailInput.value.trim();
+
   const password = passwordInput.value;
 
   if (!name || !email || !password) {
-    showMessage("Please enter your name, email and password.");
+
+    showMessage(
+      "Please enter your name, email and password."
+    );
+
     return;
   }
 
   if (password.length < 6) {
-    showMessage("Your password must contain at least 6 characters.");
+
+    showMessage(
+      "Your password must contain at least 6 characters."
+    );
+
     return;
   }
 
   try {
-    const credential = await createUserWithEmailAndPassword(
-      auth, email, password
-    );
+
+    showMessage("Creating your account...");
+
+    const credential =
+      await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
     await updateProfile(credential.user, {
       displayName: name
     });
 
-    showMessage("Account created successfully!");
+    await createPlayerProfile(credential.user);
+
+    showMessage(
+      "Account created successfully! Welcome to QuizSpark."
+    );
+
   } catch (error) {
-    showMessage(error.message);
+
+    showFriendlyError(error);
+
   }
+
 };
 
-/* EMAIL SIGN IN */
 
-document.getElementById("loginBtn").onclick = async () => {
+/* =====================================
+   9. EMAIL SIGN IN
+===================================== */
+
+document.getElementById("loginBtn").onclick =
+async function() {
+
   const email = emailInput.value.trim();
+
   const password = passwordInput.value;
 
   if (!email || !password) {
+
     showMessage("Enter your email and password.");
+
     return;
   }
 
   try {
-    await signInWithEmailAndPassword(auth, email, password);
-    showMessage("Welcome back!");
+
+    showMessage("Signing you in...");
+
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    showMessage("Welcome back to QuizSpark!");
+
   } catch (error) {
-    showMessage(error.message);
+
+    showFriendlyError(error);
+
   }
+
 };
 
-/* GOOGLE SIGN IN */
 
-document.getElementById("googleBtn").onclick = async () => {
+/* =====================================
+   10. GOOGLE SIGN IN
+===================================== */
+
+document.getElementById("googleBtn").onclick =
+async function() {
+
   try {
+
+    showMessage("Connecting to Google...");
+
     await signInWithPopup(auth, provider);
+
     showMessage("Google sign-in successful!");
+
   } catch (error) {
-    showMessage(error.message);
+
+    showFriendlyError(error);
+
   }
+
 };
 
-/* SIGN OUT */
 
-document.getElementById("logoutBtn").onclick = async () => {
+/* =====================================
+   11. SIGN OUT
+===================================== */
+
+document.getElementById("logoutBtn").onclick =
+async function() {
+
   try {
+
     await signOut(auth);
+
     showMessage("You have signed out.");
+
+    resetGameDisplay();
+
   } catch (error) {
-    showMessage(error.message);
+
+    showFriendlyError(error);
+
   }
+
 };
 
-/* AUTHENTICATION STATE */
 
-onAuthStateChanged(auth, async (user) => {
-  const authSection = document.getElementById("authSection");
-  const userSection = document.getElementById("userSection");
-  const startButton = document.getElementById("startBtn");
+/* =====================================
+   12. AUTHENTICATION STATE
+===================================== */
+
+onAuthStateChanged(auth, async function(user) {
+
+  currentUser = user;
 
   if (user) {
+
     authSection.classList.add("hidden");
+
     userSection.classList.remove("hidden");
 
-    document.getElementById("welcome").textContent =
+    welcomeElement.textContent =
       "Welcome, " + (user.displayName || user.email) + "!";
 
-    startButton.disabled = false;
+    startButton.disabled = true;
+
+    resultElement.textContent =
+      "Loading your player account...";
+
+    profileLoading = true;
 
     try {
+
       await createPlayerProfile(user);
+
+      if (auth.currentUser?.uid !== user.uid) return;
+
+      startButton.disabled = false;
+
+      resultElement.textContent =
+        "Your account is ready. Press Start Quiz!";
+
     } catch (error) {
-      showMessage("Account signed in, but player profile could not load: " + error.message);
+
+      showFriendlyError(error);
+
+      resultElement.textContent =
+        "Your player account could not load. Please try again.";
+
+    } finally {
+
+      profileLoading = false;
+
     }
 
   } else {
+
     authSection.classList.remove("hidden");
+
     userSection.classList.add("hidden");
+
     startButton.disabled = true;
+
+    playerPointsElement.textContent =
+      "Your saved points: 0";
+
+    welcomeElement.textContent = "";
+
+    resultElement.textContent =
+      "Please sign in before playing.";
+
+    profileLoading = false;
+
   }
+
 });
 
-/* QUESTION BANK */
+
+/* =====================================
+   13. QUESTION BANK
+===================================== */
 
 const facts = [
+
 ["What is the capital of France?", "Which city is the capital of France?", "Paris", ["London", "Rome", "Madrid"]],
+
 ["Which planet is called the Red Planet?", "Mars is known by what nickname?", "Mars", ["Venus", "Jupiter", "Mercury"]],
+
 ["How many days are in a week?", "A standard week contains how many days?", "7", ["5", "6", "8"]],
+
 ["Which animal is called the King of the Jungle?", "The lion is often called what?", "King of the Jungle", ["King of the Ocean", "Forest Giant", "Desert King"]],
+
 ["What is the largest ocean on Earth?", "Which ocean is the biggest?", "Pacific Ocean", ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean"]],
+
 ["What is the chemical symbol for water?", "H2O is the chemical formula for what?", "Water", ["Oxygen", "Hydrogen", "Salt"]],
+
 ["How many sides does a triangle have?", "A three-sided shape is called what?", "3", ["4", "5", "6"]],
+
 ["Which country is famous for the Great Wall?", "The Great Wall is located in which country?", "China", ["Japan", "India", "Thailand"]],
+
 ["What is the fastest land animal?", "Which animal can run fastest on land?", "Cheetah", ["Lion", "Horse", "Leopard"]],
+
 ["Which star is closest to Earth?", "Earth's nearest star is what?", "The Sun", ["Sirius", "Polaris", "The Moon"]],
+
 ["What is the largest planet in our solar system?", "Which planet is biggest?", "Jupiter", ["Earth", "Mars", "Saturn"]],
+
 ["How many continents are there?", "Earth is commonly divided into how many continents?", "7", ["5", "6", "8"]],
+
 ["What is the capital of Japan?", "Tokyo is the capital of which country?", "Japan", ["China", "South Korea", "Vietnam"]],
+
 ["Which gas do humans need to breathe?", "Humans need which gas for respiration?", "Oxygen", ["Carbon dioxide", "Helium", "Nitrogen"]],
+
 ["What is the freezing point of water in Celsius?", "At what Celsius temperature does water freeze?", "0°C", ["10°C", "50°C", "100°C"]],
+
 ["Which organ pumps blood around the body?", "What organ circulates blood?", "The heart", ["The lungs", "The brain", "The liver"]],
+
 ["How many hours are in one day?", "One full day contains how many hours?", "24", ["12", "18", "36"]],
+
 ["Which language is primarily spoken in Brazil?", "Brazil's main language is what?", "Portuguese", ["Spanish", "French", "English"]],
+
 ["What is the capital of Nigeria?", "Abuja is the capital of which country?", "Nigeria", ["Ghana", "Kenya", "Egypt"]],
+
 ["Which instrument has black and white keys?", "What musical instrument uses black and white keys?", "Piano", ["Drum", "Flute", "Trumpet"]],
+
 ["What is the biggest mammal?", "Which mammal is the largest in the world?", "Blue whale", ["Elephant", "Giraffe", "Hippopotamus"]],
+
 ["Which planet is famous for its rings?", "Saturn is especially known for what?", "Rings", ["Oceans", "Red clouds", "Two moons"]],
+
 ["How many months are in a year?", "A calendar year has how many months?", "12", ["10", "11", "13"]],
+
 ["What is the capital of Italy?", "Rome is the capital of which country?", "Italy", ["Greece", "Spain", "Portugal"]],
+
 ["Which part of a plant absorbs water?", "A plant mainly takes up water through what?", "Roots", ["Flowers", "Leaves", "Fruit"]]
+
 ];
+
+
+/* =====================================
+   14. GENERATE GENERAL KNOWLEDGE
+===================================== */
 
 const questions = [];
 
 facts.forEach(([q1, q2, answer, wrong]) => {
-  questions.push({ q: q1, a: [answer, ...wrong], correct: 0 });
-  questions.push({ q: q2, a: [answer, ...wrong], correct: 0 });
+
+  questions.push({
+    q: q1,
+    a: [answer, ...wrong],
+    correct: 0
+  });
+
+  questions.push({
+    q: q2,
+    a: [answer, ...wrong],
+    correct: 0
+  });
+
 });
 
-/* 100 MATHS QUESTIONS */
+
+/* =====================================
+   15. GENERATE MATHS QUESTIONS
+===================================== */
 
 function makeMathQuestion(question, answer) {
+
   const wrongAnswers = [
     answer + 2,
     answer + 5,
@@ -407,104 +827,173 @@ function makeMathQuestion(question, answer) {
   ];
 
   return {
+
     q: question,
+
     a: [answer, ...wrongAnswers].map(String),
+
     correct: 0
+
   };
+
 }
 
+
+/* 25 ADDITION QUESTIONS */
+
 for (let i = 0; i < 25; i++) {
+
   const a = i + 5;
+
   const b = (i % 9) + 2;
 
-  questions.push(makeMathQuestion(
-    `Maths: What is ${a} + ${b}?`,
-    a + b
-  ));
+  questions.push(
+    makeMathQuestion(
+      `Maths: What is ${a} + ${b}?`,
+      a + b
+    )
+  );
+
 }
 
+
+/* 25 SUBTRACTION QUESTIONS */
+
 for (let i = 0; i < 25; i++) {
+
   const a = i + 20;
+
   const b = (i % 10) + 2;
 
-  questions.push(makeMathQuestion(
-    `Maths: What is ${a} - ${b}?`,
-    a - b
-  ));
+  questions.push(
+    makeMathQuestion(
+      `Maths: What is ${a} - ${b}?`,
+      a - b
+    )
+  );
+
 }
 
+
+/* 25 MULTIPLICATION QUESTIONS */
+
 for (let i = 0; i < 25; i++) {
+
   const a = (i % 12) + 2;
+
   const b = (i % 8) + 2;
 
-  questions.push(makeMathQuestion(
-    `Maths: What is ${a} × ${b}?`,
-    a * b
-  ));
+  questions.push(
+    makeMathQuestion(
+      `Maths: What is ${a} × ${b}?`,
+      a * b
+    )
+  );
+
 }
+
+
+/* 25 DIVISION QUESTIONS */
 
 for (let i = 0; i < 25; i++) {
+
   const b = (i % 9) + 2;
+
   const answer = (i % 12) + 2;
+
   const a = b * answer;
 
-  questions.push(makeMathQuestion(
-    `Maths: What is ${a} ÷ ${b}?`,
-    answer
-  ));
+  questions.push(
+    makeMathQuestion(
+      `Maths: What is ${a} ÷ ${b}?`,
+      answer
+    )
+  );
+
 }
 
-/* GAME SETTINGS */
 
-let current = 0;
-let points = 0;
-let locked = false;
-let gameQuestions = [];
-
-const questionElement = document.getElementById("question");
-const answersElement = document.getElementById("answers");
-const resultElement = document.getElementById("result");
-const scoreElement = document.getElementById("score");
-const progressElement = document.getElementById("progress");
-const startButton = document.getElementById("startBtn");
+/* =====================================
+   16. SHUFFLE FUNCTION
+===================================== */
 
 function shuffle(array) {
+
   const copy = [...array];
 
   for (let i = copy.length - 1; i > 0; i--) {
+
     const j = Math.floor(Math.random() * (i + 1));
+
     [copy[i], copy[j]] = [copy[j], copy[i]];
+
   }
 
   return copy;
+
 }
 
-/* START QUIZ */
+
+/* =====================================
+   17. START QUIZ
+===================================== */
 
 function startQuiz() {
-  if (!auth.currentUser) {
-    resultElement.textContent = "Please sign in before playing.";
+
+  if (!auth.currentUser || profileLoading) {
+
+    resultElement.textContent =
+      "Please sign in before playing.";
+
     return;
+
+  }
+
+  if (gameCompleted && !pointsSaved) {
+
+    saveGamePoints();
+
+    return;
+
   }
 
   current = 0;
+
   points = 0;
+
   locked = false;
+
+  gameCompleted = false;
+
+  pointsSaved = false;
+
+  gameId =
+    "game_" + Date.now() + "_" +
+    Math.random().toString(36).slice(2);
 
   gameQuestions = shuffle(questions);
 
   scoreElement.textContent = "Points: 0";
+
   startButton.classList.add("hidden");
 
   showQuestion();
+
 }
 
-/* SHOW QUESTION */
+
+/* =====================================
+   18. SHOW QUESTION
+===================================== */
 
 function showQuestion() {
+
   if (current >= gameQuestions.length) {
+
     finishQuiz();
+
     return;
+
   }
 
   const q = gameQuestions[current];
@@ -517,91 +1006,11 @@ function showQuestion() {
   resultElement.textContent =
     `Correct answer reward: ${(current + 1) * 10} points`;
 
-  answersElement.innerHTML = "";
+  answersElement.replaceChildren();
 
   const shuffledAnswers = shuffle(
+
     q.a.map((answer, index) => ({
-      answer,
-      isCorrect: index === q.correct
-    }))
-  );
 
-  shuffledAnswers.forEach((item) => {
-    const button = document.createElement("button");
-
-    button.className = "answer";
-    button.textContent = item.answer;
-
-    button.onclick = () => checkAnswer(item.isCorrect, button);
-
-    answersElement.appendChild(button);
-  });
-}
-
-/* CHECK ANSWER */
-
-function checkAnswer(isCorrect, selectedButton) {
-  if (locked) return;
-
-  locked = true;
-
-  const buttons = answersElement.querySelectorAll("button");
-  buttons.forEach(button => button.disabled = true);
-
-  if (isCorrect) {
-    const reward = (current + 1) * 10;
-    points += reward;
-
-    selectedButton.classList.add("correct");
-
-    resultElement.textContent =
-      `Correct! You earned ${reward} points!`;
-
-  } else {
-    selectedButton.classList.add("wrong");
-
-    resultElement.textContent =
-      "Not quite! Keep learning and try the next one.";
-
-    const q = gameQuestions[current];
-    const correctAnswer = q.a[q.correct];
-
-    buttons.forEach(button => {
-      if (button.textContent === correctAnswer) {
-        button.classList.add("correct");
-      }
-    });
-  }
-
-  scoreElement.textContent = "Points: " + points;
-
-  setTimeout(() => {
-    current++;
-    locked = false;
-    showQuestion();
-  }, 1200);
-}
-
-/* FINISH QUIZ */
-
-function finishQuiz() {
-  questionElement.textContent = "🏆 Quiz Completed!";
-  answersElement.innerHTML = "";
-
-  progressElement.textContent =
-    "You completed all 150 questions!";
-
-  resultElement.textContent =
-    `Amazing effort! Your final score is ${points} points.`;
-
-  startButton.textContent = "Play Again";
-  startButton.classList.remove("hidden");
-}
-
-startButton.onclick = startQuiz;
-startButton.disabled = true;
-
-</script>
-</body>
-  </html>
+      answer: an
   
