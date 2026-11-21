@@ -49,7 +49,6 @@ body {
 
 h1 { color: #facc15; }
 h2 { color: #38bdf8; }
-
 p { line-height: 1.5; }
 
 input {
@@ -97,13 +96,8 @@ button:disabled {
   text-align: left;
 }
 
-.answer.correct {
-  background: #15803d;
-}
-
-.answer.wrong {
-  background: #b91c1c;
-}
+.answer.correct { background: #15803d; }
+.answer.wrong { background: #b91c1c; }
 
 .hidden { display: none !important; }
 
@@ -157,7 +151,6 @@ footer {
   <h1>⚡ QuizSpark</h1>
   <p>Play, learn and earn points!</p>
 
-  <!-- PLAYER ACCOUNT -->
   <section id="authSection">
     <h2>Player Account</h2>
 
@@ -172,15 +165,14 @@ footer {
     <p id="authMessage">Create an account or sign in to play.</p>
   </section>
 
-  <!-- SIGNED-IN PLAYER -->
   <section id="userSection" class="hidden">
     <p id="welcome"></p>
+    <p id="playerPoints">Your saved points: 0</p>
     <button id="logoutBtn" class="secondary">Sign Out</button>
   </section>
 
   <hr>
 
-  <!-- QUIZ -->
   <section id="gameSection">
     <h3 id="score">Points: 0</h3>
     <p id="progress">150 questions waiting for you!</p>
@@ -196,8 +188,9 @@ footer {
 </div>
 
 <script type="module">
+
 import { initializeApp } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getAuth,
@@ -209,30 +202,33 @@ import {
   onAuthStateChanged,
   updateProfile
 } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* =====================================
-   FIREBASE CONFIGURATION
-   REPLACE THESE PLACEHOLDERS WITH YOUR
-   EXISTING FIREBASE PROJECT VALUES.
-===================================== */
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* FIREBASE CONFIGURATION */
 
 const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY_HERE",
-  authDomain: "PASTE_YOUR_AUTH_DOMAIN_HERE",
-  projectId: "PASTE_YOUR_PROJECT_ID_HERE",
-  storageBucket: "PASTE_YOUR_STORAGE_BUCKET_HERE",
-  messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID_HERE",
-  appId: "PASTE_YOUR_APP_ID_HERE"
+  apiKey: "AIzaSyBpADv380nomzd15tNPmruoYcok4VQ29VQ",
+  authDomain: "quizspark-65dbd.firebaseapp.com",
+  projectId: "quizspark-65dbd",
+  storageBucket: "quizspark-65dbd.firebasestorage.app",
+  messagingSenderId: "328231530287",
+  appId: "1:328231530287:web:9a2f4bb9b92b5faa267bda"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-/* =====================================
-   ACCOUNT ELEMENTS
-===================================== */
+/* ACCOUNT ELEMENTS */
 
 const nameInput = document.getElementById("name");
 const emailInput = document.getElementById("email");
@@ -242,6 +238,27 @@ const authMessage = document.getElementById("authMessage");
 function showMessage(message) {
   authMessage.textContent = message;
 }
+
+/* CREATE PLAYER PROFILE */
+
+async function createPlayerProfile(user) {
+  const playerRef = doc(db, "players", user.uid);
+  const playerSnapshot = await getDoc(playerRef);
+
+  if (!playerSnapshot.exists()) {
+    await setDoc(playerRef, {
+      name: user.displayName || user.email || "Player",
+      points: 0
+    });
+  }
+
+  const savedPlayer = await getDoc(playerRef);
+
+  document.getElementById("playerPoints").textContent =
+    "Your saved points: " + (savedPlayer.data().points || 0);
+}
+
+/* SIGN UP */
 
 document.getElementById("signupBtn").onclick = async () => {
   const name = nameInput.value.trim();
@@ -273,6 +290,8 @@ document.getElementById("signupBtn").onclick = async () => {
   }
 };
 
+/* EMAIL SIGN IN */
+
 document.getElementById("loginBtn").onclick = async () => {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
@@ -290,6 +309,8 @@ document.getElementById("loginBtn").onclick = async () => {
   }
 };
 
+/* GOOGLE SIGN IN */
+
 document.getElementById("googleBtn").onclick = async () => {
   try {
     await signInWithPopup(auth, provider);
@@ -298,6 +319,8 @@ document.getElementById("googleBtn").onclick = async () => {
     showMessage(error.message);
   }
 };
+
+/* SIGN OUT */
 
 document.getElementById("logoutBtn").onclick = async () => {
   try {
@@ -308,9 +331,12 @@ document.getElementById("logoutBtn").onclick = async () => {
   }
 };
 
-onAuthStateChanged(auth, (user) => {
+/* AUTHENTICATION STATE */
+
+onAuthStateChanged(auth, async (user) => {
   const authSection = document.getElementById("authSection");
   const userSection = document.getElementById("userSection");
+  const startButton = document.getElementById("startBtn");
 
   if (user) {
     authSection.classList.add("hidden");
@@ -318,65 +344,60 @@ onAuthStateChanged(auth, (user) => {
 
     document.getElementById("welcome").textContent =
       "Welcome, " + (user.displayName || user.email) + "!";
+
+    startButton.disabled = false;
+
+    try {
+      await createPlayerProfile(user);
+    } catch (error) {
+      showMessage("Account signed in, but player profile could not load: " + error.message);
+    }
+
   } else {
     authSection.classList.remove("hidden");
     userSection.classList.add("hidden");
+    startButton.disabled = true;
   }
 });
 
-/* =====================================
-   QUESTION BANK
-   25 GENERAL KNOWLEDGE QUESTIONS,
-   EACH ASKED IN TWO DIFFERENT WAYS.
-===================================== */
+/* QUESTION BANK */
 
 const facts = [
-  ["What is the capital of France?", "Which city is the capital of France?", "Paris", ["London", "Rome", "Madrid"]],
-  ["Which planet is called the Red Planet?", "Mars is known by what nickname?", "Mars", ["Venus", "Jupiter", "Mercury"]],
-  ["How many days are in a week?", "A standard week contains how many days?", "7", ["5", "6", "8"]],
-  ["Which animal is called the King of the Jungle?", "The lion is often called what?", "King of the Jungle", ["King of the Ocean", "Forest Giant", "Desert King"]],
-  ["What is the largest ocean on Earth?", "Which ocean is the biggest?", "Pacific Ocean", ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean"]],
-  ["What is the chemical symbol for water?", "H2O is the chemical formula for what?", "Water", ["Oxygen", "Hydrogen", "Salt"]],
-  ["How many sides does a triangle have?", "A three-sided shape is called what?", "3", ["4", "5", "6"]],
-  ["Which country is famous for the Great Wall?", "The Great Wall is located in which country?", "China", ["Japan", "India", "Thailand"]],
-  ["What is the fastest land animal?", "Which animal can run fastest on land?", "Cheetah", ["Lion", "Horse", "Leopard"]],
-  ["Which star is closest to Earth?", "Earth's nearest star is what?", "The Sun", ["Sirius", "Polaris", "The Moon"]],
-  ["What is the largest planet in our solar system?", "Which planet is biggest?", "Jupiter", ["Earth", "Mars", "Saturn"]],
-  ["How many continents are there?", "Earth is commonly divided into how many continents?", "7", ["5", "6", "8"]],
-  ["What is the capital of Japan?", "Tokyo is the capital of which country?", "Japan", ["China", "South Korea", "Vietnam"]],
-  ["Which gas do humans need to breathe?", "Humans need which gas for respiration?", "Oxygen", ["Carbon dioxide", "Helium", "Nitrogen"]],
-  ["What is the freezing point of water in Celsius?", "At what Celsius temperature does water freeze?", "0°C", ["10°C", "50°C", "100°C"]],
-  ["Which organ pumps blood around the body?", "What organ circulates blood?", "The heart", ["The lungs", "The brain", "The liver"]],
-  ["How many hours are in one day?", "One full day contains how many hours?", "24", ["12", "18", "36"]],
-  ["Which language is primarily spoken in Brazil?", "Brazil's main language is what?", "Portuguese", ["Spanish", "French", "English"]],
-  ["What is the capital of Nigeria?", "Abuja is the capital of which country?", "Nigeria", ["Ghana", "Kenya", "Egypt"]],
-  ["Which instrument has black and white keys?", "What musical instrument uses black and white keys?", "Piano", ["Drum", "Flute", "Trumpet"]],
-  ["What is the biggest mammal?", "Which mammal is the largest in the world?", "Blue whale", ["Elephant", "Giraffe", "Hippopotamus"]],
-  ["Which planet is famous for its rings?", "Saturn is especially known for what?", "Rings", ["Oceans", "Red clouds", "Two moons"]],
-  ["How many months are in a year?", "A calendar year has how many months?", "12", ["10", "11", "13"]],
-  ["What is the capital of Italy?", "Rome is the capital of which country?", "Italy", ["Greece", "Spain", "Portugal"]],
-  ["Which part of a plant absorbs water?", "A plant mainly takes up water through what?", "Roots", ["Flowers", "Leaves", "Fruit"]]
+["What is the capital of France?", "Which city is the capital of France?", "Paris", ["London", "Rome", "Madrid"]],
+["Which planet is called the Red Planet?", "Mars is known by what nickname?", "Mars", ["Venus", "Jupiter", "Mercury"]],
+["How many days are in a week?", "A standard week contains how many days?", "7", ["5", "6", "8"]],
+["Which animal is called the King of the Jungle?", "The lion is often called what?", "King of the Jungle", ["King of the Ocean", "Forest Giant", "Desert King"]],
+["What is the largest ocean on Earth?", "Which ocean is the biggest?", "Pacific Ocean", ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean"]],
+["What is the chemical symbol for water?", "H2O is the chemical formula for what?", "Water", ["Oxygen", "Hydrogen", "Salt"]],
+["How many sides does a triangle have?", "A three-sided shape is called what?", "3", ["4", "5", "6"]],
+["Which country is famous for the Great Wall?", "The Great Wall is located in which country?", "China", ["Japan", "India", "Thailand"]],
+["What is the fastest land animal?", "Which animal can run fastest on land?", "Cheetah", ["Lion", "Horse", "Leopard"]],
+["Which star is closest to Earth?", "Earth's nearest star is what?", "The Sun", ["Sirius", "Polaris", "The Moon"]],
+["What is the largest planet in our solar system?", "Which planet is biggest?", "Jupiter", ["Earth", "Mars", "Saturn"]],
+["How many continents are there?", "Earth is commonly divided into how many continents?", "7", ["5", "6", "8"]],
+["What is the capital of Japan?", "Tokyo is the capital of which country?", "Japan", ["China", "South Korea", "Vietnam"]],
+["Which gas do humans need to breathe?", "Humans need which gas for respiration?", "Oxygen", ["Carbon dioxide", "Helium", "Nitrogen"]],
+["What is the freezing point of water in Celsius?", "At what Celsius temperature does water freeze?", "0°C", ["10°C", "50°C", "100°C"]],
+["Which organ pumps blood around the body?", "What organ circulates blood?", "The heart", ["The lungs", "The brain", "The liver"]],
+["How many hours are in one day?", "One full day contains how many hours?", "24", ["12", "18", "36"]],
+["Which language is primarily spoken in Brazil?", "Brazil's main language is what?", "Portuguese", ["Spanish", "French", "English"]],
+["What is the capital of Nigeria?", "Abuja is the capital of which country?", "Nigeria", ["Ghana", "Kenya", "Egypt"]],
+["Which instrument has black and white keys?", "What musical instrument uses black and white keys?", "Piano", ["Drum", "Flute", "Trumpet"]],
+["What is the biggest mammal?", "Which mammal is the largest in the world?", "Blue whale", ["Elephant", "Giraffe", "Hippopotamus"]],
+["Which planet is famous for its rings?", "Saturn is especially known for what?", "Rings", ["Oceans", "Red clouds", "Two moons"]],
+["How many months are in a year?", "A calendar year has how many months?", "12", ["10", "11", "13"]],
+["What is the capital of Italy?", "Rome is the capital of which country?", "Italy", ["Greece", "Spain", "Portugal"]],
+["Which part of a plant absorbs water?", "A plant mainly takes up water through what?", "Roots", ["Flowers", "Leaves", "Fruit"]]
 ];
 
 const questions = [];
 
 facts.forEach(([q1, q2, answer, wrong]) => {
-  questions.push({
-    q: q1,
-    a: [answer, ...wrong],
-    correct: 0
-  });
-
-  questions.push({
-    q: q2,
-    a: [answer, ...wrong],
-    correct: 0
-  });
+  questions.push({ q: q1, a: [answer, ...wrong], correct: 0 });
+  questions.push({ q: q2, a: [answer, ...wrong], correct: 0 });
 });
 
-/* =====================================
-   100 MATHS QUESTIONS
-===================================== */
+/* 100 MATHS QUESTIONS */
 
 function makeMathQuestion(question, answer) {
   const wrongAnswers = [
@@ -385,12 +406,9 @@ function makeMathQuestion(question, answer) {
     Math.max(0, answer - 3)
   ];
 
-  const options = [answer, ...wrongAnswers]
-    .map(String);
-
   return {
     q: question,
-    a: options,
+    a: [answer, ...wrongAnswers].map(String),
     correct: 0
   };
 }
@@ -398,30 +416,30 @@ function makeMathQuestion(question, answer) {
 for (let i = 0; i < 25; i++) {
   const a = i + 5;
   const b = (i % 9) + 2;
-  const answer = a + b;
+
   questions.push(makeMathQuestion(
     `Maths: What is ${a} + ${b}?`,
-    answer
+    a + b
   ));
 }
 
 for (let i = 0; i < 25; i++) {
   const a = i + 20;
   const b = (i % 10) + 2;
-  const answer = a - b;
+
   questions.push(makeMathQuestion(
     `Maths: What is ${a} - ${b}?`,
-    answer
+    a - b
   ));
 }
 
 for (let i = 0; i < 25; i++) {
   const a = (i % 12) + 2;
   const b = (i % 8) + 2;
-  const answer = a * b;
+
   questions.push(makeMathQuestion(
     `Maths: What is ${a} × ${b}?`,
-    answer
+    a * b
   ));
 }
 
@@ -429,15 +447,14 @@ for (let i = 0; i < 25; i++) {
   const b = (i % 9) + 2;
   const answer = (i % 12) + 2;
   const a = b * answer;
+
   questions.push(makeMathQuestion(
     `Maths: What is ${a} ÷ ${b}?`,
     answer
   ));
 }
 
-/* =====================================
-   GAME SETTINGS
-===================================== */
+/* GAME SETTINGS */
 
 let current = 0;
 let points = 0;
@@ -462,7 +479,14 @@ function shuffle(array) {
   return copy;
 }
 
+/* START QUIZ */
+
 function startQuiz() {
+  if (!auth.currentUser) {
+    resultElement.textContent = "Please sign in before playing.";
+    return;
+  }
+
   current = 0;
   points = 0;
   locked = false;
@@ -475,6 +499,8 @@ function startQuiz() {
   showQuestion();
 }
 
+/* SHOW QUESTION */
+
 function showQuestion() {
   if (current >= gameQuestions.length) {
     finishQuiz();
@@ -484,6 +510,7 @@ function showQuestion() {
   const q = gameQuestions[current];
 
   questionElement.textContent = q.q;
+
   progressElement.textContent =
     `Question ${current + 1} of ${gameQuestions.length}`;
 
@@ -501,6 +528,7 @@ function showQuestion() {
 
   shuffledAnswers.forEach((item) => {
     const button = document.createElement("button");
+
     button.className = "answer";
     button.textContent = item.answer;
 
@@ -509,6 +537,8 @@ function showQuestion() {
     answersElement.appendChild(button);
   });
 }
+
+/* CHECK ANSWER */
 
 function checkAnswer(isCorrect, selectedButton) {
   if (locked) return;
@@ -523,10 +553,15 @@ function checkAnswer(isCorrect, selectedButton) {
     points += reward;
 
     selectedButton.classList.add("correct");
-    resultElement.textContent = `Correct! You earned ${reward} points!`;
+
+    resultElement.textContent =
+      `Correct! You earned ${reward} points!`;
+
   } else {
     selectedButton.classList.add("wrong");
-    resultElement.textContent = "Not quite! Keep learning and try the next one.";
+
+    resultElement.textContent =
+      "Not quite! Keep learning and try the next one.";
 
     const q = gameQuestions[current];
     const correctAnswer = q.a[q.correct];
@@ -547,10 +582,15 @@ function checkAnswer(isCorrect, selectedButton) {
   }, 1200);
 }
 
+/* FINISH QUIZ */
+
 function finishQuiz() {
   questionElement.textContent = "🏆 Quiz Completed!";
   answersElement.innerHTML = "";
-  progressElement.textContent = "You completed all 150 questions!";
+
+  progressElement.textContent =
+    "You completed all 150 questions!";
+
   resultElement.textContent =
     `Amazing effort! Your final score is ${points} points.`;
 
@@ -559,10 +599,9 @@ function finishQuiz() {
 }
 
 startButton.onclick = startQuiz;
+startButton.disabled = true;
 
 </script>
 </body>
   </html>
-  
-
   
