@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +7,6 @@
 <meta name="theme-color" content="#101044">
 <meta name="description" content="QuizSpark - Play, learn and earn points!">
 <title>QuizSpark - Play, Learn and Earn</title>
-
 <link rel="icon" href="./quizspark-logo.png">
 <link rel="apple-touch-icon" href="./quizspark-logo.png">
 
@@ -23,274 +21,133 @@
   --green:#22c55e;
   --red:#ef4444;
 }
-
 * {box-sizing:border-box}
-
 body {
-  margin:0;
-  background:var(--bg);
-  color:white;
-  font-family:Arial,sans-serif;
-  padding-bottom:85px;
+  margin:0;background:var(--bg);color:white;
+  font-family:Arial,sans-serif;padding-bottom:85px;
 }
-
 button,input {font:inherit}
 button {cursor:pointer}
-
 header {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:17px;
-  background:#101632;
-  position:sticky;
-  top:0;
-  z-index:5;
-  border-bottom:1px solid #293554;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:17px;background:#101632;position:sticky;top:0;
+  z-index:5;border-bottom:1px solid #293554;
 }
-
 .brand {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:21px;
-  font-weight:bold;
-  color:var(--yellow);
+  display:flex;align-items:center;gap:10px;font-size:21px;
+  font-weight:bold;color:var(--yellow);
 }
-
 .brand img {
-  width:40px;
-  height:40px;
-  object-fit:contain;
-  border-radius:9px;
+  width:40px;height:40px;object-fit:contain;border-radius:9px;
 }
-
 .header-points {
-  background:#293554;
-  padding:9px 12px;
-  border-radius:20px;
-  color:var(--yellow);
-  font-size:13px;
-  font-weight:bold;
+  background:#293554;padding:9px 12px;border-radius:20px;
+  color:var(--yellow);font-size:13px;font-weight:bold;
 }
-
-main {
-  max-width:650px;
-  margin:auto;
-  padding:16px;
-}
-
+main {max-width:650px;margin:auto;padding:16px}
 .page {display:none}
 .page.active {display:block}
-
 .card {
-  background:var(--panel);
-  border:1px solid #293554;
-  border-radius:17px;
-  padding:18px;
-  margin-bottom:15px;
+  background:var(--panel);border:1px solid #293554;
+  border-radius:17px;padding:18px;margin-bottom:15px;
 }
-
 .hero {
   background:linear-gradient(135deg,#24216b,#124b76);
-  padding:25px 20px;
-  border-radius:20px;
-  margin-bottom:18px;
+  padding:25px 20px;border-radius:20px;margin-bottom:18px;
 }
-
-.hero h1 {
-  color:var(--yellow);
-  font-size:29px;
-  margin:0 0 10px;
-}
-
+.hero h1 {color:var(--yellow);font-size:29px;margin:0 0 10px}
 .hero p {color:#dbeafe;line-height:1.6}
-
 h2 {font-size:21px}
 h3 {margin-top:0}
-
 .muted {color:var(--muted)}
 .yellow {color:var(--yellow)}
-
-.grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.stat {
-  background:var(--panel2);
-  border-radius:14px;
-  padding:16px 12px;
-}
-
+.grid {display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat {background:var(--panel2);border-radius:14px;padding:16px 12px}
 .stat strong {
-  display:block;
-  font-size:23px;
-  color:var(--yellow);
-  margin-top:8px;
+  display:block;font-size:23px;color:var(--yellow);margin-top:8px;
 }
-
 .stat span {font-size:13px;color:var(--muted)}
-
 .primary {
   background:linear-gradient(90deg,#e99b16,#ffcf40);
-  color:#171717;
-  border:0;
-  border-radius:11px;
-  padding:14px;
-  font-weight:bold;
-  width:100%;
+  color:#171717;border:0;border-radius:11px;padding:14px;
+  font-weight:bold;width:100%;
 }
-
 .secondary {
-  background:#34415e;
-  color:white;
-  border:0;
-  border-radius:11px;
-  padding:13px;
-  width:100%;
-  margin-top:9px;
+  background:#34415e;color:white;border:0;border-radius:11px;
+  padding:13px;width:100%;margin-top:9px;
 }
-
 .google {
-  background:white;
-  color:#222;
-  border:0;
-  border-radius:11px;
-  padding:13px;
-  width:100%;
-  font-weight:bold;
-  margin-top:9px;
+  background:white;color:#222;border:0;border-radius:11px;
+  padding:13px;width:100%;font-weight:bold;margin-top:9px;
 }
-
 input {
-  width:100%;
-  padding:14px;
-  border-radius:10px;
-  border:1px solid #475569;
-  background:#0c1530;
-  color:white;
-  margin:7px 0 12px;
-  outline:none;
+  width:100%;padding:14px;border-radius:10px;
+  border:1px solid #475569;background:#0c1530;color:white;
+  margin:7px 0 12px;outline:none;
 }
-
 input:focus {border-color:var(--blue)}
-
 label {
-  display:block;
-  text-align:left;
-  color:var(--muted);
-  font-size:13px;
+  display:block;text-align:left;color:var(--muted);font-size:13px;
 }
 
+/* PASSWORD SHOW / HIDE */
+.password-wrap {
+  position:relative;display:flex;align-items:center;
+  margin:7px 0 12px;
+}
+.password-wrap input {
+  margin:0;padding-right:85px;
+}
+.toggle-password {
+  position:absolute;right:9px;background:transparent;
+  color:var(--yellow);border:none;padding:8px;
+  font-size:13px;font-weight:bold;cursor:pointer;
+}
 .bottom-nav {
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:#111831;
-  border-top:1px solid #34415e;
-  display:grid;
+  position:fixed;bottom:0;left:0;right:0;background:#111831;
+  border-top:1px solid #34415e;display:grid;
   grid-template-columns:repeat(5,1fr);
   padding:8px 3px calc(8px + env(safe-area-inset-bottom));
   z-index:10;
 }
-
 .nav-btn {
-  border:0;
-  background:transparent;
-  color:#a8b3cb;
-  font-size:11px;
-  padding:5px 0;
+  border:0;background:transparent;color:#a8b3cb;
+  font-size:11px;padding:5px 0;
 }
-
-.nav-btn .symbol {
-  display:block;
-  font-size:21px;
-  margin-bottom:4px;
-}
-
+.nav-btn .symbol {display:block;font-size:21px;margin-bottom:4px}
 .nav-btn.active {color:var(--yellow)}
-
 .answer {
-  display:block;
-  width:100%;
-  padding:15px;
-  margin:10px 0;
-  text-align:left;
-  background:#293554;
-  color:white;
-  border:1px solid #475569;
-  border-radius:11px;
+  display:block;width:100%;padding:15px;margin:10px 0;
+  text-align:left;background:#293554;color:white;
+  border:1px solid #475569;border-radius:11px;
 }
-
-.answer.correct {
-  background:#166534;
-  border-color:#22c55e;
-}
-
-.answer.wrong {
-  background:#991b1b;
-  border-color:#ef4444;
-}
-
+.answer.correct {background:#166534;border-color:#22c55e}
+.answer.wrong {background:#991b1b;border-color:#ef4444}
 .answer:disabled {cursor:default}
-
 .progress-track {
-  height:8px;
-  background:#34415e;
-  border-radius:10px;
-  overflow:hidden;
-  margin:12px 0;
+  height:8px;background:#34415e;border-radius:10px;
+  overflow:hidden;margin:12px 0;
 }
-
 .progress-fill {
-  height:100%;
-  width:0;
-  background:var(--yellow);
+  height:100%;width:0;background:var(--yellow);
   transition:width .2s;
 }
-
 .rank-row {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:13px 5px;
-  border-bottom:1px solid #34415e;
-  gap:10px;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:13px 5px;border-bottom:1px solid #34415e;gap:10px;
 }
-
-.rank-number {color:var(--yellow);font-weight:bold}
-.rank-points {color:var(--yellow);font-weight:bold}
-
+.rank-number,.rank-points {color:var(--yellow);font-weight:bold}
 .message {
-  font-size:13px;
-  color:var(--blue);
-  overflow-wrap:anywhere;
+  font-size:13px;color:var(--blue);overflow-wrap:anywhere;
   min-height:20px;
 }
-
 .hidden {display:none!important}
-
 .avatar {
-  width:75px;
-  height:75px;
-  border-radius:50%;
-  background:#34415e;
-  display:grid;
-  place-items:center;
-  font-size:32px;
-  margin:auto;
+  width:75px;height:75px;border-radius:50%;
+  background:#34415e;display:grid;place-items:center;
+  font-size:32px;margin:auto;
 }
-
-footer {
-  text-align:center;
-  color:#71809e;
-  font-size:11px;
-  padding:20px;
-}
-
+footer {text-align:center;color:#71809e;font-size:11px;padding:20px}
 @media(max-width:380px) {
   .nav-btn {font-size:10px}
   .nav-btn .symbol {font-size:18px}
@@ -299,7 +156,6 @@ footer {
 </head>
 
 <body>
-
 <header>
   <div class="brand">
     <img src="./quizspark-logo.png" alt="QuizSpark"
@@ -311,10 +167,8 @@ footer {
 
 <main>
 
-<!-- AUTHENTICATION -->
-
+<!-- LOGIN AND REGISTRATION -->
 <section id="authPage" class="page active">
-
   <div class="hero">
     <h1>⚡ Welcome to QuizSpark!</h1>
     <p>Challenge your mind, answer exciting questions and earn points as you play.</p>
@@ -335,9 +189,15 @@ footer {
            autocomplete="email">
 
     <label>Password</label>
-    <input id="password" type="password"
-           placeholder="Minimum 6 characters"
-           autocomplete="current-password">
+    <div class="password-wrap">
+      <input id="password" type="password"
+             placeholder="Minimum 6 characters"
+             autocomplete="current-password">
+      <button type="button" class="toggle-password"
+              id="togglePassword" aria-label="Show password">
+        👁 Show
+      </button>
+    </div>
 
     <button class="primary" id="signupBtn">Create Account</button>
     <button class="secondary" id="loginBtn">Sign In</button>
@@ -348,40 +208,22 @@ footer {
       Welcome! Sign in to start playing.
     </p>
   </div>
-
 </section>
 
 <!-- HOME -->
-
 <section id="homePage" class="page">
-
   <div class="hero">
     <h1 id="homeGreeting">Hello, Player! 👋</h1>
     <p>Your next challenge is waiting. Play, learn and climb the leaderboard!</p>
-    <button class="primary" onclick="showPage('play')">
-      Start Playing →
-    </button>
+    <button class="primary" onclick="showPage('play')">Start Playing →</button>
   </div>
 
   <h2>Your Dashboard</h2>
-
   <div class="grid">
-    <div class="stat">
-      <span>⚡ Total Points</span>
-      <strong id="homePoints">0</strong>
-    </div>
-    <div class="stat">
-      <span>🎮 Games Played</span>
-      <strong id="gamesPlayed">0</strong>
-    </div>
-    <div class="stat">
-      <span>🏆 Correct Answers</span>
-      <strong id="correctAnswers">0</strong>
-    </div>
-    <div class="stat">
-      <span>📚 Questions</span>
-      <strong>150</strong>
-    </div>
+    <div class="stat"><span>⚡ Total Points</span><strong id="homePoints">0</strong></div>
+    <div class="stat"><span>🎮 Games Played</span><strong id="gamesPlayed">0</strong></div>
+    <div class="stat"><span>🏆 Correct Answers</span><strong id="correctAnswers">0</strong></div>
+    <div class="stat"><span>📚 Questions</span><strong>150</strong></div>
   </div>
 
   <div class="card" style="margin-top:17px">
@@ -389,40 +231,21 @@ footer {
     <p class="muted">Test your knowledge and earn 10 points for each correct answer.</p>
     <button class="primary" onclick="showPage('play')">Play Quiz Now</button>
   </div>
-
 </section>
 
 <!-- PLAY -->
-
 <section id="playPage" class="page">
-
   <div class="card">
     <h2>🎮 Quiz Arena</h2>
     <p class="muted">150 questions. Four options. One correct answer.</p>
-
     <div class="grid">
-      <div class="stat">
-        <span>Current Score</span>
-        <strong id="gamePoints">0</strong>
-      </div>
-      <div class="stat">
-        <span>Question</span>
-        <strong id="questionNumber">0/150</strong>
-      </div>
+      <div class="stat"><span>Current Score</span><strong id="gamePoints">0</strong></div>
+      <div class="stat"><span>Question</span><strong id="questionNumber">0/150</strong></div>
     </div>
-
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
     <h3 id="question">Ready to play?</h3>
-
     <div id="answers"></div>
-
-    <p id="gameMessage" class="message" aria-live="polite">
-      Press Start Quiz when ready.
-    </p>
-
+    <p id="gameMessage" class="message" aria-live="polite">Press Start Quiz when ready.</p>
     <button class="primary" id="startBtn">Start Quiz</button>
     <button class="secondary hidden" id="nextBtn">Next Question →</button>
   </div>
@@ -431,71 +254,48 @@ footer {
     <h3>How to earn points</h3>
     <p class="muted">Every correct answer earns 10 points. Your points are added to your player account after completing a game.</p>
   </div>
-
 </section>
 
 <!-- LEADERBOARD -->
-
 <section id="leaderboardPage" class="page">
-
   <div class="hero">
     <h1>🏆 Leaderboard</h1>
     <p>See how you compare with other QuizSpark players.</p>
   </div>
-
   <div class="card">
     <h3>Top Players</h3>
-    <div id="leaderboard">
-      <p class="muted">Sign in to load the leaderboard.</p>
-    </div>
-    <button class="secondary" id="refreshLeaderboard">
-      Refresh Leaderboard
-    </button>
+    <div id="leaderboard"><p class="muted">Sign in to load the leaderboard.</p></div>
+    <button class="secondary" id="refreshLeaderboard">Refresh Leaderboard</button>
   </div>
-
 </section>
 
 <!-- WALLET -->
-
 <section id="walletPage" class="page">
-
   <div class="hero">
     <h1>💰 My Wallet</h1>
     <p>Your QuizSpark points balance.</p>
   </div>
-
   <div class="card">
     <p class="muted">Total Available Points</p>
     <h1 class="yellow" id="walletPoints">0 ⚡</h1>
     <hr>
-    <p class="muted">
-      Earn more points by answering quiz questions correctly.
-    </p>
-    <button class="primary" onclick="showPage('play')">
-      Earn More Points
-    </button>
+    <p class="muted">Earn more points by answering quiz questions correctly.</p>
+    <button class="primary" onclick="showPage('play')">Earn More Points</button>
   </div>
-
   <div class="card">
     <h3>About Your Points</h3>
-    <p class="muted">
-      Points are in-app game rewards. They are not cash and do not represent a withdrawable monetary balance.
-    </p>
+    <p class="muted">Points are in-app game rewards. They are not cash and do not represent a withdrawable monetary balance.</p>
   </div>
-
 </section>
 
 <!-- PROFILE -->
-
 <section id="profilePage" class="page">
-
   <div class="card" style="text-align:center">
     <div class="avatar">👤</div>
     <h2 id="profileName">Player</h2>
     <p class="muted" id="profileEmail"></p>
     <h2 class="yellow" id="profilePoints">0 Points</h2>
   </div>
-
   <div class="card">
     <h3>Player Information</h3>
     <p class="muted">Account: <span id="accountType">Firebase</span></p>
@@ -503,71 +303,36 @@ footer {
     <p class="muted">Correct answers: <strong id="profileCorrect">0</strong></p>
     <button class="secondary" id="logoutBtn">Sign Out</button>
   </div>
-
 </section>
-
 </main>
 
 <nav class="bottom-nav hidden" id="bottomNav">
-  <button class="nav-btn active" data-page="home">
-    <span class="symbol">🏠</span>Home
-  </button>
-  <button class="nav-btn" data-page="play">
-    <span class="symbol">🎮</span>Play
-  </button>
-  <button class="nav-btn" data-page="leaderboard">
-    <span class="symbol">🏆</span>Leaderboard
-  </button>
-  <button class="nav-btn" data-page="wallet">
-    <span class="symbol">💰</span>Wallet
-  </button>
-  <button class="nav-btn" data-page="profile">
-    <span class="symbol">👤</span>Profile
-  </button>
+  <button class="nav-btn active" data-page="home"><span class="symbol">🏠</span>Home</button>
+  <button class="nav-btn" data-page="play"><span class="symbol">🎮</span>Play</button>
+  <button class="nav-btn" data-page="leaderboard"><span class="symbol">🏆</span>Leaderboard</button>
+  <button class="nav-btn" data-page="wallet"><span class="symbol">💰</span>Wallet</button>
+  <button class="nav-btn" data-page="profile"><span class="symbol">👤</span>Profile</button>
 </nav>
 
 <footer>© 2026 QuizSpark. All rights reserved.</footer>
 
 <script type="module">
-
-// ====================================
-// 1. FIREBASE IMPORTS
-// ====================================
-
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged,
-  updateProfile,
-  sendPasswordResetEmail
+  getAuth, createUserWithEmailAndPassword,
+  signInWithEmailAndPassword, GoogleAuthProvider,
+  signInWithPopup, signOut, onAuthStateChanged,
+  updateProfile, sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  runTransaction,
-  collection,
-  query,
-  orderBy,
-  limit,
-  getDocs,
-  serverTimestamp
+  getFirestore, doc, getDoc, setDoc, runTransaction,
+  collection, query, orderBy, limit, getDocs, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-
-// ====================================
-// 2. FIREBASE CONFIGURATION
-// ====================================
-
+// FIREBASE CONFIGURATION
 const firebaseConfig = {
   apiKey: "AIzaSyBpADv380nomzd15tNPmruoYcok4VQ29VQ",
   authDomain: "quizspark-65dbd.firebaseapp.com",
@@ -580,20 +345,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt:"select_account"});
 
-
-// ====================================
-// 3. APPLICATION STATE
-// ====================================
-
+// APPLICATION STATE
 let currentUser = null;
 let savedPoints = 0;
 let games = 0;
 let correctTotal = 0;
-
 let questions = [];
 let currentQuestion = 0;
 let gameScore = 0;
@@ -601,24 +360,28 @@ let gameRunning = false;
 let answered = false;
 let savingGame = false;
 
-
-// ====================================
-// 4. ELEMENT HELPERS
-// ====================================
-
 const $ = id => document.getElementById(id);
 
 function message(text) {
   $("authMessage").textContent = text;
 }
-
 function gameMessage(text) {
   $("gameMessage").textContent = text;
 }
 
+// SHOW / HIDE PASSWORD
+$("togglePassword").addEventListener("click", () => {
+  const field = $("password");
+  const button = $("togglePassword");
+  const showing = field.type === "password";
+
+  field.type = showing ? "text" : "password";
+  button.textContent = showing ? "🙈 Hide" : "👁 Show";
+  button.setAttribute("aria-label", showing ? "Hide password" : "Show password");
+});
+
 function friendlyError(error) {
   console.error(error);
-
   const errors = {
     "auth/email-already-in-use":"This email already has an account. Please sign in.",
     "auth/invalid-email":"Enter a valid email address.",
@@ -633,51 +396,31 @@ function friendlyError(error) {
     "permission-denied":"Firestore denied access. Check your database rules.",
     "unavailable":"Connection problem. Please try again."
   };
-
   return errors[error.code] || error.message || "Something went wrong.";
 }
 
-
-// ====================================
-// 5. NAVIGATION
-// ====================================
-
+// NAVIGATION
 window.showPage = function(page) {
   if (!currentUser) return;
 
-  document.querySelectorAll(".page").forEach(p => {
-    p.classList.remove("active");
-  });
-
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   const target = $(page + "Page");
   if (target) target.classList.add("active");
 
   document.querySelectorAll(".nav-btn").forEach(button => {
-    button.classList.toggle(
-      "active",
-      button.dataset.page === page
-    );
+    button.classList.toggle("active",button.dataset.page === page);
   });
 
   if (page === "leaderboard") loadLeaderboard();
-  if (page === "home" || page === "wallet" || page === "profile") {
-    updateDashboard();
-  }
-
+  if (["home","wallet","profile"].includes(page)) updateDashboard();
   window.scrollTo(0,0);
 };
 
 document.querySelectorAll(".nav-btn").forEach(button => {
-  button.addEventListener("click", () => {
-    showPage(button.dataset.page);
-  });
+  button.addEventListener("click",() => showPage(button.dataset.page));
 });
 
-
-// ====================================
-// 6. ACCOUNT PROFILE
-// ====================================
-
+// PLAYER PROFILE
 async function createProfile(user) {
   const ref = doc(db,"players",user.uid);
   const snapshot = await getDoc(ref);
@@ -692,50 +435,37 @@ async function createProfile(user) {
       createdAt:serverTimestamp()
     });
   } else if (user.displayName) {
-    await setDoc(ref,{
-      name:user.displayName
-    },{merge:true});
+    await setDoc(ref,{name:user.displayName},{merge:true});
   }
 }
 
 async function loadProfile(user) {
   const snapshot = await getDoc(doc(db,"players",user.uid));
-
   if (!snapshot.exists()) throw new Error("Player profile not found.");
 
   const data = snapshot.data();
-
   savedPoints = Number(data.points) || 0;
   games = Number(data.gamesPlayed) || 0;
   correctTotal = Number(data.correctAnswers) || 0;
-
   updateDashboard();
 }
 
 function updateDashboard() {
   const name = currentUser?.displayName || "Player";
-
   $("homeGreeting").textContent = "Hello, " + name + "! 👋";
   $("homePoints").textContent = savedPoints.toLocaleString();
   $("headerPoints").textContent = "⚡ " + savedPoints.toLocaleString() + " Points";
   $("walletPoints").textContent = savedPoints.toLocaleString() + " ⚡";
-  $("playerPoints").textContent = savedPoints.toLocaleString() + " Points";
   $("profilePoints").textContent = savedPoints.toLocaleString() + " Points";
-
   $("gamesPlayed").textContent = games;
   $("profileGames").textContent = games;
   $("correctAnswers").textContent = correctTotal;
   $("profileCorrect").textContent = correctTotal;
-
   $("profileName").textContent = name;
   $("profileEmail").textContent = currentUser?.email || "";
 }
 
-
-// ====================================
-// 7. EMAIL REGISTRATION
-// ====================================
-
+// EMAIL REGISTRATION
 $("signupBtn").onclick = async () => {
   const name = $("name").value.trim();
   const email = $("email").value.trim();
@@ -745,7 +475,6 @@ $("signupBtn").onclick = async () => {
     message("Please complete all fields.");
     return;
   }
-
   if (password.length < 6) {
     message("Password must contain at least 6 characters.");
     return;
@@ -753,28 +482,17 @@ $("signupBtn").onclick = async () => {
 
   try {
     message("Creating your account...");
-
-    const credential = await createUserWithEmailAndPassword(
-      auth,email,password
-    );
-
+    const credential = await createUserWithEmailAndPassword(auth,email,password);
     await updateProfile(credential.user,{displayName:name});
-
     await createProfile(credential.user);
     await loadProfile(credential.user);
-
     message("Welcome to QuizSpark!");
-
   } catch(error) {
     message(friendlyError(error));
   }
 };
 
-
-// ====================================
-// 8. EMAIL LOGIN
-// ====================================
-
+// EMAIL LOGIN
 $("loginBtn").onclick = async () => {
   const email = $("email").value.trim();
   const password = $("password").value;
@@ -783,50 +501,33 @@ $("loginBtn").onclick = async () => {
     message("Enter your email and password.");
     return;
   }
-
   try {
     message("Signing in...");
-
     await signInWithEmailAndPassword(auth,email,password);
-
     message("Welcome back!");
-
   } catch(error) {
     message(friendlyError(error));
   }
 };
 
-
-// ====================================
-// 9. GOOGLE LOGIN
-// ====================================
-
+// GOOGLE LOGIN
 $("googleBtn").onclick = async () => {
   try {
     message("Connecting to Google...");
-
     await signInWithPopup(auth,googleProvider);
-
     message("Google sign-in successful!");
-
   } catch(error) {
     message(friendlyError(error));
   }
 };
 
-
-// ====================================
-// 10. PASSWORD RESET
-// ====================================
-
+// PASSWORD RESET
 $("forgotBtn").onclick = async () => {
   const email = $("email").value.trim();
-
   if (!email) {
     message("Enter your email address first.");
     return;
   }
-
   try {
     await sendPasswordResetEmail(auth,email);
     message("Password reset email sent. Check your inbox.");
@@ -835,11 +536,7 @@ $("forgotBtn").onclick = async () => {
   }
 };
 
-
-// ====================================
-// 11. SIGN OUT
-// ====================================
-
+// SIGN OUT
 $("logoutBtn").onclick = async () => {
   try {
     await signOut(auth);
@@ -848,30 +545,20 @@ $("logoutBtn").onclick = async () => {
   }
 };
 
-
-// ====================================
-// 12. AUTHENTICATION LISTENER
-// ====================================
-
+// AUTHENTICATION LISTENER
 onAuthStateChanged(auth,async user => {
   currentUser = user;
 
   if (!user) {
-    $("authPage").classList.add("active");
-    $("homePage").classList.remove("active");
-    $("playPage").classList.remove("active");
-    $("leaderboardPage").classList.remove("active");
-    $("walletPage").classList.remove("active");
-    $("profilePage").classList.remove("active");
-
-    $("bottomNav").classList.add("hidden");
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     $("authPage").classList.remove("hidden");
+    $("authPage").classList.add("active");
+    $("bottomNav").classList.add("hidden");
     $("signupFields").classList.remove("hidden");
 
     savedPoints = 0;
     games = 0;
     correctTotal = 0;
-
     updateDashboard();
     message("Sign in or create an account to play.");
     return;
@@ -884,28 +571,18 @@ onAuthStateChanged(auth,async user => {
 
   try {
     message("Loading your account...");
-
     await createProfile(user);
-
     if (auth.currentUser?.uid !== user.uid) return;
-
     await loadProfile(user);
-
     if (auth.currentUser?.uid !== user.uid) return;
-
     showPage("home");
-
   } catch(error) {
     message(friendlyError(error));
     gameMessage("Could not load your account. Check Firestore rules.");
   }
 });
 
-
-// ====================================
-// 13. GENERAL KNOWLEDGE QUESTIONS
-// ====================================
-
+// GENERAL KNOWLEDGE QUESTIONS
 const facts = [
 ["What is the capital of France?","Paris",["London","Rome","Madrid"]],
 ["Which planet is called the Red Planet?","Mars",["Venus","Jupiter","Mercury"]],
@@ -959,152 +636,77 @@ const facts = [
 ["Which metal is liquid at room temperature?","Mercury",["Iron","Copper","Gold"]]
 ];
 
-
-// ====================================
-// 14. BUILD EXACTLY 150 QUESTIONS
-// ====================================
-
-function addQuestion(q,correct,wrong) {
-  questions.push({
-    q,
-    a:shuffle([correct,...wrong]),
-    correct:0
-  });
-}
-
-// Shuffle answers and preserve the correct position.
-function createQuestion(q,correct,wrong) {
-  const options = shuffle([correct,...wrong]);
-  return {
-    q,
-    a:options,
-    correct:options.indexOf(correct)
-  };
-}
-
+// BUILD 150 QUESTIONS
 function shuffle(array) {
   const copy = [...array];
-
   for(let i=copy.length-1;i>0;i--) {
     const j=Math.floor(Math.random()*(i+1));
     [copy[i],copy[j]]=[copy[j],copy[i]];
   }
-
   return copy;
 }
 
-questions = [];
-
-facts.forEach(([q,a,w]) => {
-  questions.push(createQuestion(q,a,w));
-});
-
-// 50 General knowledge questions + 100 Maths questions.
-
-for(let i=0;i<25;i++) {
-  const a=i+5;
-  const b=(i%9)+2;
-  const answer=a+b;
-
-  questions.push(createQuestion(
-    `Maths: What is ${a} + ${b}?`,
-    String(answer),
-    [String(answer+2),String(answer+5),String(Math.max(0,answer-3))]
-  ));
+function createQuestion(q,correct,wrong) {
+  const options = shuffle([correct,...wrong]);
+  return {q,a:options,correct:options.indexOf(correct)};
 }
 
-for(let i=0;i<25;i++) {
-  const a=i+20;
-  const b=(i%10)+2;
-  const answer=a-b;
-
-  questions.push(createQuestion(
-    `Maths: What is ${a} - ${b}?`,
-    String(answer),
-    [String(answer+2),String(answer+5),String(Math.max(0,answer-3))]
-  ));
-}
+questions = facts.map(([q,a,w]) => createQuestion(q,a,w));
 
 for(let i=0;i<25;i++) {
-  const a=(i%12)+2;
-  const b=(i%8)+2;
-  const answer=a*b;
-
-  questions.push(createQuestion(
-    `Maths: What is ${a} × ${b}?`,
-    String(answer),
-    [String(answer+2),String(answer+5),String(Math.max(0,answer-3))]
-  ));
+  const a=i+5,b=(i%9)+2,answer=a+b;
+  questions.push(createQuestion(`Maths: What is ${a} + ${b}?`,String(answer),
+    [String(answer+2),String(answer+5),String(Math.max(0,answer-3))]));
 }
-
 for(let i=0;i<25;i++) {
-  const b=(i%9)+2;
-  const answer=(i%12)+2;
-  const a=b*answer;
-
-  questions.push(createQuestion(
-    `Maths: What is ${a} ÷ ${b}?`,
-    String(answer),
-    [String(answer+2),String(answer+5),String(Math.max(0,answer-3))]
-  ));
+  const a=i+20,b=(i%10)+2,answer=a-b;
+  questions.push(createQuestion(`Maths: What is ${a} - ${b}?`,String(answer),
+    [String(answer+2),String(answer+5),String(Math.max(0,answer-3))]));
+}
+for(let i=0;i<25;i++) {
+  const a=(i%12)+2,b=(i%8)+2,answer=a*b;
+  questions.push(createQuestion(`Maths: What is ${a} × ${b}?`,String(answer),
+    [String(answer+2),String(answer+5),String(Math.max(0,answer-3))]));
+}
+for(let i=0;i<25;i++) {
+  const b=(i%9)+2,answer=(i%12)+2,a=b*answer;
+  questions.push(createQuestion(`Maths: What is ${a} ÷ ${b}?`,String(answer),
+    [String(answer+2),String(answer+5),String(Math.max(0,answer-3))]));
 }
 
-
-// ====================================
-// 15. QUIZ START
-// ====================================
-
+// START QUIZ
 $("startBtn").onclick = () => {
   if (!currentUser || gameRunning || savingGame) return;
-
   currentQuestion = 0;
   gameScore = 0;
   answered = false;
   gameRunning = true;
-
   questions = shuffle(questions);
-
   $("startBtn").classList.add("hidden");
   $("nextBtn").classList.add("hidden");
-
   $("gamePoints").textContent = "0";
   gameMessage("Good luck! Choose the correct answer.");
-
   showQuestion();
 };
 
-
-// ====================================
-// 16. DISPLAY QUESTION
-// ====================================
-
+// DISPLAY QUESTION
 function showQuestion() {
   if(currentQuestion>=questions.length) {
     finishQuiz();
     return;
   }
-
   answered = false;
-
   const q=questions[currentQuestion];
-
   $("question").textContent=q.q;
-  $("questionNumber").textContent=
-    `${currentQuestion+1}/150`;
-
-  $("progressFill").style.width=
-    `${(currentQuestion/150)*100}%`;
-
+  $("questionNumber").textContent=`${currentQuestion+1}/150`;
+  $("progressFill").style.width=`${(currentQuestion/150)*100}%`;
   $("answers").replaceChildren();
 
   q.a.forEach((answer,index) => {
     const button=document.createElement("button");
-
     button.className="answer";
     button.textContent=answer;
-
     button.onclick=()=>checkAnswer(index,button);
-
     $("answers").appendChild(button);
   });
 
@@ -1112,22 +714,15 @@ function showQuestion() {
   gameMessage("Select your answer.");
 }
 
-
-// ====================================
-// 17. CHECK ANSWER
-// ====================================
-
+// CHECK ANSWER
 function checkAnswer(index,button) {
   if(answered || !gameRunning) return;
-
   answered=true;
-
   const q=questions[currentQuestion];
   const buttons=$("answers").querySelectorAll("button");
 
-  buttons.forEach((b,i)=>{
+  buttons.forEach((b,i) => {
     b.disabled=true;
-
     if(i===q.correct) b.classList.add("correct");
   });
 
@@ -1141,61 +736,37 @@ function checkAnswer(index,button) {
   }
 
   $("nextBtn").classList.remove("hidden");
-  $("nextBtn").textContent=
-    currentQuestion===149 ? "Finish Quiz" : "Next Question →";
+  $("nextBtn").textContent=currentQuestion===149?"Finish Quiz":"Next Question →";
 }
 
-
-// ====================================
-// 18. NEXT QUESTION
-// ====================================
-
+// NEXT QUESTION
 $("nextBtn").onclick=()=>{
   if(!answered || !gameRunning) return;
-
   currentQuestion++;
-
-  if(currentQuestion>=questions.length) {
-    finishQuiz();
-  } else {
-    showQuestion();
-  }
+  if(currentQuestion>=questions.length) finishQuiz();
+  else showQuestion();
 };
 
-
-// ====================================
-// 19. FINISH AND SAVE GAME
-// ====================================
-
+// FINISH AND SAVE GAME
 async function finishQuiz() {
   if(!gameRunning || savingGame) return;
-
   gameRunning=false;
   savingGame=true;
 
   $("answers").replaceChildren();
   $("question").textContent="Quiz Completed! 🎉";
   $("progressFill").style.width="100%";
-
   $("nextBtn").classList.add("hidden");
   $("startBtn").classList.add("hidden");
-
-  gameMessage(
-    `You scored ${gameScore} points out of 1500. Saving your result...`
-  );
+  gameMessage(`You scored ${gameScore} points out of 1500. Saving your result...`);
 
   try {
     if(!currentUser) throw new Error("Please sign in again.");
-
     const ref=doc(db,"players",currentUser.uid);
 
     await runTransaction(db,async transaction=>{
       const snapshot=await transaction.get(ref);
-
-      if(!snapshot.exists()) {
-        throw new Error("Player profile not found.");
-      }
-
+      if(!snapshot.exists()) throw new Error("Player profile not found.");
       const data=snapshot.data();
 
       transaction.update(ref,{
@@ -1207,49 +778,28 @@ async function finishQuiz() {
     });
 
     await loadProfile(currentUser);
-
-    gameMessage(
-      `🏆 Congratulations! You earned ${gameScore} points. Your new balance is ${savedPoints}.`
-    );
-
+    gameMessage(`🏆 Congratulations! You earned ${gameScore} points. Your new balance is ${savedPoints}.`);
     $("startBtn").textContent="Play Again";
     $("startBtn").classList.remove("hidden");
-
     await loadLeaderboard();
 
   } catch(error) {
-    gameMessage(
-      "Your result could not be saved: "+friendlyError(error)
-    );
-
+    gameMessage("Your result could not be saved: "+friendlyError(error));
     $("startBtn").textContent="Try Again";
     $("startBtn").classList.remove("hidden");
-
   } finally {
     savingGame=false;
   }
 }
 
-
-// ====================================
-// 20. LEADERBOARD
-// ====================================
-
+// LEADERBOARD
 async function loadLeaderboard() {
   if(!currentUser) return;
-
-  $("leaderboard").innerHTML=
-    '<p class="muted">Loading leaderboard...</p>';
+  $("leaderboard").textContent="Loading leaderboard...";
 
   try {
-    const q=query(
-      collection(db,"players"),
-      orderBy("points","desc"),
-      limit(20)
-    );
-
+    const q=query(collection(db,"players"),orderBy("points","desc"),limit(20));
     const snapshot=await getDocs(q);
-
     $("leaderboard").replaceChildren();
 
     if(snapshot.empty) {
@@ -1258,17 +808,14 @@ async function loadLeaderboard() {
     }
 
     let position=1;
-
     snapshot.forEach(player=>{
       const data=player.data();
-
       const row=document.createElement("div");
       row.className="rank-row";
 
       const left=document.createElement("span");
       left.className="rank-number";
-      left.textContent=
-        `${position===1?"🥇":position===2?"🥈":position===3?"🥉":position+". "}`;
+      left.textContent=position===1?"🥇":position===2?"🥈":position===3?"🥉":position+".";
 
       const name=document.createElement("span");
       name.textContent=data.name||"Player";
@@ -1280,10 +827,8 @@ async function loadLeaderboard() {
 
       row.append(left,name,points);
       $("leaderboard").appendChild(row);
-
       position++;
     });
-
   } catch(error) {
     $("leaderboard").textContent=friendlyError(error);
   }
@@ -1291,16 +836,10 @@ async function loadLeaderboard() {
 
 $("refreshLeaderboard").onclick=loadLeaderboard;
 
-
-// ====================================
-// 21. INITIAL SETTINGS
-// ====================================
-
 $("gamePoints").textContent="0";
 $("questionNumber").textContent="0/150";
 
 console.log("QuizSpark initialized with",questions.length,"questions.");
-
 </script>
 </body>
 </html>
