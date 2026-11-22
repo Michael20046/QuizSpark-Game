@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,10 +73,10 @@ footer{text-align:center;color:#71809e;font-size:11px;padding:20px}.small{font-s
  <div class="card" id="quizSetup"><h3>1. Choose a Category</h3><div class="category-grid" id="quizCategories"></div>
  <h3 style="margin-top:20px">2. Choose Difficulty</h3><select id="difficulty"><option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option><option value="Advanced">Advanced</option></select>
  <h3>3. Number of Questions</h3><select id="questionCount"><option value="5">5 Questions</option><option value="10" selected>10 Questions</option></select>
- <button class="primary" id="startBtn">Start My Quiz 🚀</button><p class="muted">Earn 10 points for every correct answer.</p></div>
+ <button class="primary" id="startBtn">Start My Quiz 🚀</button><p class="muted">Earn 10 points for every correct answer. Your unfinished quiz is saved on this device.</p></div>
  <div class="card hidden" id="quizGame"><div class="grid"><div class="stat"><span>Current Score</span><strong id="gamePoints">0</strong></div><div class="stat"><span>Question</span><strong id="questionNumber">0/0</strong></div></div>
  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><h3 id="question">Question</h3><div id="answers"></div><p id="gameMessage" class="message" aria-live="polite"></p>
- <button class="primary hidden" id="nextBtn">Next Question →</button><button class="secondary" id="quitBtn">Quit Quiz</button></div>
+ <button class="primary hidden" id="nextBtn">Next Question →</button><button class="secondary" id="quitBtn">Save and Exit Quiz</button></div>
 </section>
 <section id="leaderboardPage" class="page"><div class="hero"><h1>🏆 Leaderboard</h1><p>Celebrate progress and see the top QuizSpark players.</p></div><div class="card"><div id="leaderboard">Open this page to load players.</div><button class="secondary" id="refreshLeaderboard">Refresh</button></div></section>
 <section id="walletPage" class="page"><div class="hero"><h1>💰 My Wallet</h1><p>Keep track of your learning and gaming points.</p></div><div class="card"><p class="muted">Your points balance</p><h1 class="yellow" id="walletPoints">0 ⚡</h1><button class="primary" onclick="showPage('play')">Earn More Points</button></div><div class="card"><h3>Important Information</h3><p class="muted">Points are in-app rewards. They are not cash and cannot currently be withdrawn.</p></div></section>
@@ -87,12 +86,13 @@ footer{text-align:center;color:#71809e;font-size:11px;padding:20px}.small{font-s
 <nav class="bottom-nav hidden" id="bottomNav" aria-label="Main navigation">
  <button class="nav-btn active" data-page="home"><span class="symbol">🏠</span>Home</button><button class="nav-btn" data-page="play"><span class="symbol">🎮</span>Play</button><button class="nav-btn" data-page="leaderboard"><span class="symbol">🏆</span>Ranks</button><button class="nav-btn" data-page="wallet"><span class="symbol">💰</span>Wallet</button><button class="nav-btn" data-page="profile"><span class="symbol">👤</span>Profile</button>
 </nav><footer>© 2026 QuizSpark. Learn More. Play More. Grow Smarter.</footer>
+
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,GoogleAuthProvider,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged,updateProfile,sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {getFirestore,doc,getDoc,setDoc,runTransaction,collection,query,orderBy,limit,getDocs,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* Your existing Firebase web app configuration */
+/* This configuration must match the Firebase project that owns this website. */
 const firebaseConfig={
  apiKey:"AIzaSyBpADv380nomzd15tNPmruoYcok4VQ29VQ",
  authDomain:"quizspark-65dbd.firebaseapp.com",
@@ -101,15 +101,20 @@ const firebaseConfig={
  messagingSenderId:"328231530287",
  appId:"1:328231530287:web:9a2f4bb9b92b5faa267bda"
 };
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),googleProvider=new GoogleAuthProvider();
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const googleProvider=new GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt:"select_account"});
 const $=id=>document.getElementById(id);
 let currentUser=null,savedPoints=0,games=0,correctTotal=0,lessonsDone=[];
 let selectedCategory="General Knowledge",quizQuestions=[],questionIndex=0,score=0,answered=false,gameRunning=false,saving=false,currentLessonId=null;
+let disabledAnswers=[];
 
 const categories=[
  ["General Knowledge","🌍","World facts"],["Mathematics","➗","Numbers and calculations"],["English","📚","Grammar and vocabulary"],["Science","🔬","Discover science"],["Sports","⚽","Sports knowledge"],["Funny Questions","😂","Fun challenges"],["Riddles","🧩","Think carefully"],["Story Questions","📖","Read and understand"],["Business & Money","💰","Financial knowledge"],["Technology","💻","Digital world"],["Who Is Richest?","🏆","Wealth and business"],["Life Skills","💡","Everyday knowledge"]
 ];
+
 const lessons={
  "School":[
  {id:"math1",title:"Introduction to Mathematics",body:"Mathematics helps us understand numbers, quantities and patterns. Addition combines quantities. Subtraction finds the difference. Multiplication is repeated addition. Division shares quantities into equal groups."},
@@ -132,61 +137,186 @@ const lessons={
  {id:"gen1",title:"Our World and Continents",body:"The world is commonly divided into seven continents: Africa, Antarctica, Asia, Europe, North America, South America and Australia."},
  {id:"gen2",title:"The Solar System",body:"Our solar system includes the Sun, eight planets, dwarf planets, moons, asteroids and comets. Earth is the third planet from the Sun."}]
 };
+
 const bank={
  "General Knowledge":[
- ["What is the capital of Nigeria?","Abuja",["Lagos","Kano","Accra"]],["Which is the largest ocean?","Pacific Ocean",["Atlantic Ocean","Indian Ocean","Arctic Ocean"]],["How many continents are there?","7",["5","6","8"]],["What is the capital of Japan?","Tokyo",["Seoul","Beijing","Bangkok"]],["Which country has the Great Wall?","China",["India","Japan","Thailand"]],["Which is the largest continent?","Asia",["Africa","Europe","Australia"]],["What is the capital of Ghana?","Accra",["Lagos","Nairobi","Dakar"]],["Which star is closest to Earth?","The Sun",["Sirius","Polaris","Vega"]]],
+ ["What is the capital of Nigeria?","Abuja",["Lagos","Kano","Accra"]],
+ ["Which is the largest ocean?","Pacific Ocean",["Atlantic Ocean","Indian Ocean","Arctic Ocean"]],
+ ["How many continents are there?","7",["5","6","8"]],
+ ["What is the capital of Japan?","Tokyo",["Seoul","Beijing","Bangkok"]],
+ ["Which country has the Great Wall?","China",["India","Japan","Thailand"]],
+ ["Which is the largest continent?","Asia",["Africa","Europe","Australia"]],
+ ["What is the capital of Ghana?","Accra",["Lagos","Nairobi","Dakar"]],
+ ["Which star is closest to Earth?","The Sun",["Sirius","Polaris","Vega"]]
+ ],
  "Mathematics":[
- ["What is 8 + 7?","15",["14","16","17"]],["What is 12 × 4?","48",["36","42","52"]],["What is 100 ÷ 5?","20",["15","25","30"]],["What is 45 - 18?","27",["23","28","33"]],["What is half of 90?","45",["40","50","55"]],["What is 9 × 9?","81",["72","79","89"]],["What is 144 ÷ 12?","12",["10","14","16"]],["What is 25% of 200?","50",["25","40","75"]]],
+ ["What is 8 + 7?","15",["14","16","17"]],
+ ["What is 12 × 4?","48",["36","42","52"]],
+ ["What is 100 ÷ 5?","20",["15","25","30"]],
+ ["What is 45 - 18?","27",["23","28","33"]],
+ ["What is half of 90?","45",["40","50","55"]],
+ ["What is 9 × 9?","81",["72","79","89"]],
+ ["What is 144 ÷ 12?","12",["10","14","16"]],
+ ["What is 25% of 200?","50",["25","40","75"]]
+ ],
  "English":[
- ["What is the plural of child?","Children",["Childs","Childes","Childrens"]],["Which word is a noun?","Teacher",["Quickly","Beautiful","Running"]],["What is the opposite of ancient?","Modern",["Old","Historic","Past"]],["Choose the correct spelling.","Beautiful",["Beutiful","Beautifull","Butiful"]],["Which is a verb?","Run",["Table","Blue","Happiness"]],["What is the past tense of go?","Went",["Goed","Gone","Going"]],["Which punctuation ends a question?","Question mark",["Full stop","Comma","Colon"]],["What is a synonym for happy?","Joyful",["Angry","Sad","Tired"]]],
+ ["What is the plural of child?","Children",["Childs","Childes","Childrens"]],
+ ["Which word is a noun?","Teacher",["Quickly","Beautiful","Running"]],
+ ["What is the opposite of ancient?","Modern",["Old","Historic","Past"]],
+ ["Choose the correct spelling.","Beautiful",["Beutiful","Beautifull","Butiful"]],
+ ["Which is a verb?","Run",["Table","Blue","Happiness"]],
+ ["What is the past tense of go?","Went",["Goed","Gone","Going"]],
+ ["Which punctuation ends a question?","Question mark",["Full stop","Comma","Colon"]],
+ ["What is a synonym for happy?","Joyful",["Angry","Sad","Tired"]]
+ ],
  "Science":[
- ["Which planet is called the Red Planet?","Mars",["Venus","Jupiter","Mercury"]],["What is the chemical formula for water?","H2O",["CO2","O2","NaCl"]],["Which organ pumps blood?","Heart",["Lungs","Brain","Liver"]],["Which gas do humans need to breathe?","Oxygen",["Helium","Hydrogen","Neon"]],["What is the largest planet?","Jupiter",["Earth","Mars","Saturn"]],["What is the centre of an atom called?","Nucleus",["Cell","Electron","Molecule"]],["Which part of a plant absorbs water?","Roots",["Flowers","Leaves","Fruit"]],["What force pulls objects toward Earth?","Gravity",["Friction","Magnetism","Electricity"]]],
+ ["Which planet is called the Red Planet?","Mars",["Venus","Jupiter","Mercury"]],
+ ["What is the chemical formula for water?","H2O",["CO2","O2","NaCl"]],
+ ["Which organ pumps blood?","Heart",["Lungs","Brain","Liver"]],
+ ["Which gas do humans need to breathe?","Oxygen",["Helium","Hydrogen","Neon"]],
+ ["What is the largest planet?","Jupiter",["Earth","Mars","Saturn"]],
+ ["What is the centre of an atom called?","Nucleus",["Cell","Electron","Molecule"]],
+ ["Which part of a plant absorbs water?","Roots",["Flowers","Leaves","Fruit"]],
+ ["What force pulls objects toward Earth?","Gravity",["Friction","Magnetism","Electricity"]]
+ ],
  "Sports":[
- ["How many players does a football team have on the field?","11",["9","10","12"]],["Which sport uses a racket and shuttlecock?","Badminton",["Tennis","Cricket","Golf"]],["How many rings are on the Olympic symbol?","5",["4","6","7"]],["Which sport is played at Wimbledon?","Tennis",["Football","Rugby","Basketball"]],["What is the length of a marathon approximately?","42.195 km",["21 km","30 km","50 km"]],["Which sport uses a bat and wickets?","Cricket",["Basketball","Swimming","Boxing"]],["In football, what is a hat-trick?","Three goals by one player",["Two goals","Four goals","A penalty"]],["Which sport uses a hoop?","Basketball",["Tennis","Golf","Swimming"]]],
+ ["How many players does a football team have on the field?","11",["9","10","12"]],
+ ["Which sport uses a racket and shuttlecock?","Badminton",["Tennis","Cricket","Golf"]],
+ ["How many rings are on the Olympic symbol?","5",["4","6","7"]],
+ ["Which sport is played at Wimbledon?","Tennis",["Football","Rugby","Basketball"]],
+ ["What is the length of a marathon approximately?","42.195 km",["21 km","30 km","50 km"]],
+ ["Which sport uses a bat and wickets?","Cricket",["Basketball","Swimming","Boxing"]],
+ ["In football, what is a hat-trick?","Three goals by one player",["Two goals","Four goals","A penalty"]],
+ ["Which sport uses a hoop?","Basketball",["Tennis","Golf","Swimming"]]
+ ],
  "Funny Questions":[
- ["What has hands but cannot clap?","A clock",["A robot","A tree","A chair"]],["What gets wetter as it dries?","A towel",["A sponge","A river","A cloud"]],["What has a neck but no head?","A bottle",["A shirt","A snake","A tree"]],["What has many keys but opens no locks?","A piano",["A door","A map","A phone"]],["What goes up but never comes down?","Your age",["A balloon","A bird","Smoke"]],["What has one eye but cannot see?","A needle",["A camera","A person","A fish"]],["What can travel around the world while staying in a corner?","A stamp",["A plane","A map","A clock"]],["What has teeth but cannot eat?","A comb",["A lion","A fork","A shark"]]],
+ ["What has hands but cannot clap?","A clock",["A robot","A tree","A chair"]],
+ ["What gets wetter as it dries?","A towel",["A sponge","A river","A cloud"]],
+ ["What has a neck but no head?","A bottle",["A shirt","A snake","A tree"]],
+ ["What has many keys but opens no locks?","A piano",["A door","A map","A phone"]],
+ ["What goes up but never comes down?","Your age",["A balloon","A bird","Smoke"]],
+ ["What has one eye but cannot see?","A needle",["A camera","A person","A fish"]],
+ ["What can travel around the world while staying in a corner?","A stamp",["A plane","A map","A clock"]],
+ ["What has teeth but cannot eat?","A comb",["A lion","A fork","A shark"]]
+ ],
  "Riddles":[
- ["I speak without a mouth and hear without ears. What am I?","An echo",["A radio","A book","A bell"]],["The more you take, the more you leave behind. What are they?","Footsteps",["Coins","Books","Pictures"]],["What has cities but no houses?","A map",["A village","A country","A road"]],["What has a face and two hands but no arms?","A clock",["A doll","A statue","A mirror"]],["What has a head and a tail but no body?","A coin",["A snake","A dog","A fish"]],["What runs but never walks?","A river",["A person","A horse","A child"]],["What can you catch but not throw?","A cold",["A ball","A stone","A stick"]],["What has pages but is not a book?","A calendar",["A phone","A table","A bag"]]],
+ ["I speak without a mouth and hear without ears. What am I?","An echo",["A radio","A book","A bell"]],
+ ["The more you take, the more you leave behind. What are they?","Footsteps",["Coins","Books","Pictures"]],
+ ["What has cities but no houses?","A map",["A village","A country","A road"]],
+ ["What has a face and two hands but no arms?","A clock",["A doll","A statue","A mirror"]],
+ ["What has a head and a tail but no body?","A coin",["A snake","A dog","A fish"]],
+ ["What runs but never walks?","A river",["A person","A horse","A child"]],
+ ["What can you catch but not throw?","A cold",["A ball","A stone","A stick"]],
+ ["What has pages but is not a book?","A calendar",["A phone","A table","A bag"]]
+ ],
  "Story Questions":[
- ["Ada saved money every week to buy a book. What did she save?","Money",["Food","Water","Clothes"]],["Tunde planted seeds and watered them daily. What was he growing?","Plants",["Fish","Cars","Books"]],["Musa helped an elderly neighbour carry groceries. What quality did he show?","Kindness",["Anger","Carelessness","Pride"]],["Amina studied every evening and passed her exam. What helped her succeed?","Consistent study",["Luck alone","Avoiding books","Skipping class"]],["A farmer planted maize before the rainy season. What did the farmer plant?","Maize",["Rice","Beans","Wheat"]],["Chika shared her lunch with a friend. What did she demonstrate?","Generosity",["Selfishness","Dishonesty","Impatience"]],["A boy checked both sides before crossing. What was he practising?","Road safety",["Cooking","Swimming","Shopping"]],["A girl read instructions before using a machine. Why?","To use it correctly and safely",["To waste time","To break it","To ignore it"]]],
+ ["Ada saved money every week to buy a book. What did she save?","Money",["Food","Water","Clothes"]],
+ ["Tunde planted seeds and watered them daily. What was he growing?","Plants",["Fish","Cars","Books"]],
+ ["Musa helped an elderly neighbour carry groceries. What quality did he show?","Kindness",["Anger","Carelessness","Pride"]],
+ ["Amina studied every evening and passed her exam. What helped her succeed?","Consistent study",["Luck alone","Avoiding books","Skipping class"]],
+ ["A farmer planted maize before the rainy season. What did the farmer plant?","Maize",["Rice","Beans","Wheat"]],
+ ["Chika shared her lunch with a friend. What did she demonstrate?","Generosity",["Selfishness","Dishonesty","Impatience"]],
+ ["A boy checked both sides before crossing. What was he practising?","Road safety",["Cooking","Swimming","Shopping"]],
+ ["A girl read instructions before using a machine. Why?","To use it correctly and safely",["To waste time","To break it","To ignore it"]]
+ ],
  "Business & Money":[
- ["What is a budget?","A plan for income and spending",["A loan","A bank building","A receipt"]],["What does profit mean?","Revenue minus costs",["Total expenses","A personal loan","A tax bill"]],["What is saving?","Keeping money for future use",["Spending everything","Borrowing money","Losing money"]],["Who is an entrepreneur?","Someone who starts or runs a business",["Only a customer","A tourist","A referee"]],["What is a customer?","A person who buys goods or services",["A supplier only","A banknote","A building"]],["What is an investment?","Putting resources into something for future returns",["Throwing money away","A shopping list","A salary slip"]],["What is a business expense?","A cost of running a business",["A customer's name","A company logo","A profit"]],["Why do businesses research customers?","To understand their needs",["To ignore them","To avoid feedback","To stop selling"]]],
+ ["What is a budget?","A plan for income and spending",["A loan","A bank building","A receipt"]],
+ ["What does profit mean?","Revenue minus costs",["Total expenses","A personal loan","A tax bill"]],
+ ["What is saving?","Keeping money for future use",["Spending everything","Borrowing money","Losing money"]],
+ ["Who is an entrepreneur?","Someone who starts or runs a business",["Only a customer","A tourist","A referee"]],
+ ["What is a customer?","A person who buys goods or services",["A supplier only","A banknote","A building"]],
+ ["What is an investment?","Putting resources into something for future returns",["Throwing money away","A shopping list","A salary slip"]],
+ ["What is a business expense?","A cost of running a business",["A customer's name","A company logo","A profit"]],
+ ["Why do businesses research customers?","To understand their needs",["To ignore them","To avoid feedback","To stop selling"]]
+ ],
  "Technology":[
- ["What does CPU stand for?","Central Processing Unit",["Computer Power Utility","Central Program User","Control Processing Unit"]],["What is a web browser used for?","Accessing websites",["Washing clothes","Printing money","Charging batteries"]],["Which is an example of an operating system?","Android",["Google Search","Wi-Fi","Bluetooth"]],["What does AI stand for?","Artificial Intelligence",["Automatic Internet","Advanced Input","Applied Information"]],["What is a strong password?","A long, unique password",["123456","Your first name","password"]],["What does email allow you to do?","Send electronic messages",["Print food","Repair a screen","Charge a phone"]],["What is cloud storage?","Storing data on remote internet servers",["A weather forecast","A computer fan","A keyboard"]],["What is phishing?","A trick to steal personal information",["A safe backup","A video format","A computer game"]]],
+ ["What does CPU stand for?","Central Processing Unit",["Computer Power Utility","Central Program User","Control Processing Unit"]],
+ ["What is a web browser used for?","Accessing websites",["Washing clothes","Printing money","Charging batteries"]],
+ ["Which is an example of an operating system?","Android",["Google Search","Wi-Fi","Bluetooth"]],
+ ["What does AI stand for?","Artificial Intelligence",["Automatic Internet","Advanced Input","Applied Information"]],
+ ["What is a strong password?","A long, unique password",["123456","Your first name","password"]],
+ ["What does email allow you to do?","Send electronic messages",["Print food","Repair a screen","Charge a phone"]],
+ ["What is cloud storage?","Storing data on remote internet servers",["A weather forecast","A computer fan","A keyboard"]],
+ ["What is phishing?","A trick to steal personal information",["A safe backup","A video format","A computer game"]]
+ ],
  "Who Is Richest?":[
- ["Which publication tracks billionaire wealth?","Forbes",["NASA","UNESCO","WHO"]],["What does net worth measure?","Assets minus liabilities",["Monthly salary only","Daily expenses","Cash in one pocket"]],["Can billionaire rankings change over time?","Yes",["No, never","Only every 100 years","Only on weekends"]],["What is an asset?","Something of value that you own",["A debt only","An expense","A tax"]],["What is a share in a company?","A unit of ownership",["A shopping receipt","A bank loan","A tax return"]],["What can affect estimated wealth?","Changes in asset values",["The weather only","Shoe size","Birthday"]],["Is revenue the same as profit?","No",["Yes, always","Only for banks","Only for shops"]]],
+ ["Which publication tracks billionaire wealth?","Forbes",["NASA","UNESCO","WHO"]],
+ ["What does net worth measure?","Assets minus liabilities",["Monthly salary only","Daily expenses","Cash in one pocket"]],
+ ["Can billionaire rankings change over time?","Yes",["No, never","Only every 100 years","Only on weekends"]],
+ ["What is an asset?","Something of value that you own",["A debt only","An expense","A tax"]],
+ ["What is a share in a company?","A unit of ownership",["A shopping receipt","A bank loan","A tax return"]],
+ ["What can affect estimated wealth?","Changes in asset values",["The weather only","Shoe size","Birthday"]],
+ ["Is revenue the same as profit?","No",["Yes, always","Only for banks","Only for shops"]]
+ ],
  "Life Skills":[
- ["What is active listening?","Giving attention and understanding",["Interrupting constantly","Ignoring people","Changing the topic"]],["What helps manage time?","Prioritising tasks",["Avoiding plans","Doing everything at once","Never resting"]],["What is empathy?","Understanding another person's feelings",["Making fun of people","Ignoring others","Always agreeing"]],["What is a healthy way to handle disagreement?","Discuss respectfully",["Shout louder","Use insults","Refuse to listen"]],["What is critical thinking?","Evaluating information and evidence",["Believing every claim","Guessing only","Avoiding questions"]],["What is teamwork?","Working together toward a shared goal",["Competing against teammates","Avoiding responsibility","Working without communication"]],["What is a goal?","A result you want to achieve",["An excuse","A random thought","A punishment"]],["What is a useful study habit?","Regular revision",["Never practising","Only guessing","Avoiding feedback"]]]
-};
-const advancedExtras={
- "Mathematics":[["Solve: 15 × 12","180",["160","170","190"]],["What is 3/4 of 80?","60",["40","50","70"]],["What is the square root of 169?","13",["12","14","15"]]],
- "Science":[["What is the SI unit of force?","Newton",["Joule","Watt","Pascal"]],["What is the pH of a neutral solution at 25°C?","7",["0","5","14"]],["Which organelle produces most cellular ATP?","Mitochondrion",["Ribosome","Nucleus","Golgi apparatus"]]],
- "English":[["Which is a metaphor?","Time is a thief",["As cold as ice","He ran quickly","The sun is bright"]],["What is the passive form of 'She wrote the letter'?","The letter was written by her",["She was writing","The letter writes her","She writes the letter"]],["What is an antonym?","A word with an opposite meaning",["A word with the same meaning","A type of noun","A punctuation mark"]]]
+ ["What is active listening?","Giving attention and understanding",["Interrupting constantly","Ignoring people","Changing the topic"]],
+ ["What helps manage time?","Prioritising tasks",["Avoiding plans","Doing everything at once","Never resting"]],
+ ["What is empathy?","Understanding another person's feelings",["Making fun of people","Ignoring others","Always agreeing"]],
+ ["What is a healthy way to handle disagreement?","Discuss respectfully",["Shout louder","Use insults","Refuse to listen"]],
+ ["What is critical thinking?","Evaluating information and evidence",["Believing every claim","Guessing only","Avoiding questions"]],
+ ["What is teamwork?","Working together toward a shared goal",["Competing against teammates","Avoiding responsibility","Working without communication"]],
+ ["What is a goal?","A result you want to achieve",["An excuse","A random thought","A punishment"]],
+ ["What is a useful study habit?","Regular revision",["Never practising","Only guessing","Avoiding feedback"]]
+ ]
 };
 
-function shuffle(list){const a=[...list];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function setMessage(id,text,type=""){const el=$(id);el.textContent=text;el.className="message "+type;}
+const advancedExtras={
+ "Mathematics":[
+ ["Solve: 15 × 12","180",["160","170","190"]],
+ ["What is 3/4 of 80?","60",["40","50","70"]],
+ ["What is the square root of 169?","13",["12","14","15"]]
+ ],
+ "Science":[
+ ["What is the SI unit of force?","Newton",["Joule","Watt","Pascal"]],
+ ["What is the pH of a neutral solution at 25°C?","7",["0","5","14"]],
+ ["Which organelle produces most cellular ATP?","Mitochondrion",["Ribosome","Nucleus","Golgi apparatus"]]
+ ],
+ "English":[
+ ["Which is a metaphor?","Time is a thief",["As cold as ice","He ran quickly","The sun is bright"]],
+ ["What is the passive form of 'She wrote the letter'?","The letter was written by her",["She was writing","The letter writes her","She writes the letter"]],
+ ["What is an antonym?","A word with an opposite meaning",["A word with the same meaning","A type of noun","A punctuation mark"]]
+ ]
+};
+
+function shuffle(list){
+ const a=[...list];
+ for(let i=a.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [a[i],a[j]]=[a[j],a[i]];
+ }
+ return a;
+}
+
+function setMessage(id,text,type=""){
+ const el=$(id);
+ el.textContent=text;
+ el.className="message "+type;
+}
+
 function friendlyError(error){
  console.error(error);
  const code=error?.code||"";
  const messages={
+ "auth/api-key-not-valid":"Firebase rejected this API key. Confirm the Web API key in Firebase Project settings → General → Your apps, and check Google Cloud API-key restrictions.",
  "auth/email-already-in-use":"This email already has an account. Please sign in.",
  "auth/invalid-email":"Enter a valid email address.",
  "auth/weak-password":"Choose a password with at least 6 characters.",
  "auth/invalid-credential":"The email or password is incorrect.",
  "auth/user-not-found":"No account was found for this email.",
  "auth/wrong-password":"The email or password is incorrect.",
- "auth/unauthorized-domain":"Add this website domain under Firebase Authentication → Settings → Authorized domains.",
- "auth/operation-not-allowed":"Enable this sign-in method in Firebase Authentication.",
+ "auth/unauthorized-domain":"Add michael20046.github.io under Firebase Authentication → Settings → Authorized domains.",
+ "auth/operation-not-allowed":"Enable this sign-in method in Firebase Authentication → Sign-in method.",
  "auth/network-request-failed":"Network problem. Check your internet connection and try again.",
  "permission-denied":"Firestore denied this request. Check your Firestore Security Rules.",
  "unavailable":"Firebase is temporarily unavailable. Please try again."
  };
  return messages[code]||error?.message||"Something went wrong. Please try again.";
 }
+
 window.showPage=function(page){
  if(!currentUser)return;
- const target=$(page+"Page");if(!target)return;
+ const target=$(page+"Page");
+ if(!target)return;
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  target.classList.add("active");
  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
@@ -194,168 +324,700 @@ window.showPage=function(page){
  if(["home","wallet","profile"].includes(page))updateDashboard();
  window.scrollTo({top:0,behavior:"smooth"});
 };
-document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+
+document.querySelectorAll(".nav-btn").forEach(b=>{
+ b.addEventListener("click",()=>showPage(b.dataset.page));
+});
 
 async function createProfile(user){
- const ref=doc(db,"players",user.uid),snap=await getDoc(ref);
+ const ref=doc(db,"players",user.uid);
+ const snap=await getDoc(ref);
+
  if(!snap.exists()){
-  await setDoc(ref,{name:user.displayName||"Player",email:user.email||"",points:0,gamesPlayed:0,correctAnswers:0,lessonsCompleted:[],createdAt:serverTimestamp()});
- }else{
-  await setDoc(ref,{name:user.displayName||snap.data().name||"Player",email:user.email||""},{merge:true});
+  await setDoc(ref,{
+   name:user.displayName||"Player",
+   points:0,
+   gamesPlayed:0,
+   correctAnswers:0,
+   lessonsCompleted:[],
+   createdAt:serverTimestamp()
+  });
+ }else if(user.displayName&&user.displayName!==snap.data().name){
+  await setDoc(ref,{name:user.displayName},{merge:true});
  }
 }
+
 async function loadProfile(user){
- const snap=await getDoc(doc(db,"players",user.uid));if(!snap.exists())throw new Error("Player profile not found.");
- const data=snap.data();savedPoints=Number(data.points)||0;games=Number(data.gamesPlayed)||0;correctTotal=Number(data.correctAnswers)||0;
- lessonsDone=Array.isArray(data.lessonsCompleted)?data.lessonsCompleted:[];updateDashboard();
+ const snap=await getDoc(doc(db,"players",user.uid));
+ if(!snap.exists())throw new Error("Player profile not found.");
+
+ const data=snap.data();
+ savedPoints=Number(data.points)||0;
+ games=Number(data.gamesPlayed)||0;
+ correctTotal=Number(data.correctAnswers)||0;
+ lessonsDone=Array.isArray(data.lessonsCompleted)?data.lessonsCompleted:[];
+ updateDashboard();
 }
+
 function updateDashboard(){
  const name=currentUser?.displayName||"Player";
- $("homeGreeting").textContent="Hello, "+name+"! 👋";$("homePoints").textContent=savedPoints.toLocaleString();
- $("headerPoints").textContent="⚡ "+savedPoints.toLocaleString()+" Points";$("walletPoints").textContent=savedPoints.toLocaleString()+" ⚡";
- $("profilePoints").textContent=savedPoints.toLocaleString()+" Points";$("gamesPlayed").textContent=games;$("profileGames").textContent=games;
- $("correctAnswers").textContent=correctTotal;$("profileCorrect").textContent=correctTotal;$("profileName").textContent=name;
- $("profileEmail").textContent=currentUser?.email||"";$("lessonsCompleted").textContent=lessonsDone.length;$("profileLessons").textContent=lessonsDone.length;
+ $("homeGreeting").textContent="Hello, "+name+"! 👋";
+ $("homePoints").textContent=savedPoints.toLocaleString();
+ $("headerPoints").textContent="⚡ "+savedPoints.toLocaleString()+" Points";
+ $("walletPoints").textContent=savedPoints.toLocaleString()+" ⚡";
+ $("profilePoints").textContent=savedPoints.toLocaleString()+" Points";
+ $("gamesPlayed").textContent=games;
+ $("profileGames").textContent=games;
+ $("correctAnswers").textContent=correctTotal;
+ $("profileCorrect").textContent=correctTotal;
+ $("profileName").textContent=name;
+ $("profileEmail").textContent=currentUser?.email||"";
+ $("lessonsCompleted").textContent=lessonsDone.length;
+ $("profileLessons").textContent=lessonsDone.length;
 }
+
 $("signupBtn").onclick=async()=>{
- const name=$("name").value.trim(),email=$("email").value.trim(),password=$("password").value;
+ const name=$("name").value.trim();
+ const email=$("email").value.trim();
+ const password=$("password").value;
+
  if(!name||!email||!password)return setMessage("authMessage","Please complete all fields.","error");
  if(name.length>50)return setMessage("authMessage","Your name must be 50 characters or fewer.","error");
  if(password.length<6)return setMessage("authMessage","Password must contain at least 6 characters.","error");
- try{setMessage("authMessage","Creating your account...");const result=await createUserWithEmailAndPassword(auth,email,password);await updateProfile(result.user,{displayName:name});await createProfile(result.user);await loadProfile(result.user);setMessage("authMessage","Welcome to QuizSpark!","success");}
- catch(e){setMessage("authMessage",friendlyError(e),"error");}
+
+ try{
+  setMessage("authMessage","Creating your account...");
+  const result=await createUserWithEmailAndPassword(auth,email,password);
+  await updateProfile(result.user,{displayName:name});
+  await createProfile(result.user);
+  await loadProfile(result.user);
+  setMessage("authMessage","Welcome to QuizSpark!","success");
+ }catch(e){
+  setMessage("authMessage",friendlyError(e),"error");
+ }
 };
+
 $("loginBtn").onclick=async()=>{
- const email=$("email").value.trim(),password=$("password").value;
+ const email=$("email").value.trim();
+ const password=$("password").value;
+
  if(!email||!password)return setMessage("authMessage","Enter your email and password.","error");
- try{setMessage("authMessage","Signing in...");await signInWithEmailAndPassword(auth,email,password);}
- catch(e){setMessage("authMessage",friendlyError(e),"error");}
+
+ try{
+  setMessage("authMessage","Signing in...");
+  await signInWithEmailAndPassword(auth,email,password);
+ }catch(e){
+  setMessage("authMessage",friendlyError(e),"error");
+ }
 };
+
 $("googleBtn").onclick=async()=>{
- try{setMessage("authMessage","Connecting to Google...");await signInWithRedirect(auth,googleProvider);}
- catch(e){setMessage("authMessage",friendlyError(e),"error");}
+ try{
+  setMessage("authMessage","Connecting to Google...");
+  await signInWithRedirect(auth,googleProvider);
+ }catch(e){
+  setMessage("authMessage",friendlyError(e),"error");
+ }
 };
-try{const redirectResult=await getRedirectResult(auth);if(redirectResult?.user){setMessage("authMessage","Google sign-in successful.","success");}}
-catch(e){setMessage("authMessage",friendlyError(e),"error");}
+
+try{
+ const redirectResult=await getRedirectResult(auth);
+ if(redirectResult?.user){
+  setMessage("authMessage","Google sign-in successful.","success");
+ }
+}catch(e){
+ setMessage("authMessage",friendlyError(e),"error");
+}
+
 $("forgotBtn").onclick=async()=>{
- const email=$("email").value.trim();if(!email)return setMessage("authMessage","Enter your email address first.","error");
- try{await sendPasswordResetEmail(auth,email);setMessage("authMessage","Password reset email sent. Check your inbox.","success");}
- catch(e){setMessage("authMessage",friendlyError(e),"error");}
+ const email=$("email").value.trim();
+
+ if(!email)return setMessage("authMessage","Enter your email address first.","error");
+
+ try{
+  await sendPasswordResetEmail(auth,email);
+  setMessage("authMessage","Password reset email sent. Check your inbox.","success");
+ }catch(e){
+  setMessage("authMessage",friendlyError(e),"error");
+ }
 };
-$("logoutBtn").onclick=async()=>{try{if(gameRunning&&!confirm("You have an unfinished quiz. Sign out anyway?"))return;await signOut(auth);}catch(e){alert(friendlyError(e));}};
+
+$("logoutBtn").onclick=async()=>{
+ try{
+  if(gameRunning&&!confirm("Your unfinished quiz is saved on this device. Sign out anyway?"))return;
+  await signOut(auth);
+ }catch(e){
+  alert(friendlyError(e));
+ }
+};
+
 onAuthStateChanged(auth,async user=>{
  currentUser=user;
+
  if(!user){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));$("authPage").classList.add("active");$("authPage").classList.remove("hidden");
-  $("bottomNav").classList.add("hidden");$("signupFields").classList.remove("hidden");
-  savedPoints=games=correctTotal=0;lessonsDone=[];updateDashboard();return;
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  $("authPage").classList.add("active");
+  $("authPage").classList.remove("hidden");
+  $("bottomNav").classList.add("hidden");
+  $("signupFields").classList.remove("hidden");
+
+  savedPoints=games=correctTotal=0;
+  lessonsDone=[];
+  updateDashboard();
+  return;
  }
- $("authPage").classList.remove("active");$("authPage").classList.add("hidden");$("signupFields").classList.add("hidden");$("bottomNav").classList.remove("hidden");
- try{await createProfile(user);if(auth.currentUser?.uid!==user.uid)return;await loadProfile(user);showPage("home");}
- catch(e){setMessage("authMessage",friendlyError(e),"error");}
+
+ $("authPage").classList.remove("active");
+ $("authPage").classList.add("hidden");
+ $("signupFields").classList.add("hidden");
+ $("bottomNav").classList.remove("hidden");
+
+ try{
+  await createProfile(user);
+  if(auth.currentUser?.uid!==user.uid)return;
+
+  await loadProfile(user);
+  if(auth.currentUser?.uid!==user.uid)return;
+
+  showPage("home");
+ }catch(e){
+  setMessage("authMessage",friendlyError(e),"error");
+ }
 });
 
 function buildLearningCategories(){
- const items=[["School","🎓","School subjects"],["Business","💼","Business and money"],["Technology","💻","Digital knowledge"],["Life Skills","💡","Everyday skills"],["General Knowledge","🌍","Explore the world"]];
+ const items=[
+  ["School","🎓","School subjects"],
+  ["Business","💼","Business and money"],
+  ["Technology","💻","Digital knowledge"],
+  ["Life Skills","💡","Everyday skills"],
+  ["General Knowledge","🌍","Explore the world"]
+ ];
+
  $("learningCategories").replaceChildren();
- items.forEach(([name,icon,description])=>{const b=document.createElement("button");b.className="category";b.innerHTML=`${icon}<strong>${name}</strong><small>${description}</small>`;b.onclick=()=>displayLessons(name);$("learningCategories").appendChild(b);});
-}
-function displayLessons(category){
- $("lessonHeading").textContent=category+" Lessons";$("lessonList").replaceChildren();
- const list=lessons[category]||[];
- if(!list.length){$("lessonList").textContent="More lessons coming soon.";return;}
- list.forEach(item=>{
-  const card=document.createElement("div");card.className="lesson";const h=document.createElement("h3");h.textContent=item.title;
-  const status=document.createElement("p");status.textContent=lessonsDone.includes(item.id)?"✓ Completed":"Written lesson";
-  const b=document.createElement("button");b.className="primary";b.textContent="Read Lesson";b.onclick=()=>openLesson(category,item.id);
-  card.append(h,status,b);$("lessonList").appendChild(card);
+
+ items.forEach(([name,icon,description])=>{
+  const b=document.createElement("button");
+  b.className="category";
+  b.textContent=icon+" ";
+
+  const strong=document.createElement("strong");
+  strong.textContent=name;
+
+  const small=document.createElement("small");
+  small.textContent=description;
+
+  b.append(strong,small);
+  b.onclick=()=>displayLessons(name);
+  $("learningCategories").appendChild(b);
  });
 }
-function openLesson(category,id){
- const item=(lessons[category]||[]).find(x=>x.id===id);if(!item)return;
- currentLessonId=id;$("readerTitle").textContent=item.title;$("readerContent").textContent=item.body;
- $("lessonMessage").textContent=lessonsDone.includes(id)?"You have completed this lesson.":"Read the lesson and mark it complete when finished.";
- $("completeLessonBtn").textContent=lessonsDone.includes(id)?"Already Completed ✓":"Mark Lesson as Completed ✓";$("completeLessonBtn").disabled=lessonsDone.includes(id);showPage("lesson");
+
+function displayLessons(category){
+ $("lessonHeading").textContent=category+" Lessons";
+ $("lessonList").replaceChildren();
+
+ const list=lessons[category]||[];
+
+ if(!list.length){
+  $("lessonList").textContent="More lessons coming soon.";
+  return;
+ }
+
+ list.forEach(item=>{
+  const card=document.createElement("div");
+  card.className="lesson";
+
+  const h=document.createElement("h3");
+  h.textContent=item.title;
+
+  const status=document.createElement("p");
+  status.textContent=lessonsDone.includes(item.id)?"✓ Completed":"Written lesson";
+
+  const b=document.createElement("button");
+  b.className="primary";
+  b.textContent="Read Lesson";
+  b.onclick=()=>openLesson(category,item.id);
+
+  card.append(h,status,b);
+  $("lessonList").appendChild(card);
+ });
 }
+
+function openLesson(category,id){
+ const item=(lessons[category]||[]).find(x=>x.id===id);
+ if(!item)return;
+
+ currentLessonId=id;
+ $("readerTitle").textContent=item.title;
+ $("readerContent").textContent=item.body;
+
+ $("lessonMessage").textContent=lessonsDone.includes(id)
+  ?"You have completed this lesson."
+  :"Read the lesson and mark it complete when finished.";
+
+ $("completeLessonBtn").textContent=lessonsDone.includes(id)
+  ?"Already Completed ✓"
+  :"Mark Lesson as Completed ✓";
+
+ $("completeLessonBtn").disabled=lessonsDone.includes(id);
+ showPage("lesson");
+}
+
 $("completeLessonBtn").onclick=async()=>{
  if(!currentUser||!currentLessonId||lessonsDone.includes(currentLessonId))return;
- const btn=$("completeLessonBtn");btn.disabled=true;
+
+ const btn=$("completeLessonBtn");
+ btn.disabled=true;
+
  try{
   const ref=doc(db,"players",currentUser.uid);
-  await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw new Error("Profile not found.");
-   const completed=Array.isArray(snap.data().lessonsCompleted)?snap.data().lessonsCompleted:[];
-   if(!completed.includes(currentLessonId))tx.update(ref,{lessonsCompleted:[...completed,currentLessonId]});
+
+  await runTransaction(db,async tx=>{
+   const snap=await tx.get(ref);
+   if(!snap.exists())throw new Error("Profile not found.");
+
+   const completed=Array.isArray(snap.data().lessonsCompleted)
+    ?snap.data().lessonsCompleted
+    :[];
+
+   if(!completed.includes(currentLessonId)){
+    tx.update(ref,{lessonsCompleted:[...completed,currentLessonId]});
+   }
   });
-  await loadProfile(currentUser);$("lessonMessage").textContent="Lesson completed! Great work.";$("completeLessonBtn").textContent="Completed ✓";
- }catch(e){btn.disabled=false;$("lessonMessage").textContent=friendlyError(e);}
-};
-$("videoBtn").onclick=()=>{
- const topic=$("videoSearch").value.trim();if(!topic)return alert("Enter a topic you want to learn.");
- window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(topic+" educational lesson"),"_blank","noopener,noreferrer");
-};
-function buildQuizCategories(){
- const holder=$("quizCategories");holder.replaceChildren();
- categories.forEach(([name,icon,description])=>{const b=document.createElement("button");b.className="category"+(name===selectedCategory?" selected":"");
- b.innerHTML=`${icon}<strong>${name}</strong><small>${description}</small>`;b.onclick=()=>{selectedCategory=name;buildQuizCategories();};holder.appendChild(b);});
-}
-function makeQuiz(){
- let source=[...(bank[selectedCategory]||bank["General Knowledge"])],difficulty=$("difficulty").value;
- if(difficulty==="Advanced"&&advancedExtras[selectedCategory])source.push(...advancedExtras[selectedCategory]);
- if(selectedCategory==="Mathematics"&&difficulty!=="Beginner"){
-  for(let i=0;i<12;i++){const a=10+i*2,b=3+(i%8),answer=a*b;source.push([`Calculate ${a} × ${b}.`,String(answer),[String(answer+2),String(answer-3),String(answer+10)]]);}
+
+  await loadProfile(currentUser);
+  $("lessonMessage").textContent="Lesson completed! Great work.";
+  $("completeLessonBtn").textContent="Completed ✓";
+ }catch(e){
+  btn.disabled=false;
+  $("lessonMessage").textContent=friendlyError(e);
  }
- if(difficulty==="Beginner")source=source.slice(0,Math.max(5,source.length-2));
- return shuffle(source).slice(0,Math.min(Number($("questionCount").value),source.length)).map(([q,correct,wrong])=>{const options=shuffle([correct,...wrong]);return{q,a:options,correct:options.indexOf(correct)};});
-}
-$("startBtn").onclick=()=>{
- if(!currentUser||gameRunning||saving)return;quizQuestions=makeQuiz();if(!quizQuestions.length)return;
- questionIndex=0;score=0;answered=false;gameRunning=true;$("quizSetup").classList.add("hidden");$("quizGame").classList.remove("hidden");$("gamePoints").textContent="0";showQuestion();
 };
+
+$("videoBtn").onclick=()=>{
+ const topic=$("videoSearch").value.trim();
+
+ if(!topic)return alert("Enter a topic you want to learn.");
+
+ window.open(
+  "https://www.youtube.com/results?search_query="+encodeURIComponent(topic+" educational lesson"),
+  "_blank",
+  "noopener,noreferrer"
+ );
+};
+
+function buildQuizCategories(){
+ const holder=$("quizCategories");
+ holder.replaceChildren();
+
+ categories.forEach(([name,icon,description])=>{
+  const b=document.createElement("button");
+  b.className="category"+(name===selectedCategory?" selected":"");
+  b.textContent=icon+" ";
+
+  const strong=document.createElement("strong");
+  strong.textContent=name;
+
+  const small=document.createElement("small");
+  small.textContent=description;
+
+  b.append(strong,small);
+
+  b.onclick=()=>{
+   selectedCategory=name;
+   buildQuizCategories();
+  };
+
+  holder.appendChild(b);
+ });
+}
+
+function makeQuiz(){
+ let source=[...(bank[selectedCategory]||bank["General Knowledge"])];
+ const difficulty=$("difficulty").value;
+
+ if(difficulty==="Advanced"&&advancedExtras[selectedCategory]){
+  source.push(...advancedExtras[selectedCategory]);
+ }
+
+ if(selectedCategory==="Mathematics"&&difficulty!=="Beginner"){
+  for(let i=0;i<12;i++){
+   const a=10+i*2;
+   const b=3+(i%8);
+   const answer=a*b;
+
+   source.push([
+    `Calculate ${a} × ${b}.`,
+    String(answer),
+    [String(answer+2),String(answer-3),String(answer+10)]
+   ]);
+  }
+ }
+
+ if(difficulty==="Beginner"){
+  source=source.slice(0,Math.max(5,source.length-2));
+ }
+
+ return shuffle(source)
+  .slice(0,Math.min(Number($("questionCount").value),source.length))
+  .map(([q,correct,wrong])=>{
+   const options=shuffle([correct,...wrong]);
+   return{
+    q,
+    a:options,
+    correct:options.indexOf(correct)
+   };
+  });
+}
+
+/* Save unfinished quizzes locally on this device. */
+function draftKey(){
+ return currentUser?"quizspark_quiz_"+currentUser.uid:null;
+}
+
+function saveQuizDraft(){
+ if(!currentUser||!quizQuestions.length)return;
+
+ try{
+  localStorage.setItem(draftKey(),JSON.stringify({
+   version:1,
+   questions:quizQuestions,
+   index:questionIndex,
+   score,
+   category:selectedCategory,
+   disabled:disabledAnswers
+  }));
+ }catch(e){
+  console.warn("Could not save quiz draft locally.",e);
+ }
+}
+
+function readQuizDraft(){
+ if(!currentUser)return null;
+
+ try{
+  const raw=localStorage.getItem(draftKey());
+  if(!raw)return null;
+
+  const d=JSON.parse(raw);
+
+  if(d.version!==1||!Array.isArray(d.questions)||!d.questions.length||
+     !Number.isInteger(d.index)||d.index<0||d.index>d.questions.length){
+   return null;
+  }
+
+  if(!Number.isFinite(d.score)||!Array.isArray(d.disabled))return null;
+
+  return d;
+ }catch(e){
+  console.warn("Saved quiz draft could not be read.",e);
+  return null;
+ }
+}
+
+function clearQuizDraft(){
+ if(currentUser){
+  try{
+   localStorage.removeItem(draftKey());
+  }catch(e){
+   console.warn(e);
+  }
+ }
+}
+
+function refreshStartButton(){
+ const draft=readQuizDraft();
+ $("startBtn").textContent=draft?"Resume Saved Quiz ▶":"Start My Quiz 🚀";
+}
+
+function startOrResumeQuiz(){
+ if(!currentUser||gameRunning||saving)return;
+
+ const draft=readQuizDraft();
+
+ if(draft){
+  quizQuestions=draft.questions;
+  questionIndex=draft.index;
+  score=draft.score;
+  selectedCategory=draft.category||selectedCategory;
+  disabledAnswers=draft.disabled||[];
+
+  $("gamePoints").textContent=String(score);
+  $("quizSetup").classList.add("hidden");
+  $("quizGame").classList.remove("hidden");
+
+  gameRunning=true;
+  buildQuizCategories();
+  showQuestion();
+  return;
+ }
+
+ quizQuestions=makeQuiz();
+
+ if(!quizQuestions.length)return;
+
+ questionIndex=0;
+ score=0;
+ answered=false;
+ disabledAnswers=[];
+ gameRunning=true;
+
+ saveQuizDraft();
+
+ $("quizSetup").classList.add("hidden");
+ $("quizGame").classList.remove("hidden");
+ $("gamePoints").textContent="0";
+
+ showQuestion();
+}
+
+$("startBtn").onclick=startOrResumeQuiz;
+
 function showQuestion(){
- if(questionIndex>=quizQuestions.length){finishQuiz();return;}
- answered=false;const q=quizQuestions[questionIndex];$("question").textContent=q.q;
- $("questionNumber").textContent=(questionIndex+1)+"/"+quizQuestions.length;$("progressFill").style.width=(questionIndex/quizQuestions.length*100)+"%";$("answers").replaceChildren();
- q.a.forEach((answer,index)=>{const b=document.createElement("button");b.className="answer";b.textContent=answer;b.onclick=()=>checkAnswer(index,b);$("answers").appendChild(b);});
- $("nextBtn").classList.add("hidden");setMessage("gameMessage","Choose the correct answer.");
+ if(questionIndex>=quizQuestions.length){
+  finishQuiz();
+  return;
+ }
+
+ answered=false;
+
+ const q=quizQuestions[questionIndex];
+
+ $("question").textContent=q.q;
+ $("questionNumber").textContent=(questionIndex+1)+"/"+quizQuestions.length;
+ $("progressFill").style.width=(questionIndex/quizQuestions.length*100)+"%";
+ $("answers").replaceChildren();
+
+ q.a.forEach((answer,index)=>{
+  const b=document.createElement("button");
+  b.className="answer";
+  b.textContent=answer;
+
+  if(disabledAnswers.includes(index)){
+   b.disabled=true;
+   b.classList.add("wrong");
+  }
+
+  b.onclick=()=>checkAnswer(index,b);
+  $("answers").appendChild(b);
+ });
+
+ $("nextBtn").classList.add("hidden");
+
+ setMessage(
+  "gameMessage",
+  disabledAnswers.length
+   ?"Try another answer. Incorrect choices do not remove points."
+   :"Choose the correct answer."
+ );
 }
+
 function checkAnswer(index,button){
- if(answered||!gameRunning)return;answered=true;const q=quizQuestions[questionIndex],buttons=$("answers").querySelectorAll("button");
- buttons.forEach((b,i)=>{b.disabled=true;if(i===q.correct)b.classList.add("correct");});
- if(index===q.correct){score+=10;$("gamePoints").textContent=score;setMessage("gameMessage","🎉 Correct! You earned 10 points.","success");}
- else{button.classList.add("wrong");setMessage("gameMessage","The correct answer is "+q.a[q.correct]+".","error");}
- $("nextBtn").classList.remove("hidden");$("nextBtn").textContent=questionIndex===quizQuestions.length-1?"Finish Quiz":"Next Question →";
+ if(answered||!gameRunning||disabledAnswers.includes(index))return;
+
+ const q=quizQuestions[questionIndex];
+ const buttons=$("answers").querySelectorAll("button");
+
+ if(index===q.correct){
+  answered=true;
+  score+=10;
+  $("gamePoints").textContent=String(score);
+
+  buttons.forEach((b,i)=>{
+   b.disabled=true;
+   if(i===q.correct)b.classList.add("correct");
+  });
+
+  setMessage("gameMessage","🎉 Correct! You earned 10 points.","success");
+
+  $("nextBtn").classList.remove("hidden");
+  $("nextBtn").textContent=questionIndex===quizQuestions.length-1
+   ?"Finish Quiz"
+   :"Next Question →";
+ }else{
+  disabledAnswers.push(index);
+  button.disabled=true;
+  button.classList.add("wrong");
+
+  setMessage(
+   "gameMessage",
+   "Not quite. Try another answer. You have not lost any points.",
+   "error"
+  );
+ }
+
+ saveQuizDraft();
 }
-$("nextBtn").onclick=()=>{if(!answered||!gameRunning)return;questionIndex++;showQuestion();};
-$("quitBtn").onclick=()=>{if(!gameRunning)return;if(!confirm("Quit this quiz? Your unfinished score will not be saved."))return;gameRunning=false;$("quizGame").classList.add("hidden");$("quizSetup").classList.remove("hidden");};
+
+$("nextBtn").onclick=()=>{
+ if(!gameRunning)return;
+ if(questionIndex>=quizQuestions.length)return;
+ if(!answered)return;
+
+ questionIndex++;
+ disabledAnswers=[];
+ answered=false;
+
+ saveQuizDraft();
+ showQuestion();
+};
+
+$("quitBtn").onclick=()=>{
+ if(!gameRunning)return;
+
+ saveQuizDraft();
+ gameRunning=false;
+
+ $("quizGame").classList.add("hidden");
+ $("quizSetup").classList.remove("hidden");
+
+ setMessage("gameMessage","Your unfinished quiz has been saved on this device.");
+ refreshStartButton();
+};
+
 async function finishQuiz(){
- if(!gameRunning||saving)return;gameRunning=false;saving=true;$("answers").replaceChildren();$("question").textContent="Quiz Completed! 🎉";$("progressFill").style.width="100%";$("nextBtn").classList.add("hidden");
+ if(!gameRunning||saving)return;
+
+ gameRunning=false;
+ saving=true;
+
+ $("answers").replaceChildren();
+ $("question").textContent="Quiz Completed! 🎉";
+ $("progressFill").style.width="100%";
+ $("nextBtn").classList.add("hidden");
+ $("quitBtn").disabled=true;
+
  setMessage("gameMessage","You scored "+score+" points. Saving your result...");
+
  try{
-  const ref=doc(db,"players",currentUser.uid),earnedCorrect=score/10;
-  await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw new Error("Player profile not found.");
-   const data=snap.data();tx.update(ref,{points:(Number(data.points)||0)+score,gamesPlayed:(Number(data.gamesPlayed)||0)+1,correctAnswers:(Number(data.correctAnswers)||0)+earnedCorrect,updatedAt:serverTimestamp()});
+  const ref=doc(db,"players",currentUser.uid);
+  const earnedCorrect=score/10;
+
+  await runTransaction(db,async tx=>{
+   const snap=await tx.get(ref);
+
+   if(!snap.exists())throw new Error("Player profile not found.");
+
+   const data=snap.data();
+
+   tx.update(ref,{
+    points:(Number(data.points)||0)+score,
+    gamesPlayed:(Number(data.gamesPlayed)||0)+1,
+    correctAnswers:(Number(data.correctAnswers)||0)+earnedCorrect,
+    updatedAt:serverTimestamp()
+   });
   });
-  await loadProfile(currentUser);setMessage("gameMessage","🏆 Congratulations! You earned "+score+" points. Your new balance is "+savedPoints+".","success");
+
+  clearQuizDraft();
+
+  await loadProfile(currentUser);
+
+  setMessage(
+   "gameMessage",
+   "🏆 Congratulations! You earned "+score+
+   " points. Your new balance is "+savedPoints+".",
+   "success"
+  );
+
   await loadLeaderboard();
- }catch(e){setMessage("gameMessage","Could not save your score: "+friendlyError(e),"error");}
- finally{saving=false;$("quizSetup").classList.remove("hidden");}
+
+ }catch(e){
+  gameRunning=true;
+
+  setMessage(
+   "gameMessage",
+   "Your score could not be saved: "+friendlyError(e)+
+   " Tap the button below to try saving again.",
+   "error"
+  );
+
+  $("nextBtn").classList.remove("hidden");
+  $("nextBtn").textContent="Retry Saving Score";
+
+  $("nextBtn").onclick=()=>{
+   if(gameRunning&&questionIndex>=quizQuestions.length){
+    finishQuiz();
+   }
+  };
+
+ }finally{
+  saving=false;
+  $("quitBtn").disabled=false;
+
+  if(!gameRunning){
+   $("quizSetup").classList.remove("hidden");
+   $("quizGame").classList.remove("hidden");
+   refreshStartButton();
+  }
+ }
 }
+
 async function loadLeaderboard(){
- if(!currentUser)return;$("leaderboard").textContent="Loading leaderboard...";
+ if(!currentUser)return;
+
+ $("leaderboard").textContent="Loading leaderboard...";
+
  try{
-  const q=query(collection(db,"players"),orderBy("points","desc"),limit(20)),snap=await getDocs(q);$("leaderboard").replaceChildren();
-  if(snap.empty){$("leaderboard").textContent="No players yet.";return;}
-  let position=1;snap.forEach(player=>{const data=player.data(),row=document.createElement("div");row.className="rank-row";
-   const rank=document.createElement("strong");rank.className="yellow";rank.textContent=position===1?"🥇":position===2?"🥈":position===3?"🥉":position+".";
-   const name=document.createElement("span");name.textContent=data.name||"Player";name.style.flex="1";
-   const points=document.createElement("strong");points.className="yellow";points.textContent=(Number(data.points)||0).toLocaleString()+" ⚡";
-   row.append(rank,name,points);$("leaderboard").appendChild(row);position++;
+  const q=query(
+   collection(db,"players"),
+   orderBy("points","desc"),
+   limit(20)
+  );
+
+  const snap=await getDocs(q);
+  $("leaderboard").replaceChildren();
+
+  if(snap.empty){
+   $("leaderboard").textContent="No players yet.";
+   return;
+  }
+
+  let position=1;
+
+  snap.forEach(player=>{
+   const data=player.data();
+   const row=document.createElement("div");
+   row.className="rank-row";
+
+   const rank=document.createElement("strong");
+   rank.className="yellow";
+   rank.textContent=position===1
+    ?"🥇"
+    :position===2
+     ?"🥈"
+     :position===3
+      ?"🥉"
+      :position+".";
+
+   const name=document.createElement("span");
+   name.textContent=data.name||"Player";
+   name.style.flex="1";
+
+   const points=document.createElement("strong");
+   points.className="yellow";
+   points.textContent=(Number(data.points)||0).toLocaleString()+" ⚡";
+
+   row.append(rank,name,points);
+   $("leaderboard").appendChild(row);
+
+   position++;
   });
- }catch(e){$("leaderboard").textContent=friendlyError(e);}
+
+ }catch(e){
+  $("leaderboard").textContent=friendlyError(e);
+ }
 }
+
 $("refreshLeaderboard").onclick=loadLeaderboard;
-buildLearningCategories();buildQuizCategories();
+
+buildLearningCategories();
+buildQuizCategories();
+refreshStartButton();
+
 console.log("QuizSpark initialised.");
 </script>
 </body>
 </html>
+
+
