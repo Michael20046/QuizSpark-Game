@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,15 @@
 <meta name="description" content="QuizSpark — learn, play, challenge yourself and grow smarter.">
 <title>QuizSpark — Learn, Play and Grow</title>
 <link rel="icon" href="./quizspark-logo.png" type="image/png">
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-95HWM1FE69"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-95HWM1FE69');
+</script>
 
 <style>
 :root{
@@ -171,7 +181,6 @@ footer{text-align:center;color:#71809e;font-size:11px;padding:20px}
   <button class="secondary" onclick="showPage('learn')">← Back to Learning Centre</button>
   <h2 id="readerTitle">Lesson</h2>
   <div id="readerContent" class="muted"></div>
-
   <div class="lesson-quiz-box">
    <h3>📝 Test Your Knowledge</h3>
    <p class="muted">Answer five questions about this lesson. Each correct answer is worth 10 points.</p>
@@ -188,7 +197,6 @@ footer{text-align:center;color:#71809e;font-size:11px;padding:20px}
     <button class="primary hidden" id="lessonQuizNextBtn">Next Question →</button>
    </div>
   </div>
-
   <button class="primary" id="completeLessonBtn">Mark Lesson as Completed ✓</button>
   <p id="lessonMessage" class="message" aria-live="polite"></p>
  </div>
@@ -313,6 +321,13 @@ const auth=getAuth(app);
 const db=getFirestore(app);
 const googleProvider=new GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt:"select_account"});
+
+/* GOOGLE ANALYTICS EVENT HELPER */
+function trackAnalytics(eventName,parameters={}){
+ if(typeof window.gtag==="function"){
+  window.gtag("event",eventName,parameters);
+ }
+}
 
 const $=id=>document.getElementById(id);
 
@@ -729,6 +744,7 @@ $("signupBtn").onclick=async()=>{
   await updateProfile(result.user,{displayName:name});
   await createProfile(result.user);
   await loadProfile(result.user);
+  trackAnalytics("sign_up",{method:"email"});
   setMessage("authMessage","Welcome to QuizSpark!","success");
  }catch(e){setMessage("authMessage",friendlyError(e),"error");}
 };
@@ -737,8 +753,11 @@ $("signupBtn").onclick=async()=>{
 $("loginBtn").onclick=async()=>{
  const email=$("email").value.trim(),password=$("password").value;
  if(!email||!password)return setMessage("authMessage","Enter your email and password.","error");
- try{setMessage("authMessage","Signing in...");await signInWithEmailAndPassword(auth,email,password);}
- catch(e){setMessage("authMessage",friendlyError(e),"error");}
+ try{
+  setMessage("authMessage","Signing in...");
+  await signInWithEmailAndPassword(auth,email,password);
+  trackAnalytics("login",{method:"email"});
+ }catch(e){setMessage("authMessage",friendlyError(e),"error");}
 };
 
 /* GOOGLE SIGN IN */
@@ -749,7 +768,10 @@ $("googleBtn").onclick=async()=>{
 
 try{
  const redirectResult=await getRedirectResult(auth);
- if(redirectResult?.user)setMessage("authMessage","Google sign-in successful.","success");
+ if(redirectResult?.user){
+  trackAnalytics("login",{method:"google"});
+  setMessage("authMessage","Google sign-in successful.","success");
+ }
 }catch(e){setMessage("authMessage",friendlyError(e),"error");}
 
 /* PASSWORD RESET */
@@ -979,6 +1001,13 @@ async function finishLessonQuiz(){
   });
 
   await loadProfile(currentUser);
+  if(pointsAwarded){
+   trackAnalytics("lesson_quiz_complete",{
+    lesson_id:lessonId,
+    score:lessonScore,
+    question_count:5
+   });
+  }
   $("lessonQuizProgress").style.width="100%";
   $("lessonQuizQuestion").textContent="Lesson Quiz Completed! 🎉";
   $("lessonQuizAnswers").replaceChildren();
@@ -1143,6 +1172,11 @@ function startOrResumeQuiz(){
  quizQuestions=makeQuiz();
  if(!quizQuestions.length)return;
  questionIndex=0;score=0;answered=false;disabledAnswers=[];gameRunning=true;
+ trackAnalytics("quiz_start",{
+  category:selectedCategory,
+  difficulty:$("difficulty").value,
+  question_count:quizQuestions.length
+ });
  saveQuizDraft();
  $("quizSetup").classList.add("hidden");
  $("quizGame").classList.remove("hidden");
@@ -1245,6 +1279,11 @@ async function finishQuiz(){
   });
   clearQuizDraft();
   await loadProfile(currentUser);
+  trackAnalytics("quiz_complete",{
+   category:selectedCategory,
+   score:score,
+   question_count:quizQuestions.length
+  });
   setMessage("gameMessage","🏆 Congratulations! You earned "+score+
    " points. Your new balance is "+savedPoints+".","success");
   await loadLeaderboard();
