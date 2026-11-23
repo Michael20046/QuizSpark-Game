@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101632">
+<title>QuizSpark Admin Dashboard</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#101632;
+  color:#fff;
+}
+header{
+  padding:22px;
+  background:#192448;
+  border-bottom:1px solid #34436b;
+}
+header h1{margin:0;color:#70e1ff}
+header p{color:#b9c5e5;margin-bottom:0}
+main{max-width:1100px;margin:auto;padding:20px}
+.panel{
+  background:#192448;
+  padding:22px;
+  border-radius:14px;
+  margin-bottom:20px;
+}
+input{
+  width:100%;
+  padding:14px;
+  margin:8px 0 14px;
+  border:1px solid #52628d;
+  border-radius:8px;
+  background:#101632;
+  color:white;
+}
+button{
+  padding:12px 18px;
+  border:0;
+  border-radius:8px;
+  background:#20c7e8;
+  color:#101632;
+  font-weight:bold;
+  cursor:pointer;
+}
+button.secondary{background:#34436b;color:white}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:14px;
+}
+.stat{
+  background:#24345f;
+  padding:18px;
+  border-radius:12px;
+}
+.stat strong{
+  display:block;
+  font-size:28px;
+  color:#70e1ff;
+  margin-top:8px;
+}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:650px}
+th,td{
+  padding:13px;
+  text-align:left;
+  border-bottom:1px solid #34436b;
+}
+th{color:#70e1ff}
+#message{color:#ffd479;line-height:1.5}
+.hidden{display:none}
+</style>
+</head>
+
+<body>
+<header>
+  <h1>QuizSpark Admin</h1>
+  <p>Private game management dashboard</p>
+</header>
+
+<main>
+  <section class="panel" id="loginPanel">
+    <h2>Administrator Login</h2>
+    <p>Sign in using your administrator Firebase account.</p>
+
+    <form id="loginForm">
+      <label>Email address</label>
+      <input id="email" type="email" required placeholder="Admin email">
+
+      <label>Password</label>
+      <input id="password" type="password" required placeholder="Admin password">
+
+      <button type="submit">Sign In</button>
+    </form>
+    <p id="message"></p>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <div class="panel">
+      <h2>Dashboard Overview</h2>
+      <p id="welcome"></p>
+      <button id="refreshBtn">Refresh Data</button>
+      <button id="logoutBtn" class="secondary">Sign Out</button>
+      <p id="status"></p>
+    </div>
+
+    <div class="stats">
+      <div class="stat">Registered Players<strong id="totalPlayers">0</strong></div>
+      <div class="stat">Total Points<strong id="totalPoints">0</strong></div>
+      <div class="stat">Games Played<strong id="totalGames">0</strong></div>
+      <div class="stat">Correct Answers<strong id="totalCorrect">0</strong></div>
+      <div class="stat">Lessons Completed<strong id="totalLessons">0</strong></div>
+    </div>
+
+    <div class="panel" style="margin-top:20px">
+      <h2>Registered Players</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Points</th>
+              <th>Games Played</th>
+              <th>Correct Answers</th>
+              <th>Lessons</th>
+              <th>Joined</th>
+            </tr>
+          </thead>
+          <tbody id="playersTable">
+            <tr><td colspan="6">No data loaded yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// QuizSpark Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBrrmHAlWHholQbaxzDfVMBP8c42tmnaw",
+  authDomain: "quizspark-65dbd.firebaseapp.com",
+  projectId: "quizspark-65dbd",
+  storageBucket: "quizspark-65dbd.firebasestorage.app",
+  messagingSenderId: "328231530287",
+  appId: "1:328231530287:web:9a2f4bb9b92b5faa267bda"
+};
+
+// Administrator UID
+const ADMIN_UID = "NtzGfpCFHFODJuZ5sl8GeyxK4Br2";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const loginPanel = document.getElementById("loginPanel");
+const dashboard = document.getElementById("dashboard");
+const message = document.getElementById("message");
+const status = document.getElementById("status");
+
+document.getElementById("loginForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  message.textContent = "Signing in...";
+
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      document.getElementById("email").value.trim(),
+      document.getElementById("password").value
+    );
+  } catch (error) {
+    message.textContent = "Login failed: " + error.message;
+  }
+});
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    loginPanel.classList.remove("hidden");
+    dashboard.classList.add("hidden");
+    return;
+  }
+
+  if (user.uid !== ADMIN_UID) {
+    message.textContent = "Access denied. This account is not an administrator.";
+    await signOut(auth);
+    return;
+  }
+
+  loginPanel.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+  document.getElementById("welcome").textContent =
+    "Signed in as administrator: " + user.email;
+
+  await loadDashboard();
+});
+
+async function loadDashboard() {
+  status.textContent = "Loading player information...";
+
+  try {
+    const snapshot = await getDocs(collection(db, "players"));
+    const players = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    const totalPoints = players.reduce((sum, p) => sum + (Number(p.points) || 0), 0);
+    const totalGames = players.reduce((sum, p) => sum + (Number(p.gamesPlayed) || 0), 0);
+    const totalCorrect = players.reduce((sum, p) => sum + (Number(p.correctAnswers) || 0), 0);
+    const totalLessons = players.reduce((sum, p) => sum + (Number(p.lessonsCompleted) || 0), 0);
+
+    document.getElementById("totalPlayers").textContent = players.length;
+    document.getElementById("totalPoints").textContent = totalPoints;
+    document.getElementById("totalGames").textContent = totalGames;
+    document.getElementById("totalCorrect").textContent = totalCorrect;
+    document.getElementById("totalLessons").textContent = totalLessons;
+
+    players.sort((a, b) => (Number(b.points) || 0) - (Number(a.points) || 0));
+
+    const table = document.getElementById("playersTable");
+    table.replaceChildren();
+
+    if (players.length === 0) {
+      const row = table.insertRow();
+      const cell = row.insertCell();
+      cell.colSpan = 6;
+      cell.textContent = "No registered player profiles found.";
+    }
+
+    players.forEach(player => {
+      const row = table.insertRow();
+
+      const joined = player.createdAt?.toDate
+        ? player.createdAt.toDate().toLocaleDateString()
+        : "Not available";
+
+      [
+        player.name || "Unnamed",
+        Number(player.points) || 0,
+        Number(player.gamesPlayed) || 0,
+        Number(player.correctAnswers) || 0,
+        Number(player.lessonsCompleted) || 0,
+        joined
+      ].forEach(value => {
+        const cell = row.insertCell();
+        cell.textContent = String(value);
+      });
+    });
+
+    status.textContent = "Dashboard updated successfully.";
+  } catch (error) {
+    status.textContent = "Could not load data: " + error.message;
+  }
+}
+
+document.getElementById("refreshBtn").addEventListener("click", loadDashboard);
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await signOut(auth);
+});
+</script>
+</body>
+</html>
