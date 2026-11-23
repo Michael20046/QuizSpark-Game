@@ -26,13 +26,23 @@ gtag('config', 'G-95HWM1FE69');
 
 <style>
 :root{
- --bg:#090d22;--panel:#151d39;--panel2:#202b4a;
- --line:#34415e;--yellow:#ffcb38;--blue:#38bdf8;
- --muted:#a8b3cb;--green:#22c55e;--red:#ef4444
+ --bg:#101632;
+ --panel:#192344;
+ --panel2:#232f55;
+ --line:#39466e;
+ --yellow:#A78BFA;
+ --blue:#A78BFA;
+ --muted:#B8C2DE;
+ --green:#22c55e;
+ --red:#ef4444;
+ --purple:#7047EB;
+ --lavender:#A78BFA;
 }
 *{box-sizing:border-box}
 body{
- margin:0;background:var(--bg);color:#fff;
+ margin:0;
+ background:var(--bg);
+ color:#fff;
  font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;
  padding-bottom:calc(82px + env(safe-area-inset-bottom))
 }
@@ -42,66 +52,153 @@ button:disabled{opacity:.55;cursor:not-allowed}
 header{
  display:flex;align-items:center;justify-content:space-between;
  gap:12px;padding:14px 16px;background:#101632;
- position:sticky;top:0;z-index:5;border-bottom:1px solid #293554
+ position:sticky;top:0;z-index:5;
+ border-bottom:1px solid #39466e
 }
-.brand{display:flex;align-items:center;gap:9px;font-size:21px;font-weight:800;color:var(--yellow)}
+.brand{
+ display:flex;align-items:center;gap:9px;
+ font-size:21px;font-weight:800;color:#A78BFA
+}
 .brand img{width:34px;height:34px;object-fit:contain;border-radius:8px}
-.points-pill{background:#293554;color:var(--yellow);border-radius:22px;padding:9px 12px;font-size:12px;font-weight:700}
+.points-pill{
+ background:#29365f;color:#C4B5FD;
+ border-radius:22px;padding:9px 12px;
+ font-size:12px;font-weight:700
+}
 main{max-width:760px;margin:auto;padding:15px}
 .page{display:none}
 .page.active{display:block}
-.card{background:var(--panel);border:1px solid #293554;border-radius:17px;padding:17px;margin-bottom:15px}
-.hero{background:linear-gradient(135deg,#24216b,#124b76);padding:23px 18px;border-radius:20px;margin-bottom:17px}
-.hero h1{color:var(--yellow);margin:0 0 9px;font-size:27px}
+.card{
+ background:var(--panel);
+ border:1px solid var(--line);
+ border-radius:17px;padding:17px;margin-bottom:15px
+}
+.hero{
+ background:linear-gradient(135deg,#30206f,#4930a0,#263b75);
+ padding:23px 18px;border-radius:20px;margin-bottom:17px;
+ border:1px solid #5943a5
+}
+.hero h1{color:#D8CCFF;margin:0 0 9px;font-size:27px}
 .hero p,.muted{color:var(--muted);line-height:1.6}
 h2{font-size:21px;margin:8px 0 14px}
 h3{font-size:17px;margin:8px 0 12px}
-.grid,.category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.grid,.category-grid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px
+}
 .stat{background:var(--panel2);border-radius:13px;padding:14px}
 .stat span{font-size:12px;color:var(--muted)}
-.stat strong{display:block;color:var(--yellow);font-size:23px;margin-top:7px}
-.primary,.secondary,.google{width:100%;border:0;border-radius:11px;padding:13px;font-weight:750;margin-top:8px}
-.primary{background:linear-gradient(90deg,#e99b16,#ffcf40);color:#171717}
-.secondary{background:#34415e;color:white}
+.stat strong{
+ display:block;color:#C4B5FD;font-size:23px;margin-top:7px
+}
+.primary,.secondary,.google{
+ width:100%;border:0;border-radius:11px;
+ padding:13px;font-weight:750;margin-top:8px
+}
+.primary{
+ background:linear-gradient(100deg,#7047EB,#936BFF);
+ color:white;box-shadow:0 4px 14px #7047EB44
+}
+.primary:active{transform:scale(.98)}
+.secondary{background:#35416b;color:white}
 .google{background:#fff;color:#222}
-input,select{width:100%;padding:13px;border:1px solid #475569;border-radius:10px;background:#0c1530;color:white;margin:7px 0 13px}
+input,select{
+ width:100%;padding:13px;border:1px solid #59658c;
+ border-radius:10px;background:#111b3b;color:white;
+ margin:7px 0 13px
+}
 label{display:block;color:var(--muted);font-size:13px}
-input:focus,select:focus,button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-.message{font-size:13px;color:var(--blue);overflow-wrap:anywhere;line-height:1.5;min-height:18px}
+input:focus,select:focus,button:focus-visible{
+ outline:2px solid #A78BFA;outline-offset:2px
+}
+.message{
+ font-size:13px;color:#C4B5FD;overflow-wrap:anywhere;
+ line-height:1.5;min-height:18px
+}
 .error{color:#fca5a5}
 .success{color:#86efac}
 .hidden{display:none!important}
 .bottom-nav{
- position:fixed;bottom:0;left:0;right:0;background:#111831;
- border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);
- padding:8px 3px calc(8px + env(safe-area-inset-bottom));z-index:10
+ position:fixed;bottom:0;left:0;right:0;
+ background:#111a38;border-top:1px solid var(--line);
+ display:grid;grid-template-columns:repeat(5,1fr);
+ padding:8px 3px calc(8px + env(safe-area-inset-bottom));
+ z-index:10
 }
-.nav-btn{border:0;background:transparent;color:var(--muted);font-size:10px;padding:5px 0}
+.nav-btn{
+ border:0;background:transparent;color:var(--muted);
+ font-size:10px;padding:5px 0
+}
 .nav-btn .symbol{display:block;font-size:21px;margin-bottom:4px}
-.nav-btn.active{color:var(--yellow)}
-.category{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:14px;text-align:left;color:white;min-height:88px}
+.nav-btn.active{color:#C4B5FD}
+.category{
+ background:var(--panel2);border:1px solid var(--line);
+ border-radius:13px;padding:14px;text-align:left;
+ color:white;min-height:88px
+}
 .category strong{display:block;margin-top:7px}
 .category small{color:var(--muted)}
-.category.selected{border:2px solid var(--yellow)}
+.category.selected{border:2px solid #A78BFA;background:#30245f}
 .lesson{background:var(--panel2);padding:14px;border-radius:12px;margin:10px 0}
 .lesson p{color:var(--muted);line-height:1.6;font-size:14px}
-.answer{display:block;width:100%;padding:14px;margin:9px 0;text-align:left;background:#293554;color:white;border:1px solid #475569;border-radius:11px}
+.answer{
+ display:block;width:100%;padding:14px;margin:9px 0;
+ text-align:left;background:#29365f;color:white;
+ border:1px solid #59658c;border-radius:11px
+}
 .answer.correct{background:#166534;border-color:var(--green)}
 .answer.wrong{background:#991b1b;border-color:var(--red)}
 .answer:disabled{cursor:default}
-.progress-track{height:8px;background:#34415e;border-radius:10px;overflow:hidden;margin:12px 0}
-.progress-fill{height:100%;width:0;background:var(--yellow);transition:width .2s}
-.rank-row{display:flex;align-items:center;justify-content:space-between;padding:12px 4px;border-bottom:1px solid var(--line);gap:10px}
-.yellow{color:var(--yellow)}
-.avatar{width:70px;height:70px;border-radius:50%;background:#34415e;display:grid;place-items:center;font-size:30px;margin:auto}
-footer{text-align:center;color:#71809e;font-size:11px;padding:20px}
+.progress-track{
+ height:8px;background:#39466e;border-radius:10px;
+ overflow:hidden;margin:12px 0
+}
+.progress-fill{
+ height:100%;width:0;
+ background:linear-gradient(90deg,#7047EB,#C4B5FD);
+ transition:width .2s
+}
+.rank-row{
+ display:flex;align-items:center;justify-content:space-between;
+ padding:12px 4px;border-bottom:1px solid var(--line);gap:10px
+}
+.yellow{color:#C4B5FD}
+.avatar{
+ width:70px;height:70px;border-radius:50%;
+ background:#35416b;display:grid;place-items:center;
+ font-size:30px;margin:auto
+}
+footer{text-align:center;color:#8995b8;font-size:11px;padding:20px}
 .small{font-size:12px;color:var(--muted)}
 .toolbar{display:flex;gap:8px;flex-wrap:wrap}
 .toolbar button{flex:1}
-.lesson-quiz-box{background:#202b4a;border:1px solid #475569;border-radius:14px;padding:14px;margin-top:18px}
-.lesson-quiz-box h3{color:var(--yellow)}
+.lesson-quiz-box{
+ background:#232f55;border:1px solid #59658c;
+ border-radius:14px;padding:14px;margin-top:18px
+}
+.lesson-quiz-box h3{color:#C4B5FD}
+
+/* ABOUT QUIZSPARK LINK */
+.about-link{
+ display:block;
+ text-align:center;
+ margin-top:15px;
+ padding:13px;
+ border:1px solid #7047EB;
+ border-radius:12px;
+ background:#192344;
+ color:#C4B5FD;
+ font-weight:750;
+ text-decoration:none;
+ transition:background .2s ease;
+}
+.about-link:hover{
+ background:#30245f;
+}
+
 @media(max-width:380px){
- .nav-btn{font-size:9px}.nav-btn .symbol{font-size:18px}.hero h1{font-size:24px}
+ .nav-btn{font-size:9px}
+ .nav-btn .symbol{font-size:18px}
+ .hero h1{font-size:24px}
 }
 </style>
 </head>
@@ -147,6 +244,10 @@ footer{text-align:center;color:#71809e;font-size:11px;padding:20px}
   <button class="primary" onclick="showPage('learn')">📚 Explore Learning Centre</button>
   <button class="secondary" onclick="showPage('play')">🎮 Enter Quiz Arena</button>
  </div>
+
+ <!-- ABOUT QUIZSPARK LINK -->
+ <a class="about-link" href="./about.html">ℹ️ About QuizSpark — Learn More About the Game</a>
+
  <h2>Your Dashboard</h2>
  <div class="grid">
   <div class="stat"><span>⚡ Total Points</span><strong id="homePoints">0</strong></div>
