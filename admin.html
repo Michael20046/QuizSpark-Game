@@ -67,8 +67,12 @@ th{color:#c4b5fd}
 <h3>Registered Players</h3>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Name</th><th>Email</th><th>Points</th><th>Games</th><th>Correct Answers</th></tr></thead>
-<tbody id="playersTable"><tr><td colspan="5">Loading players...</td></tr></tbody>
+<thead>
+<tr><th>Name</th><th>Email</th><th>Points</th><th>Games</th><th>Correct Answers</th></tr>
+</thead>
+<tbody id="playersTable">
+<tr><td colspan="5">Loading players...</td></tr>
+</tbody>
 </table>
 </div>
 </section>
@@ -77,8 +81,12 @@ th{color:#c4b5fd}
 <h3>Recent Sign-in Activity</h3>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Player</th><th>Email</th><th>Activity</th><th>Date</th></tr></thead>
-<tbody id="activityTable"><tr><td colspan="4">Loading activity...</td></tr></tbody>
+<thead>
+<tr><th>Player</th><th>Email</th><th>Activity</th><th>Date</th></tr>
+</thead>
+<tbody id="activityTable">
+<tr><td colspan="4">Loading activity...</td></tr>
+</tbody>
 </table>
 </div>
 </section>
@@ -97,23 +105,29 @@ th{color:#c4b5fd}
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut
+getAuth,
+signInWithEmailAndPassword,
+onAuthStateChanged,
+signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-getFirestore,collection,getDocs
+getFirestore,
+collection,
+getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// CORRECT FIREBASE CONFIGURATION
 const firebaseConfig = {
-apiKey:"AIzaSyBrrmbHAlWHholQbaxzDfVMBP8c42tmnaw",
-authDomain:"quizspark-65dbd.firebaseapp.com",
-projectId:"quizspark-65dbd",
-storageBucket:"quizspark-65dbd.firebasestorage.app",
-messagingSenderId:"328231530287",
-appId:"1:328231530287:web:9a2f4bb9b92b5faa267bda"
+apiKey: "AIzaSyBpADv380nomzd15tNPmruoYcok4VQ29VQ",
+authDomain: "quizspark-65dbd.firebaseapp.com",
+projectId: "quizspark-65dbd",
+storageBucket: "quizspark-65dbd.firebasestorage.app",
+messagingSenderId: "328231530287",
+appId: "1:328231530287:web:9a2f4bb9b92b5faa267bda"
 };
 
-// Replace this placeholder with your real Firebase administrator UID.
+// IMPORTANT: Add your real Firebase administrator UID here.
 const ADMIN_UID = "PASTE_YOUR_ADMIN_UID_HERE";
 
 const app = initializeApp(firebaseConfig);
@@ -161,7 +175,7 @@ return;
 }
 
 if(ADMIN_UID==="PASTE_YOUR_ADMIN_UID_HERE"||user.uid!==ADMIN_UID){
-showMessage(loginMessage,"This account is not authorized as an administrator.","error");
+showMessage(loginMessage,"This account is not authorized as an administrator. We need to configure your admin UID.","error");
 await signOut(auth);
 return;
 }
@@ -177,7 +191,9 @@ if(!value)return "Not available";
 try{
 const date=value.toDate?value.toDate():new Date(value);
 return date.toLocaleString();
-}catch{return "Not available";}
+}catch{
+return "Not available";
+}
 }
 
 function safeText(value){
@@ -215,6 +231,7 @@ totalGames+=Number(player.gamesPlayed||0);
 totalCorrect+=Number(player.correctAnswers||0);
 
 const tr=document.createElement("tr");
+
 [
 player.name||"Unnamed",
 player.email||"Not recorded",
@@ -226,6 +243,7 @@ const td=document.createElement("td");
 td.textContent=safeText(value);
 tr.appendChild(td);
 });
+
 playersTable.appendChild(tr);
 });
 
@@ -236,7 +254,7 @@ document.getElementById("correctCount").textContent=totalCorrect;
 document.getElementById("activityCount").textContent=activitySnap.size;
 document.getElementById("feedbackCount").textContent=feedbackSnap.size;
 
-// Activity
+// SIGN-IN ACTIVITY
 const activityTable=document.getElementById("activityTable");
 activityTable.replaceChildren();
 
@@ -250,6 +268,7 @@ activityTable.innerHTML='<tr><td colspan="4">No activity recorded yet.</td></tr>
 
 activities.forEach(item=>{
 const tr=document.createElement("tr");
+
 [
 item.name||"Unknown",
 item.email||"Not recorded",
@@ -260,10 +279,11 @@ const td=document.createElement("td");
 td.textContent=safeText(value);
 tr.appendChild(td);
 });
+
 activityTable.appendChild(tr);
 });
 
-// Feedback
+// PLAYER FEEDBACK
 const feedbackList=document.getElementById("feedbackList");
 feedbackList.replaceChildren();
 
