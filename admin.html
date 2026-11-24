@@ -4,171 +4,117 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#101632">
+<meta name="theme-color" content="#11152e">
 <title>QuizSpark Admin Dashboard</title>
 
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#101632;
-  color:#fff;
-}
-header{
-  padding:22px;
-  background:#192448;
-  border-bottom:1px solid #34436b;
-}
-header h1{margin:0;color:#70e1ff}
-header p{color:#b9c5e5;margin-bottom:0}
-main{max-width:1100px;margin:auto;padding:20px}
-.panel{
-  background:#192448;
-  padding:22px;
-  border-radius:14px;
-  margin-bottom:20px;
-}
-input{
-  width:100%;
-  padding:14px;
-  margin:8px 0 14px;
-  border:1px solid #52628d;
-  border-radius:8px;
-  background:#101632;
-  color:white;
-}
-button{
-  padding:12px 18px;
-  border:0;
-  border-radius:8px;
-  background:#20c7e8;
-  color:#101632;
-  font-weight:bold;
-  cursor:pointer;
-}
-button.secondary{background:#34436b;color:white}
-.stats{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:14px;
-}
-.stat{
-  background:#24345f;
-  padding:18px;
-  border-radius:12px;
-}
-.stat strong{
-  display:block;
-  font-size:28px;
-  color:#70e1ff;
-  margin-top:8px;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#0b1022;color:#fff}
+header{background:#151c3b;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+header h2{margin:0;color:#a78bfa}
+button{border:0;padding:12px 16px;border-radius:9px;background:#8b5cf6;color:white;font-weight:bold;cursor:pointer}
+main{padding:20px;max-width:1200px;margin:auto}
+.panel,.stat{background:#171e3c;border:1px solid #30395f;border-radius:14px;padding:18px;margin-bottom:18px}
+input{width:100%;padding:13px;margin:8px 0 14px;border-radius:8px;border:1px solid #424d78;background:#0c1330;color:white}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
+.stat p{color:#a5afd2;margin:0 0 10px}
+.stat h2{margin:0;color:#c4b5fd;font-size:28px}
+h3{color:#c4b5fd}
 .table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:650px}
-th,td{
-  padding:13px;
-  text-align:left;
-  border-bottom:1px solid #34436b;
-}
-th{color:#70e1ff}
-#message{color:#ffd479;line-height:1.5}
+table{border-collapse:collapse;width:100%;min-width:650px}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #30395f;font-size:13px}
+th{color:#c4b5fd}
+.muted{color:#a5afd2}
+.feedback{background:#101831;border:1px solid #30395f;border-radius:10px;padding:14px;margin:10px 0;overflow-wrap:anywhere}
 .hidden{display:none}
+.error{color:#fca5a5}
+.success{color:#86efac}
 </style>
 </head>
 
 <body>
 <header>
-  <h1>QuizSpark Admin</h1>
-  <p>Private game management dashboard</p>
+<h2>QuizSpark Admin</h2>
+<button id="logoutBtn" class="hidden">Log out</button>
 </header>
 
 <main>
-  <section class="panel" id="loginPanel">
-    <h2>Administrator Login</h2>
-    <p>Sign in using your administrator Firebase account.</p>
+<section id="loginPanel" class="panel">
+<h2>Administrator Login</h2>
+<p class="muted">Sign in with your authorized administrator account.</p>
+<label>Email address</label>
+<input id="email" type="email" placeholder="Admin email">
+<label>Password</label>
+<input id="password" type="password" placeholder="Admin password">
+<button id="loginBtn">Log in</button>
+<p id="loginMessage"></p>
+</section>
 
-    <form id="loginForm">
-      <label>Email address</label>
-      <input id="email" type="email" required placeholder="Admin email">
+<section id="dashboard" class="hidden">
+<h2>Dashboard Overview</h2>
+<p class="muted">Your QuizSpark platform statistics.</p>
 
-      <label>Password</label>
-      <input id="password" type="password" required placeholder="Admin password">
+<div class="stats">
+<div class="stat"><p>Registered Players</p><h2 id="playersCount">0</h2></div>
+<div class="stat"><p>Total Points</p><h2 id="totalPoints">0</h2></div>
+<div class="stat"><p>Games Played</p><h2 id="gamesCount">0</h2></div>
+<div class="stat"><p>Correct Answers</p><h2 id="correctCount">0</h2></div>
+<div class="stat"><p>Sign-in Activities</p><h2 id="activityCount">0</h2></div>
+<div class="stat"><p>Feedback Messages</p><h2 id="feedbackCount">0</h2></div>
+</div>
 
-      <button type="submit">Sign In</button>
-    </form>
-    <p id="message"></p>
-  </section>
+<section class="panel">
+<h3>Registered Players</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Name</th><th>Email</th><th>Points</th><th>Games</th><th>Correct Answers</th></tr></thead>
+<tbody id="playersTable"><tr><td colspan="5">Loading players...</td></tr></tbody>
+</table>
+</div>
+</section>
 
-  <section id="dashboard" class="hidden">
-    <div class="panel">
-      <h2>Dashboard Overview</h2>
-      <p id="welcome"></p>
-      <button id="refreshBtn">Refresh Data</button>
-      <button id="logoutBtn" class="secondary">Sign Out</button>
-      <p id="status"></p>
-    </div>
+<section class="panel">
+<h3>Recent Sign-in Activity</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Player</th><th>Email</th><th>Activity</th><th>Date</th></tr></thead>
+<tbody id="activityTable"><tr><td colspan="4">Loading activity...</td></tr></tbody>
+</table>
+</div>
+</section>
 
-    <div class="stats">
-      <div class="stat">Registered Players<strong id="totalPlayers">0</strong></div>
-      <div class="stat">Total Points<strong id="totalPoints">0</strong></div>
-      <div class="stat">Games Played<strong id="totalGames">0</strong></div>
-      <div class="stat">Correct Answers<strong id="totalCorrect">0</strong></div>
-      <div class="stat">Lessons Completed<strong id="totalLessons">0</strong></div>
-    </div>
+<section class="panel">
+<h3>Player Feedback</h3>
+<div id="feedbackList">Loading feedback...</div>
+</section>
 
-    <div class="panel" style="margin-top:20px">
-      <h2>Registered Players</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Player</th>
-              <th>Points</th>
-              <th>Games Played</th>
-              <th>Correct Answers</th>
-              <th>Lessons</th>
-              <th>Joined</th>
-            </tr>
-          </thead>
-          <tbody id="playersTable">
-            <tr><td colspan="6">No data loaded yet.</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
+<button id="refreshBtn">Refresh Dashboard</button>
+<p id="dashboardMessage" class="muted"></p>
+</section>
 </main>
 
 <script type="module">
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut
+getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-  getFirestore,
-  collection,
-  getDocs
+getFirestore,collection,getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// QuizSpark Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBrrmHAlWHholQbaxzDfVMBP8c42tmnaw",
-  authDomain: "quizspark-65dbd.firebaseapp.com",
-  projectId: "quizspark-65dbd",
-  storageBucket: "quizspark-65dbd.firebasestorage.app",
-  messagingSenderId: "328231530287",
-  appId: "1:328231530287:web:9a2f4bb9b92b5faa267bda"
+apiKey:"AIzaSyBrrmbHAlWHholQbaxzDfVMBP8c42tmnaw",
+authDomain:"quizspark-65dbd.firebaseapp.com",
+projectId:"quizspark-65dbd",
+storageBucket:"quizspark-65dbd.firebasestorage.app",
+messagingSenderId:"328231530287",
+appId:"1:328231530287:web:9a2f4bb9b92b5faa267bda"
 };
 
-// Administrator UID
-const ADMIN_UID = "NtzGfpCFHFODJuZ5sl8GeyxK4Br2";
+// Replace this placeholder with your real Firebase administrator UID.
+const ADMIN_UID = "PASTE_YOUR_ADMIN_UID_HERE";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -176,109 +122,189 @@ const db = getFirestore(app);
 
 const loginPanel = document.getElementById("loginPanel");
 const dashboard = document.getElementById("dashboard");
-const message = document.getElementById("message");
-const status = document.getElementById("status");
+const loginMessage = document.getElementById("loginMessage");
+const dashboardMessage = document.getElementById("dashboardMessage");
+const logoutBtn = document.getElementById("logoutBtn");
 
-document.getElementById("loginForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
-  message.textContent = "Signing in...";
-
-  try {
-    await signInWithEmailAndPassword(
-      auth,
-      document.getElementById("email").value.trim(),
-      document.getElementById("password").value
-    );
-  } catch (error) {
-    message.textContent = "Login failed: " + error.message;
-  }
-});
-
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    loginPanel.classList.remove("hidden");
-    dashboard.classList.add("hidden");
-    return;
-  }
-
-  if (user.uid !== ADMIN_UID) {
-    message.textContent = "Access denied. This account is not an administrator.";
-    await signOut(auth);
-    return;
-  }
-
-  loginPanel.classList.add("hidden");
-  dashboard.classList.remove("hidden");
-  document.getElementById("welcome").textContent =
-    "Signed in as administrator: " + user.email;
-
-  await loadDashboard();
-});
-
-async function loadDashboard() {
-  status.textContent = "Loading player information...";
-
-  try {
-    const snapshot = await getDocs(collection(db, "players"));
-    const players = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-
-    const totalPoints = players.reduce((sum, p) => sum + (Number(p.points) || 0), 0);
-    const totalGames = players.reduce((sum, p) => sum + (Number(p.gamesPlayed) || 0), 0);
-    const totalCorrect = players.reduce((sum, p) => sum + (Number(p.correctAnswers) || 0), 0);
-    const totalLessons = players.reduce((sum, p) => sum + (Number(p.lessonsCompleted) || 0), 0);
-
-    document.getElementById("totalPlayers").textContent = players.length;
-    document.getElementById("totalPoints").textContent = totalPoints;
-    document.getElementById("totalGames").textContent = totalGames;
-    document.getElementById("totalCorrect").textContent = totalCorrect;
-    document.getElementById("totalLessons").textContent = totalLessons;
-
-    players.sort((a, b) => (Number(b.points) || 0) - (Number(a.points) || 0));
-
-    const table = document.getElementById("playersTable");
-    table.replaceChildren();
-
-    if (players.length === 0) {
-      const row = table.insertRow();
-      const cell = row.insertCell();
-      cell.colSpan = 6;
-      cell.textContent = "No registered player profiles found.";
-    }
-
-    players.forEach(player => {
-      const row = table.insertRow();
-
-      const joined = player.createdAt?.toDate
-        ? player.createdAt.toDate().toLocaleDateString()
-        : "Not available";
-
-      [
-        player.name || "Unnamed",
-        Number(player.points) || 0,
-        Number(player.gamesPlayed) || 0,
-        Number(player.correctAnswers) || 0,
-        Number(player.lessonsCompleted) || 0,
-        joined
-      ].forEach(value => {
-        const cell = row.insertCell();
-        cell.textContent = String(value);
-      });
-    });
-
-    status.textContent = "Dashboard updated successfully.";
-  } catch (error) {
-    status.textContent = "Could not load data: " + error.message;
-  }
+function showMessage(element,message,className=""){
+element.textContent=message;
+element.className=className;
 }
 
-document.getElementById("refreshBtn").addEventListener("click", loadDashboard);
+document.getElementById("loginBtn").addEventListener("click",async()=>{
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  await signOut(auth);
+if(!email||!password){
+showMessage(loginMessage,"Enter your email and password.","error");
+return;
+}
+
+try{
+showMessage(loginMessage,"Signing in...");
+await signInWithEmailAndPassword(auth,email,password);
+}catch(error){
+showMessage(loginMessage,error.message,"error");
+}
 });
+
+logoutBtn.addEventListener("click",async()=>{
+await signOut(auth);
+});
+
+onAuthStateChanged(auth,async(user)=>{
+if(!user){
+loginPanel.classList.remove("hidden");
+dashboard.classList.add("hidden");
+logoutBtn.classList.add("hidden");
+return;
+}
+
+if(ADMIN_UID==="PASTE_YOUR_ADMIN_UID_HERE"||user.uid!==ADMIN_UID){
+showMessage(loginMessage,"This account is not authorized as an administrator.","error");
+await signOut(auth);
+return;
+}
+
+loginPanel.classList.add("hidden");
+dashboard.classList.remove("hidden");
+logoutBtn.classList.remove("hidden");
+await loadDashboard();
+});
+
+function formatDate(value){
+if(!value)return "Not available";
+try{
+const date=value.toDate?value.toDate():new Date(value);
+return date.toLocaleString();
+}catch{return "Not available";}
+}
+
+function safeText(value){
+return String(value??"");
+}
+
+async function loadDashboard(){
+showMessage(dashboardMessage,"Loading dashboard...");
+
+try{
+const [playersSnap,activitySnap,feedbackSnap]=await Promise.all([
+getDocs(collection(db,"players")),
+getDocs(collection(db,"activity")),
+getDocs(collection(db,"feedback"))
+]);
+
+const players=playersSnap.docs.map(doc=>({
+id:doc.id,...doc.data()
+}));
+
+let totalPoints=0;
+let totalGames=0;
+let totalCorrect=0;
+
+const playersTable=document.getElementById("playersTable");
+playersTable.replaceChildren();
+
+if(players.length===0){
+playersTable.innerHTML='<tr><td colspan="5">No registered players found.</td></tr>';
+}
+
+players.forEach(player=>{
+totalPoints+=Number(player.points||0);
+totalGames+=Number(player.gamesPlayed||0);
+totalCorrect+=Number(player.correctAnswers||0);
+
+const tr=document.createElement("tr");
+[
+player.name||"Unnamed",
+player.email||"Not recorded",
+player.points||0,
+player.gamesPlayed||0,
+player.correctAnswers||0
+].forEach(value=>{
+const td=document.createElement("td");
+td.textContent=safeText(value);
+tr.appendChild(td);
+});
+playersTable.appendChild(tr);
+});
+
+document.getElementById("playersCount").textContent=players.length;
+document.getElementById("totalPoints").textContent=totalPoints;
+document.getElementById("gamesCount").textContent=totalGames;
+document.getElementById("correctCount").textContent=totalCorrect;
+document.getElementById("activityCount").textContent=activitySnap.size;
+document.getElementById("feedbackCount").textContent=feedbackSnap.size;
+
+// Activity
+const activityTable=document.getElementById("activityTable");
+activityTable.replaceChildren();
+
+const activities=activitySnap.docs.map(doc=>doc.data())
+.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0))
+.slice(0,100);
+
+if(activities.length===0){
+activityTable.innerHTML='<tr><td colspan="4">No activity recorded yet.</td></tr>';
+}
+
+activities.forEach(item=>{
+const tr=document.createElement("tr");
+[
+item.name||"Unknown",
+item.email||"Not recorded",
+item.type||"Activity",
+formatDate(item.createdAt)
+].forEach(value=>{
+const td=document.createElement("td");
+td.textContent=safeText(value);
+tr.appendChild(td);
+});
+activityTable.appendChild(tr);
+});
+
+// Feedback
+const feedbackList=document.getElementById("feedbackList");
+feedbackList.replaceChildren();
+
+const feedbackItems=feedbackSnap.docs.map(doc=>doc.data())
+.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
+
+if(feedbackItems.length===0){
+feedbackList.textContent="No feedback received yet.";
+}
+
+feedbackItems.forEach(item=>{
+const card=document.createElement("div");
+card.className="feedback";
+
+const heading=document.createElement("strong");
+heading.textContent=item.name||"Player";
+
+const email=document.createElement("p");
+email.className="muted";
+email.textContent=item.email||"No email recorded";
+
+const message=document.createElement("p");
+message.textContent=item.message||"";
+
+const date=document.createElement("small");
+date.className="muted";
+date.textContent=formatDate(item.createdAt);
+
+card.append(heading,email,message,date);
+feedbackList.appendChild(card);
+});
+
+showMessage(dashboardMessage,"Dashboard updated successfully.","success");
+
+}catch(error){
+console.error(error);
+showMessage(dashboardMessage,"Could not load dashboard: "+error.message,"error");
+}
+}
+
+document.getElementById("refreshBtn").addEventListener("click",loadDashboard);
 </script>
 </body>
 </html>
