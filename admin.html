@@ -44,10 +44,10 @@ th{color:#c4b5fd}
 <h2>Administrator Login</h2>
 <p class="muted">Sign in with your authorized administrator account.</p>
 
-<label>Email address</label>
+<label for="email">Email address</label>
 <input id="email" type="email" placeholder="Admin email" autocomplete="username">
 
-<label>Password</label>
+<label for="password">Password</label>
 <input id="password" type="password" placeholder="Admin password" autocomplete="current-password">
 
 <button id="loginBtn">Log in</button>
@@ -132,9 +132,9 @@ collection,
 getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// FIREBASE CONFIGURATION
+// EXACT FIREBASE CONFIGURATION PROVIDED BY YOU
 const firebaseConfig = {
-apiKey: "AIzaSyBpADv380nomzd15tNPmruoYcok4VQ",
+apiKey: "AIzaSyBpADv380nomzd15tNPmruoYcok4VQ29VQ",
 authDomain: "quizspark-65dbd.firebaseapp.com",
 projectId: "quizspark-65dbd",
 storageBucket: "quizspark-65dbd.firebasestorage.app",
@@ -142,7 +142,7 @@ messagingSenderId: "328231530287",
 appId: "1:328231530287:web:9a2f4bb9b92b5faa267bda"
 };
 
-// YOUR ADMINISTRATOR UID
+// AUTHORIZED ADMINISTRATOR UID
 const ADMIN_UID = "NtzGfpCFHFODJuZ5sl8GeyxK4Br2";
 
 const app = initializeApp(firebaseConfig);
@@ -201,14 +201,11 @@ return;
 if(user.uid!==ADMIN_UID){
 showMessage(
 loginMessage,
-"Administrator account mismatch. The account you signed in with has UID: "+
-user.uid+
-". The authorized administrator UID is: "+
-ADMIN_UID+
-". Please sign in with the correct Firebase account.",
+"Not authorized. Signed-in account UID: "+user.uid+
+". Authorized UID: "+ADMIN_UID+
+". Please use the Firebase account associated with the authorized UID.",
 "error"
 );
-
 await signOut(auth);
 return;
 }
@@ -216,7 +213,6 @@ return;
 loginPanel.classList.add("hidden");
 dashboard.classList.remove("hidden");
 logoutBtn.classList.remove("hidden");
-
 await loadDashboard();
 });
 
