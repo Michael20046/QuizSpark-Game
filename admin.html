@@ -13,6 +13,7 @@ body{margin:0;font-family:Arial,sans-serif;background:#0b1022;color:#fff}
 header{background:#151c3b;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 header h2{margin:0;color:#a78bfa}
 button{border:0;padding:12px 16px;border-radius:9px;background:#8b5cf6;color:white;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}
 main{padding:20px;max-width:1200px;margin:auto}
 .panel,.stat{background:#171e3c;border:1px solid #30395f;border-radius:14px;padding:18px;margin-bottom:18px}
 input{width:100%;padding:13px;margin:8px 0 14px;border-radius:8px;border:1px solid #424d78;background:#0c1330;color:white}
@@ -42,10 +43,13 @@ th{color:#c4b5fd}
 <section id="loginPanel" class="panel">
 <h2>Administrator Login</h2>
 <p class="muted">Sign in with your authorized administrator account.</p>
+
 <label>Email address</label>
-<input id="email" type="email" placeholder="Admin email">
+<input id="email" type="email" placeholder="Admin email" autocomplete="username">
+
 <label>Password</label>
-<input id="password" type="password" placeholder="Admin password">
+<input id="password" type="password" placeholder="Admin password" autocomplete="current-password">
+
 <button id="loginBtn">Log in</button>
 <p id="loginMessage"></p>
 </section>
@@ -68,7 +72,13 @@ th{color:#c4b5fd}
 <div class="table-wrap">
 <table>
 <thead>
-<tr><th>Name</th><th>Email</th><th>Points</th><th>Games</th><th>Correct Answers</th></tr>
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Points</th>
+<th>Games</th>
+<th>Correct Answers</th>
+</tr>
 </thead>
 <tbody id="playersTable">
 <tr><td colspan="5">Loading players...</td></tr>
@@ -82,7 +92,12 @@ th{color:#c4b5fd}
 <div class="table-wrap">
 <table>
 <thead>
-<tr><th>Player</th><th>Email</th><th>Activity</th><th>Date</th></tr>
+<tr>
+<th>Player</th>
+<th>Email</th>
+<th>Activity</th>
+<th>Date</th>
+</tr>
 </thead>
 <tbody id="activityTable">
 <tr><td colspan="4">Loading activity...</td></tr>
@@ -119,7 +134,7 @@ getDocs
 
 // FIREBASE CONFIGURATION
 const firebaseConfig = {
-apiKey: "AIzaSyBpADv380nomzd15tNPmruoYcok4VQ29VQ",
+apiKey: "AIzaSyBpADv380nomzd15tNPmruoYcok4VQ",
 authDomain: "quizspark-65dbd.firebaseapp.com",
 projectId: "quizspark-65dbd",
 storageBucket: "quizspark-65dbd.firebasestorage.app",
@@ -139,13 +154,14 @@ const dashboard = document.getElementById("dashboard");
 const loginMessage = document.getElementById("loginMessage");
 const dashboardMessage = document.getElementById("dashboardMessage");
 const logoutBtn = document.getElementById("logoutBtn");
+const loginBtn = document.getElementById("loginBtn");
 
 function showMessage(element,message,className=""){
 element.textContent=message;
 element.className=className;
 }
 
-document.getElementById("loginBtn").addEventListener("click",async()=>{
+loginBtn.addEventListener("click",async()=>{
 const email=document.getElementById("email").value.trim();
 const password=document.getElementById("password").value;
 
@@ -154,16 +170,24 @@ showMessage(loginMessage,"Enter your email and password.","error");
 return;
 }
 
-try{
+loginBtn.disabled=true;
 showMessage(loginMessage,"Signing in...");
+
+try{
 await signInWithEmailAndPassword(auth,email,password);
 }catch(error){
-showMessage(loginMessage,error.message,"error");
+showMessage(loginMessage,"Login failed: "+error.message,"error");
+}finally{
+loginBtn.disabled=false;
 }
 });
 
 logoutBtn.addEventListener("click",async()=>{
+try{
 await signOut(auth);
+}catch(error){
+showMessage(dashboardMessage,error.message,"error");
+}
 });
 
 onAuthStateChanged(auth,async(user)=>{
@@ -175,7 +199,16 @@ return;
 }
 
 if(user.uid!==ADMIN_UID){
-showMessage(loginMessage,"This account is not authorized as an administrator.","error");
+showMessage(
+loginMessage,
+"Administrator account mismatch. The account you signed in with has UID: "+
+user.uid+
+". The authorized administrator UID is: "+
+ADMIN_UID+
+". Please sign in with the correct Firebase account.",
+"error"
+);
+
 await signOut(auth);
 return;
 }
@@ -183,6 +216,7 @@ return;
 loginPanel.classList.add("hidden");
 dashboard.classList.remove("hidden");
 logoutBtn.classList.remove("hidden");
+
 await loadDashboard();
 });
 
@@ -222,7 +256,12 @@ const playersTable=document.getElementById("playersTable");
 playersTable.replaceChildren();
 
 if(players.length===0){
-playersTable.innerHTML='<tr><td colspan="5">No registered players found.</td></tr>';
+const tr=document.createElement("tr");
+const td=document.createElement("td");
+td.colSpan=5;
+td.textContent="No registered players found.";
+tr.appendChild(td);
+playersTable.appendChild(tr);
 }
 
 players.forEach(player=>{
@@ -263,7 +302,12 @@ const activities=activitySnap.docs.map(doc=>doc.data())
 .slice(0,100);
 
 if(activities.length===0){
-activityTable.innerHTML='<tr><td colspan="4">No activity recorded yet.</td></tr>';
+const tr=document.createElement("tr");
+const td=document.createElement("td");
+td.colSpan=4;
+td.textContent="No activity recorded yet.";
+tr.appendChild(td);
+activityTable.appendChild(tr);
 }
 
 activities.forEach(item=>{
@@ -320,7 +364,12 @@ showMessage(dashboardMessage,"Dashboard updated successfully.","success");
 
 }catch(error){
 console.error(error);
-showMessage(dashboardMessage,"Could not load dashboard: "+error.message,"error");
+showMessage(
+dashboardMessage,
+"Could not load dashboard: "+error.message+
+". Check your Firestore security rules.",
+"error"
+);
 }
 }
 
