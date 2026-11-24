@@ -1,4 +1,6 @@
 
+  
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,11 +9,9 @@
 <meta name="theme-color" content="#101632">
 <meta name="description" content="QuizSpark — learn, play, challenge yourself and grow smarter.">
 <meta name="google-adsense-account" content="ca-pub-2631012541843607">
-
 <title>QuizSpark — Learn, Play and Grow</title>
 <link rel="icon" href="./quizspark-logo.png" type="image/png">
 
-<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-95HWM1FE69"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
@@ -20,200 +20,126 @@ gtag('js', new Date());
 gtag('config', 'G-95HWM1FE69');
 </script>
 
-<!-- Google AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2631012541843607"
- crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2631012541843607" crossorigin="anonymous"></script>
 
 <style>
 :root{
- --bg:#101632;
- --panel:#192344;
- --panel2:#232f55;
- --line:#39466e;
- --yellow:#A78BFA;
- --blue:#A78BFA;
- --muted:#B8C2DE;
- --green:#22c55e;
- --red:#ef4444;
- --purple:#7047EB;
- --lavender:#A78BFA;
+ --bg:#101632;--panel:#192344;--panel2:#232f55;--line:#39466e;
+ --yellow:#A78BFA;--blue:#A78BFA;--muted:#B8C2DE;
+ --green:#22c55e;--red:#ef4444;--purple:#7047EB;--lavender:#A78BFA;
 }
 *{box-sizing:border-box}
 body{
- margin:0;
- background:var(--bg);
- color:#fff;
+ margin:0;background:var(--bg);color:#fff;
  font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;
  padding-bottom:calc(82px + env(safe-area-inset-bottom))
 }
-button,input,select{font:inherit}
+button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 button:disabled{opacity:.55;cursor:not-allowed}
 header{
  display:flex;align-items:center;justify-content:space-between;
  gap:12px;padding:14px 16px;background:#101632;
- position:sticky;top:0;z-index:5;
- border-bottom:1px solid #39466e
+ position:sticky;top:0;z-index:5;border-bottom:1px solid #39466e
 }
-.brand{
- display:flex;align-items:center;gap:9px;
- font-size:21px;font-weight:800;color:#A78BFA
-}
+.brand{display:flex;align-items:center;gap:9px;font-size:21px;font-weight:800;color:#A78BFA}
 .brand img{width:34px;height:34px;object-fit:contain;border-radius:8px}
-.points-pill{
- background:#29365f;color:#C4B5FD;
- border-radius:22px;padding:9px 12px;
- font-size:12px;font-weight:700
-}
+.points-pill{background:#29365f;color:#C4B5FD;border-radius:22px;padding:9px 12px;font-size:12px;font-weight:700}
 main{max-width:760px;margin:auto;padding:15px}
 .page{display:none}
 .page.active{display:block}
-.card{
- background:var(--panel);
- border:1px solid var(--line);
- border-radius:17px;padding:17px;margin-bottom:15px
-}
-.hero{
- background:linear-gradient(135deg,#30206f,#4930a0,#263b75);
- padding:23px 18px;border-radius:20px;margin-bottom:17px;
- border:1px solid #5943a5
-}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:17px;margin-bottom:15px}
+.hero{background:linear-gradient(135deg,#30206f,#4930a0,#263b75);padding:23px 18px;border-radius:20px;margin-bottom:17px;border:1px solid #5943a5}
 .hero h1{color:#D8CCFF;margin:0 0 9px;font-size:27px}
 .hero p,.muted{color:var(--muted);line-height:1.6}
 h2{font-size:21px;margin:8px 0 14px}
 h3{font-size:17px;margin:8px 0 12px}
-.grid,.category-grid{
- display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px
-}
+.grid,.category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
 .stat{background:var(--panel2);border-radius:13px;padding:14px}
 .stat span{font-size:12px;color:var(--muted)}
-.stat strong{
- display:block;color:#C4B5FD;font-size:23px;margin-top:7px
-}
+.stat strong{display:block;color:#C4B5FD;font-size:23px;margin-top:7px}
 .primary,.secondary,.google{
- width:100%;border:0;border-radius:11px;
- padding:13px;font-weight:750;margin-top:8px
+ width:100%;border:0;border-radius:11px;padding:13px;font-weight:750;margin-top:8px
 }
-.primary{
- background:linear-gradient(100deg,#7047EB,#936BFF);
- color:white;box-shadow:0 4px 14px #7047EB44
-}
+.primary{background:linear-gradient(100deg,#7047EB,#936BFF);color:white;box-shadow:0 4px 14px #7047EB44}
 .primary:active{transform:scale(.98)}
 .secondary{background:#35416b;color:white}
 .google{background:#fff;color:#222}
-input,select{
- width:100%;padding:13px;border:1px solid #59658c;
- border-radius:10px;background:#111b3b;color:white;
- margin:7px 0 13px
+input,select,textarea{
+ width:100%;padding:13px;border:1px solid #59658c;border-radius:10px;
+ background:#111b3b;color:white;margin:7px 0 13px
 }
 label{display:block;color:var(--muted);font-size:13px}
-input:focus,select:focus,button:focus-visible{
- outline:2px solid #A78BFA;outline-offset:2px
-}
-.message{
- font-size:13px;color:#C4B5FD;overflow-wrap:anywhere;
- line-height:1.5;min-height:18px
-}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid #A78BFA;outline-offset:2px}
+.message{font-size:13px;color:#C4B5FD;overflow-wrap:anywhere;line-height:1.5;min-height:18px}
 .error{color:#fca5a5}
 .success{color:#86efac}
 .hidden{display:none!important}
 .bottom-nav{
- position:fixed;bottom:0;left:0;right:0;
- background:#111a38;border-top:1px solid var(--line);
- display:grid;grid-template-columns:repeat(5,1fr);
- padding:8px 3px calc(8px + env(safe-area-inset-bottom));
- z-index:10
+ position:fixed;bottom:0;left:0;right:0;background:#111a38;
+ border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);
+ padding:8px 3px calc(8px + env(safe-area-inset-bottom));z-index:10
 }
-.nav-btn{
- border:0;background:transparent;color:var(--muted);
- font-size:10px;padding:5px 0
-}
+.nav-btn{border:0;background:transparent;color:var(--muted);font-size:10px;padding:5px 0}
 .nav-btn .symbol{display:block;font-size:21px;margin-bottom:4px}
 .nav-btn.active{color:#C4B5FD}
-.category{
- background:var(--panel2);border:1px solid var(--line);
- border-radius:13px;padding:14px;text-align:left;
- color:white;min-height:88px
-}
+.category{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:14px;text-align:left;color:white;min-height:88px}
 .category strong{display:block;margin-top:7px}
 .category small{color:var(--muted)}
 .category.selected{border:2px solid #A78BFA;background:#30245f}
 .lesson{background:var(--panel2);padding:14px;border-radius:12px;margin:10px 0}
 .lesson p{color:var(--muted);line-height:1.6;font-size:14px}
-.answer{
- display:block;width:100%;padding:14px;margin:9px 0;
- text-align:left;background:#29365f;color:white;
- border:1px solid #59658c;border-radius:11px
-}
+.answer{display:block;width:100%;padding:14px;margin:9px 0;text-align:left;background:#29365f;color:white;border:1px solid #59658c;border-radius:11px}
 .answer.correct{background:#166534;border-color:var(--green)}
 .answer.wrong{background:#991b1b;border-color:var(--red)}
 .answer:disabled{cursor:default}
-.progress-track{
- height:8px;background:#39466e;border-radius:10px;
- overflow:hidden;margin:12px 0
-}
-.progress-fill{
- height:100%;width:0;
- background:linear-gradient(90deg,#7047EB,#C4B5FD);
- transition:width .2s
-}
-.rank-row{
- display:flex;align-items:center;justify-content:space-between;
- padding:12px 4px;border-bottom:1px solid var(--line);gap:10px
-}
+.progress-track{height:8px;background:#39466e;border-radius:10px;overflow:hidden;margin:12px 0}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#7047EB,#C4B5FD);transition:width .2s}
+.rank-row{display:flex;align-items:center;justify-content:space-between;padding:12px 4px;border-bottom:1px solid var(--line);gap:10px}
 .yellow{color:#C4B5FD}
-.avatar{
- width:70px;height:70px;border-radius:50%;
- background:#35416b;display:grid;place-items:center;
- font-size:30px;margin:auto
-}
+.avatar{width:70px;height:70px;border-radius:50%;background:#35416b;display:grid;place-items:center;font-size:30px;margin:auto}
 footer{text-align:center;color:#8995b8;font-size:11px;padding:20px}
-.small{font-size:12px;color:var(--muted)}
 .toolbar{display:flex;gap:8px;flex-wrap:wrap}
 .toolbar button{flex:1}
-.lesson-quiz-box{
- background:#232f55;border:1px solid #59658c;
- border-radius:14px;padding:14px;margin-top:18px
-}
+.lesson-quiz-box{background:#232f55;border:1px solid #59658c;border-radius:14px;padding:14px;margin-top:18px}
 .lesson-quiz-box h3{color:#C4B5FD}
-
-/* ABOUT QUIZSPARK LINK */
 .about-link{
- display:block;
- text-align:center;
- margin-top:15px;
- padding:13px;
- border:1px solid #7047EB;
- border-radius:12px;
- background:#192344;
- color:#C4B5FD;
- font-weight:750;
- text-decoration:none;
- transition:background .2s ease;
+ display:block;text-align:center;margin-top:15px;padding:13px;
+ border:1px solid #7047EB;border-radius:12px;background:#192344;
+ color:#C4B5FD;font-weight:750;text-decoration:none;transition:background .2s ease
 }
-.about-link:hover{
- background:#30245f;
-}
+.about-link:hover{background:#30245f}
 
+/* PLAYER REVIEWS */
+.review-stars{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 15px}
+.review-star{
+ background:#29365f;border:1px solid #59658c;color:#fbbf24;
+ border-radius:10px;padding:7px 11px;font-size:29px;line-height:1.2
+}
+.review-star.selected{background:#49330d;border-color:#fbbf24}
+.review-card{
+ background:#232f55;border:1px solid #39466e;border-radius:12px;
+ padding:13px;margin:10px 0
+}
+.review-card .review-name{font-weight:750;color:#fff}
+.review-card .review-rating{color:#fbbf24;margin:5px 0}
+.review-card .review-comment{color:#dce3f7;line-height:1.6;overflow-wrap:anywhere;white-space:pre-wrap}
+.review-card .review-date{font-size:11px;color:#aab5d3;margin-top:8px}
+.review-average{font-size:27px;font-weight:800;color:#fbbf24}
+.review-hint{font-size:12px;color:var(--muted);line-height:1.5}
 @media(max-width:380px){
- .nav-btn{font-size:9px}
- .nav-btn .symbol{font-size:18px}
- .hero h1{font-size:24px}
+ .nav-btn{font-size:9px}.nav-btn .symbol{font-size:18px}.hero h1{font-size:24px}
 }
 </style>
 </head>
 
 <body>
 <header>
- <div class="brand">
-  <img src="./quizspark-logo.png" alt="QuizSpark logo" onerror="this.style.display='none'">
-  ⚡ QuizSpark
- </div>
+ <div class="brand"><img src="./quizspark-logo.png" alt="QuizSpark logo" onerror="this.style.display='none'">⚡ QuizSpark</div>
  <div class="points-pill" id="headerPoints">⚡ 0 Points</div>
 </header>
 
 <main>
-
 <section id="authPage" class="page active">
  <div class="hero">
   <h1>Welcome to QuizSpark! ⚡</h1>
@@ -244,10 +170,7 @@ footer{text-align:center;color:#8995b8;font-size:11px;padding:20px}
   <button class="primary" onclick="showPage('learn')">📚 Explore Learning Centre</button>
   <button class="secondary" onclick="showPage('play')">🎮 Enter Quiz Arena</button>
  </div>
-
- <!-- ABOUT QUIZSPARK LINK -->
  <a class="about-link" href="./about.html">ℹ️ About QuizSpark — Learn More About the Game</a>
-
  <h2>Your Dashboard</h2>
  <div class="grid">
   <div class="stat"><span>⚡ Total Points</span><strong id="homePoints">0</strong></div>
@@ -260,21 +183,39 @@ footer{text-align:center;color:#8995b8;font-size:11px;padding:20px}
   <p class="muted">A little learning every day makes a difference.</p>
   <button class="primary" onclick="showPage('learn')">Start Learning</button>
  </div>
+
+ <!-- QUIZSPARK PLAYER REVIEWS -->
+ <div class="card" id="reviewsSection">
+  <h2>⭐ Rate and Review QuizSpark</h2>
+  <p class="muted">Enjoying the game? Give QuizSpark a star rating and tell us what you think.</p>
+  <h3>Your Rating</h3>
+  <div id="starRating" class="review-stars">
+   <button type="button" class="review-star" data-star="1" aria-label="1 star">☆</button>
+   <button type="button" class="review-star" data-star="2" aria-label="2 stars">☆</button>
+   <button type="button" class="review-star" data-star="3" aria-label="3 stars">☆</button>
+   <button type="button" class="review-star" data-star="4" aria-label="4 stars">☆</button>
+   <button type="button" class="review-star" data-star="5" aria-label="5 stars">☆</button>
+  </div>
+  <label for="reviewComment">Your comment</label>
+  <textarea id="reviewComment" maxlength="500" rows="4" placeholder="Write your experience with QuizSpark..."></textarea>
+  <p class="review-hint">You can submit one review. You can update your rating or comment later.</p>
+  <button class="primary" id="submitReviewBtn">Submit My Review</button>
+  <p id="reviewMessage" class="message" aria-live="polite"></p>
+  <div class="stat" style="margin-top:15px">
+   <span>Average Player Rating</span>
+   <div class="review-average" id="averageRating">0.0 / 5 ⭐</div>
+   <p id="reviewTotal" class="small">0 reviews</p>
+  </div>
+  <h3 style="margin-top:20px">What Players Are Saying</h3>
+  <div id="reviewsList">Loading reviews...</div>
+  <button class="secondary" id="refreshReviewsBtn">Refresh Reviews</button>
+ </div>
 </section>
 
 <section id="learnPage" class="page">
- <div class="hero">
-  <h1>📚 Learning Centre</h1>
-  <p>Explore useful subjects and develop skills at your own pace.</p>
- </div>
- <div class="card">
-  <h3>Choose Your Learning Area</h3>
-  <div class="category-grid" id="learningCategories"></div>
- </div>
- <div class="card">
-  <h3 id="lessonHeading">Explore Lessons</h3>
-  <div id="lessonList"><p class="muted">Choose an area above.</p></div>
- </div>
+ <div class="hero"><h1>📚 Learning Centre</h1><p>Explore useful subjects and develop skills at your own pace.</p></div>
+ <div class="card"><h3>Choose Your Learning Area</h3><div class="category-grid" id="learningCategories"></div></div>
+ <div class="card"><h3 id="lessonHeading">Explore Lessons</h3><div id="lessonList"><p class="muted">Choose an area above.</p></div></div>
  <div class="card">
   <h3>🎥 Video Learning</h3>
   <label for="videoSearch">Search for an educational topic</label>
@@ -310,24 +251,16 @@ footer{text-align:center;color:#8995b8;font-size:11px;padding:20px}
 </section>
 
 <section id="playPage" class="page">
- <div class="hero">
-  <h1>🎮 Quiz Arena</h1>
-  <p>Choose a subject, select your difficulty and challenge yourself.</p>
- </div>
+ <div class="hero"><h1>🎮 Quiz Arena</h1><p>Choose a subject, select your difficulty and challenge yourself.</p></div>
  <div class="card" id="quizSetup">
   <h3>1. Choose a Category</h3>
   <div class="category-grid" id="quizCategories"></div>
   <h3 style="margin-top:20px">2. Choose Difficulty</h3>
   <select id="difficulty">
-   <option value="Beginner">Beginner</option>
-   <option value="Intermediate">Intermediate</option>
-   <option value="Advanced">Advanced</option>
+   <option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option><option value="Advanced">Advanced</option>
   </select>
   <h3>3. Number of Questions</h3>
-  <select id="questionCount">
-   <option value="5">5 Questions</option>
-   <option value="10" selected>10 Questions</option>
-  </select>
+  <select id="questionCount"><option value="5">5 Questions</option><option value="10" selected>10 Questions</option></select>
   <button class="primary" id="startBtn">Start My Quiz 🚀</button>
   <p class="muted">Earn 10 points for every correct answer. Your unfinished quiz is saved on this device.</p>
  </div>
@@ -346,38 +279,20 @@ footer{text-align:center;color:#8995b8;font-size:11px;padding:20px}
 </section>
 
 <section id="leaderboardPage" class="page">
- <div class="hero">
-  <h1>🏆 Leaderboard</h1>
-  <p>Celebrate progress and see the top QuizSpark players.</p>
- </div>
- <div class="card">
-  <div id="leaderboard">Open this page to load players.</div>
-  <button class="secondary" id="refreshLeaderboard">Refresh</button>
- </div>
+ <div class="hero"><h1>🏆 Leaderboard</h1><p>Celebrate progress and see the top QuizSpark players.</p></div>
+ <div class="card"><div id="leaderboard">Open this page to load players.</div><button class="secondary" id="refreshLeaderboard">Refresh</button></div>
 </section>
 
 <section id="walletPage" class="page">
- <div class="hero">
-  <h1>💰 My Wallet</h1>
-  <p>Keep track of your learning and gaming points.</p>
- </div>
- <div class="card">
-  <p class="muted">Your points balance</p>
-  <h1 class="yellow" id="walletPoints">0 ⚡</h1>
-  <button class="primary" onclick="showPage('play')">Earn More Points</button>
- </div>
- <div class="card">
-  <h3>Important Information</h3>
-  <p class="muted">Points are in-app rewards. They are not cash and cannot currently be withdrawn.</p>
- </div>
+ <div class="hero"><h1>💰 My Wallet</h1><p>Keep track of your learning and gaming points.</p></div>
+ <div class="card"><p class="muted">Your points balance</p><h1 class="yellow" id="walletPoints">0 ⚡</h1><button class="primary" onclick="showPage('play')">Earn More Points</button></div>
+ <div class="card"><h3>Important Information</h3><p class="muted">Points are in-app rewards. They are not cash and cannot currently be withdrawn.</p></div>
 </section>
 
 <section id="profilePage" class="page">
  <div class="card" style="text-align:center">
-  <div class="avatar">👤</div>
-  <h2 id="profileName">Player</h2>
-  <p id="profileEmail" class="muted"></p>
-  <h2 id="profilePoints" class="yellow">0 Points</h2>
+  <div class="avatar">👤</div><h2 id="profileName">Player</h2>
+  <p id="profileEmail" class="muted"></p><h2 id="profilePoints" class="yellow">0 Points</h2>
  </div>
  <div class="card">
   <h3>Player Information</h3>
@@ -387,7 +302,6 @@ footer{text-align:center;color:#8995b8;font-size:11px;padding:20px}
   <button class="secondary" id="logoutBtn">Sign Out</button>
  </div>
 </section>
-
 </main>
 
 <nav class="bottom-nav hidden" id="bottomNav" aria-label="Main navigation">
@@ -402,13 +316,11 @@ footer{text-align:center;color:#8995b8;font-size:11px;padding:20px}
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
 import {
  getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,
  GoogleAuthProvider,signInWithRedirect,getRedirectResult,signOut,
  onAuthStateChanged,updateProfile,sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 import {
  getFirestore,doc,getDoc,setDoc,runTransaction,
  collection,query,orderBy,limit,getDocs,serverTimestamp
@@ -429,11 +341,8 @@ const db=getFirestore(app);
 const googleProvider=new GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt:"select_account"});
 
-/* GOOGLE ANALYTICS EVENT HELPER */
 function trackAnalytics(eventName,parameters={}){
- if(typeof window.gtag==="function"){
-  window.gtag("event",eventName,parameters);
- }
+ if(typeof window.gtag==="function")window.gtag("event",eventName,parameters);
 }
 
 const $=id=>document.getElementById(id);
@@ -444,9 +353,11 @@ let selectedCategory="General Knowledge";
 let quizQuestions=[],questionIndex=0,score=0;
 let answered=false,gameRunning=false,saving=false;
 let currentLessonId=null,disabledAnswers=[];
-
 let lessonQuestions=[],lessonQuestionIndex=0,lessonScore=0;
 let lessonAnswered=false,lessonQuizSaving=false;
+
+/* REVIEW STATE */
+let selectedReviewRating=0;
 
 const categories=[
  ["General Knowledge","🌍","World facts"],
@@ -491,7 +402,6 @@ const lessons={
  ]
 };
 
-/* FIVE QUESTIONS FOR EACH LEARNING CENTRE LESSON */
 const lessonQuestionBank={
  math1:[
   ["What does addition do?","Combines quantities",["Finds a difference","Shares equal groups","Measures temperature"]],
@@ -750,9 +660,7 @@ function shuffle(list){
 }
 
 function setMessage(id,text,type=""){
- const el=$(id);
- el.textContent=text;
- el.className="message "+type;
+ const el=$(id);el.textContent=text;el.className="message "+type;
 }
 
 function friendlyError(error){
@@ -777,31 +685,26 @@ function friendlyError(error){
 
 window.showPage=function(page){
  if(!currentUser)return;
- const target=$(page+"Page");
+ const target=$(page+"Page);".replace(";",""));
  if(!target)return;
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  target.classList.add("active");
- document.querySelectorAll(".nav-btn").forEach(b=>{
-  b.classList.toggle("active",b.dataset.page===page);
- });
+ document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
  if(page==="leaderboard")loadLeaderboard();
+ if(page==="home")loadReviews();
  if(["home","wallet","profile"].includes(page))updateDashboard();
  window.scrollTo({top:0,behavior:"smooth"});
 };
 
-document.querySelectorAll(".nav-btn").forEach(b=>{
- b.addEventListener("click",()=>showPage(b.dataset.page));
-});
+document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
 
 async function createProfile(user){
  const ref=doc(db,"players",user.uid);
  const snap=await getDoc(ref);
  if(!snap.exists()){
   await setDoc(ref,{
-   name:user.displayName||"Player",
-   points:0,gamesPlayed:0,correctAnswers:0,
-   lessonsCompleted:[],lessonQuizzesCompleted:[],
-   createdAt:serverTimestamp()
+   name:user.displayName||"Player",points:0,gamesPlayed:0,correctAnswers:0,
+   lessonsCompleted:[],lessonQuizzesCompleted:[],createdAt:serverTimestamp()
   });
  }else if(user.displayName&&user.displayName!==snap.data().name){
   await setDoc(ref,{name:user.displayName},{merge:true});
@@ -827,15 +730,153 @@ function updateDashboard(){
  $("headerPoints").textContent="⚡ "+savedPoints.toLocaleString()+" Points";
  $("walletPoints").textContent=savedPoints.toLocaleString()+" ⚡";
  $("profilePoints").textContent=savedPoints.toLocaleString()+" Points";
- $("gamesPlayed").textContent=games;
- $("profileGames").textContent=games;
- $("correctAnswers").textContent=correctTotal;
- $("profileCorrect").textContent=correctTotal;
- $("profileName").textContent=name;
- $("profileEmail").textContent=currentUser?.email||"";
- $("lessonsCompleted").textContent=lessonsDone.length;
- $("profileLessons").textContent=lessonsDone.length;
+ $("gamesPlayed").textContent=games;$("profileGames").textContent=games;
+ $("correctAnswers").textContent=correctTotal;$("profileCorrect").textContent=correctTotal;
+ $("profileName").textContent=name;$("profileEmail").textContent=currentUser?.email||"";
+ $("lessonsCompleted").textContent=lessonsDone.length;$("profileLessons").textContent=lessonsDone.length;
 }
+
+/* PLAYER REVIEWS */
+function paintReviewStars(){
+ document.querySelectorAll("#starRating button").forEach(button=>{
+  const value=Number(button.dataset.star);
+  button.textContent=value<=selectedReviewRating?"★":"☆";
+  button.classList.toggle("selected",value<=selectedReviewRating);
+  button.setAttribute("aria-pressed",value===selectedReviewRating?"true":"false");
+ });
+}
+
+document.querySelectorAll("#starRating button").forEach(button=>{
+ button.addEventListener("click",()=>{
+  selectedReviewRating=Number(button.dataset.star);
+  paintReviewStars();
+ });
+});
+
+function reviewDate(timestamp){
+ if(!timestamp||typeof timestamp.toDate!=="function")return "Recently";
+ return timestamp.toDate().toLocaleDateString(undefined,{
+  year:"numeric",month:"short",day:"numeric"
+ });
+}
+
+async function loadReviews(){
+ if(!currentUser)return;
+ const holder=$("reviewsList");
+ holder.textContent="Loading reviews...";
+ try{
+  const snapshot=await getDocs(collection(db,"reviews"));
+  const reviews=snapshot.docs.map(item=>({id:item.id,...item.data()}));
+  reviews.sort((a,b)=>{
+   const timeA=a.createdAt?.toMillis?.()||0;
+   const timeB=b.createdAt?.toMillis?.()||0;
+   return timeB-timeA;
+  });
+
+  const validReviews=reviews.filter(item=>
+   Number.isInteger(item.rating)&&item.rating>=1&&item.rating<=5
+  );
+  const total=validReviews.length;
+  const average=total
+   ?validReviews.reduce((sum,item)=>sum+item.rating,0)/total
+   :0;
+
+  $("averageRating").textContent=average.toFixed(1)+" / 5 ⭐";
+  $("reviewTotal").textContent=total+" review"+(total===1?"":"s");
+
+  const myReview=validReviews.find(item=>item.id===currentUser.uid);
+  if(myReview){
+   selectedReviewRating=myReview.rating;
+   $("reviewComment").value=myReview.comment||"";
+   $("submitReviewBtn").textContent="Update My Review";
+   paintReviewStars();
+  }else{
+   $("submitReviewBtn").textContent="Submit My Review";
+  }
+
+  holder.replaceChildren();
+  if(!validReviews.length){
+   holder.textContent="No reviews yet. Be the first to review QuizSpark!";
+   return;
+  }
+
+  validReviews.slice(0,50).forEach(item=>{
+   const card=document.createElement("div");
+   card.className="review-card";
+
+   const name=document.createElement("div");
+   name.className="review-name";
+   name.textContent=item.name||"QuizSpark Player";
+
+   const stars=document.createElement("div");
+   stars.className="review-rating";
+   stars.textContent="★".repeat(item.rating)+"☆".repeat(5-item.rating);
+
+   const comment=document.createElement("p");
+   comment.className="review-comment";
+   comment.textContent=item.comment||"No written comment.";
+
+   const date=document.createElement("div");
+   date.className="review-date";
+   date.textContent="Posted "+reviewDate(item.createdAt);
+
+   card.append(name,stars,comment,date);
+   holder.appendChild(card);
+  });
+ }catch(error){
+  holder.textContent=friendlyError(error);
+ }
+}
+
+$("submitReviewBtn").onclick=async()=>{
+ if(!currentUser){
+  setMessage("reviewMessage","Please sign in before submitting a review.","error");
+  return;
+ }
+ if(selectedReviewRating<1||selectedReviewRating>5){
+  setMessage("reviewMessage","Please select a star rating first.","error");
+  return;
+ }
+ const comment=$("reviewComment").value.trim();
+ if(!comment){
+  setMessage("reviewMessage","Please write a comment before submitting.","error");
+  return;
+ }
+ if(comment.length>500){
+  setMessage("reviewMessage","Your comment must be 500 characters or fewer.","error");
+  return;
+ }
+
+ const button=$("submitReviewBtn");
+ button.disabled=true;
+ setMessage("reviewMessage","Saving your review...");
+
+ try{
+  const reviewRef=doc(db,"reviews",currentUser.uid);
+  const existing=await getDoc(reviewRef);
+
+  const reviewData={
+   uid:currentUser.uid,
+   name:currentUser.displayName||"QuizSpark Player",
+   rating:selectedReviewRating,
+   comment:comment,
+   updatedAt:serverTimestamp()
+  };
+
+  if(!existing.exists())reviewData.createdAt=serverTimestamp();
+
+  await setDoc(reviewRef,reviewData,{merge:true});
+  setMessage("reviewMessage","Thank you! Your review has been saved.","success");
+  $("submitReviewBtn").textContent="Update My Review";
+  await loadReviews();
+ }catch(error){
+  setMessage("reviewMessage","Could not save your review: "+friendlyError(error),"error");
+ }finally{
+  button.disabled=false;
+ }
+};
+
+$("refreshReviewsBtn").onclick=loadReviews;
 
 /* ACCOUNT CREATION */
 $("signupBtn").onclick=async()=>{
@@ -909,6 +950,9 @@ onAuthStateChanged(auth,async user=>{
   $("bottomNav").classList.add("hidden");
   $("signupFields").classList.remove("hidden");
   savedPoints=0;games=0;correctTotal=0;lessonsDone=[];lessonQuizzesDone=[];
+  selectedReviewRating=0;
+  $("reviewComment").value="";
+  paintReviewStars();
   updateDashboard();
   return;
  }
@@ -923,6 +967,7 @@ onAuthStateChanged(auth,async user=>{
   if(auth.currentUser?.uid!==user.uid)return;
   showPage("home");
   refreshStartButton();
+  await loadReviews();
  }catch(e){setMessage("authMessage",friendlyError(e),"error");}
 });
 
@@ -937,13 +982,10 @@ function buildLearningCategories(){
  ];
  $("learningCategories").replaceChildren();
  items.forEach(([name,icon,description])=>{
-  const b=document.createElement("button");
-  b.className="category";
-  b.textContent=icon+" ";
+  const b=document.createElement("button");b.className="category";b.textContent=icon+" ";
   const strong=document.createElement("strong");strong.textContent=name;
   const small=document.createElement("small");small.textContent=description;
-  b.append(strong,small);
-  b.onclick=()=>displayLessons(name);
+  b.append(strong,small);b.onclick=()=>displayLessons(name);
   $("learningCategories").appendChild(b);
  });
 }
@@ -976,9 +1018,7 @@ function openLesson(category,id){
  $("completeLessonBtn").textContent=lessonsDone.includes(id)
   ?"Already Completed ✓":"Mark Lesson as Completed ✓";
  $("completeLessonBtn").disabled=lessonsDone.includes(id);
-
  resetLessonQuiz();
-
  if(lessonQuizzesDone.includes(id)){
   $("startLessonQuizBtn").textContent="Practise Lesson Quiz Again";
   setMessage("lessonQuizMessage","You have already earned points for this lesson quiz. You can practise again.");
@@ -991,11 +1031,7 @@ function openLesson(category,id){
 
 /* LESSON QUIZ */
 function resetLessonQuiz(){
- lessonQuestions=[];
- lessonQuestionIndex=0;
- lessonScore=0;
- lessonAnswered=false;
- lessonQuizSaving=false;
+ lessonQuestions=[];lessonQuestionIndex=0;lessonScore=0;lessonAnswered=false;lessonQuizSaving=false;
  $("lessonQuizPanel").classList.add("hidden");
  $("startLessonQuizBtn").classList.remove("hidden");
  $("lessonQuizScore").textContent="0/50";
@@ -1009,16 +1045,12 @@ $("startLessonQuizBtn").onclick=()=>{
  if(!currentUser||!currentLessonId)return;
  const source=lessonQuestionBank[currentLessonId];
  if(!source||source.length<5){
-  setMessage("lessonQuizMessage","Questions for this lesson are being prepared.","error");
-  return;
+  setMessage("lessonQuizMessage","Questions for this lesson are being prepared.","error");return;
  }
  lessonQuestions=shuffle(source).slice(0,5).map(([q,correct,wrong])=>{
-  const options=shuffle([correct,...wrong]);
-  return {q,a:options,correct:options.indexOf(correct)};
+  const options=shuffle([correct,...wrong]);return {q,a:options,correct:options.indexOf(correct)};
  });
- lessonQuestionIndex=0;
- lessonScore=0;
- lessonAnswered=false;
+ lessonQuestionIndex=0;lessonScore=0;lessonAnswered=false;
  $("startLessonQuizBtn").classList.add("hidden");
  $("lessonQuizPanel").classList.remove("hidden");
  $("lessonQuizScore").textContent="0/50";
@@ -1026,8 +1058,7 @@ $("startLessonQuizBtn").onclick=()=>{
 };
 
 function showLessonQuestion(){
- const q=lessonQuestions[lessonQuestionIndex];
- if(!q)return;
+ const q=lessonQuestions[lessonQuestionIndex];if(!q)return;
  lessonAnswered=false;
  $("lessonQuizQuestion").textContent=q.q;
  $("lessonQuizNumber").textContent=(lessonQuestionIndex+1)+"/5";
@@ -1035,9 +1066,7 @@ function showLessonQuestion(){
  $("lessonQuizProgress").style.width=(lessonQuestionIndex/5*100)+"%";
  $("lessonQuizAnswers").replaceChildren();
  q.a.forEach((answer,index)=>{
-  const b=document.createElement("button");
-  b.className="answer";
-  b.textContent=answer;
+  const b=document.createElement("button");b.className="answer";b.textContent=answer;
   b.onclick=()=>checkLessonAnswer(index,b);
   $("lessonQuizAnswers").appendChild(b);
  });
@@ -1050,19 +1079,13 @@ function checkLessonAnswer(index,button){
  const q=lessonQuestions[lessonQuestionIndex];
  const buttons=$("lessonQuizAnswers").querySelectorAll("button");
  if(index===q.correct){
-  lessonAnswered=true;
-  lessonScore+=10;
-  buttons.forEach((b,i)=>{
-   b.disabled=true;
-   if(i===q.correct)b.classList.add("correct");
-  });
+  lessonAnswered=true;lessonScore+=10;
+  buttons.forEach((b,i)=>{b.disabled=true;if(i===q.correct)b.classList.add("correct");});
   $("lessonQuizScore").textContent=lessonScore+"/50";
   setMessage("lessonQuizMessage","🎉 Correct! You earned 10 points.","success");
  }else{
-  button.disabled=true;
-  button.classList.add("wrong");
-  setMessage("lessonQuizMessage","Not quite. Try another answer. You have not lost points.","error");
-  return;
+  button.disabled=true;button.classList.add("wrong");
+  setMessage("lessonQuizMessage","Not quite. Try another answer. You have not lost points.","error");return;
  }
  $("lessonQuizNextBtn").classList.remove("hidden");
  $("lessonQuizNextBtn").textContent=lessonQuestionIndex===4?"Finish Lesson Quiz":"Next Question →";
@@ -1070,32 +1093,24 @@ function checkLessonAnswer(index,button){
 
 $("lessonQuizNextBtn").onclick=()=>{
  if(!lessonAnswered||lessonQuizSaving)return;
- if(lessonQuestionIndex<4){
-  lessonQuestionIndex++;
-  showLessonQuestion();
- }else{
-  finishLessonQuiz();
- }
+ if(lessonQuestionIndex<4){lessonQuestionIndex++;showLessonQuestion();}
+ else{finishLessonQuiz();}
 };
 
 async function finishLessonQuiz(){
  if(!currentUser||!currentLessonId||lessonQuizSaving)return;
- lessonQuizSaving=true;
- $("lessonQuizNextBtn").disabled=true;
+ lessonQuizSaving=true;$("lessonQuizNextBtn").disabled=true;
  setMessage("lessonQuizMessage","Saving your lesson quiz result...");
-
  const lessonId=currentLessonId;
  const earnedCorrect=lessonScore/10;
  let pointsAwarded=false;
-
  try{
   const ref=doc(db,"players",currentUser.uid);
   await runTransaction(db,async tx=>{
    const snap=await tx.get(ref);
    if(!snap.exists())throw new Error("Player profile not found.");
    const data=snap.data();
-   const completed=Array.isArray(data.lessonQuizzesCompleted)
-    ?data.lessonQuizzesCompleted:[];
+   const completed=Array.isArray(data.lessonQuizzesCompleted)?data.lessonQuizzesCompleted:[];
    if(!completed.includes(lessonId)){
     tx.update(ref,{
      points:(Number(data.points)||0)+lessonScore,
@@ -1106,83 +1121,57 @@ async function finishLessonQuiz(){
     pointsAwarded=true;
    }
   });
-
   await loadProfile(currentUser);
-  if(pointsAwarded){
-   trackAnalytics("lesson_quiz_complete",{
-    lesson_id:lessonId,
-    score:lessonScore,
-    question_count:5
-   });
-  }
+  if(pointsAwarded)trackAnalytics("lesson_quiz_complete",{lesson_id:lessonId,score:lessonScore,question_count:5});
   $("lessonQuizProgress").style.width="100%";
   $("lessonQuizQuestion").textContent="Lesson Quiz Completed! 🎉";
   $("lessonQuizAnswers").replaceChildren();
   $("lessonQuizNextBtn").classList.add("hidden");
-
   if(pointsAwarded){
-   setMessage("lessonQuizMessage",
-    "🏆 You scored "+lessonScore+"/50 and earned "+lessonScore+
-    " points! Your new balance is "+savedPoints+".","success");
+   setMessage("lessonQuizMessage","🏆 You scored "+lessonScore+"/50 and earned "+lessonScore+" points! Your new balance is "+savedPoints+".","success");
   }else{
-   setMessage("lessonQuizMessage",
-    "You scored "+lessonScore+"/50. You have already received the points for this lesson quiz, so no extra points were added.","success");
+   setMessage("lessonQuizMessage","You scored "+lessonScore+"/50. You have already received the points for this lesson quiz, so no extra points were added.","success");
   }
-
   $("startLessonQuizBtn").textContent="Practise Lesson Quiz Again";
   $("startLessonQuizBtn").classList.remove("hidden");
-
  }catch(e){
   setMessage("lessonQuizMessage","Could not save your result: "+friendlyError(e),"error");
   $("lessonQuizNextBtn").classList.remove("hidden");
   $("lessonQuizNextBtn").textContent="Retry Saving Result";
   $("lessonQuizNextBtn").onclick=finishLessonQuiz;
  }finally{
-  lessonQuizSaving=false;
-  $("lessonQuizNextBtn").disabled=false;
+  lessonQuizSaving=false;$("lessonQuizNextBtn").disabled=false;
  }
 }
 
 /* COMPLETE LESSON */
 $("completeLessonBtn").onclick=async()=>{
  if(!currentUser||!currentLessonId||lessonsDone.includes(currentLessonId))return;
- const btn=$("completeLessonBtn");
- btn.disabled=true;
+ const btn=$("completeLessonBtn");btn.disabled=true;
  try{
   const ref=doc(db,"players",currentUser.uid);
   await runTransaction(db,async tx=>{
    const snap=await tx.get(ref);
    if(!snap.exists())throw new Error("Profile not found.");
-   const completed=Array.isArray(snap.data().lessonsCompleted)
-    ?snap.data().lessonsCompleted:[];
-   if(!completed.includes(currentLessonId)){
-    tx.update(ref,{lessonsCompleted:[...completed,currentLessonId]});
-   }
+   const completed=Array.isArray(snap.data().lessonsCompleted)?snap.data().lessonsCompleted:[];
+   if(!completed.includes(currentLessonId))tx.update(ref,{lessonsCompleted:[...completed,currentLessonId]});
   });
   await loadProfile(currentUser);
   $("lessonMessage").textContent="Lesson completed! Great work.";
   $("completeLessonBtn").textContent="Completed ✓";
- }catch(e){
-  btn.disabled=false;
-  $("lessonMessage").textContent=friendlyError(e);
- }
+ }catch(e){btn.disabled=false;$("lessonMessage").textContent=friendlyError(e);}
 };
 
 /* VIDEO LEARNING */
 $("videoBtn").onclick=()=>{
  const topic=$("videoSearch").value.trim();
  if(!topic)return alert("Enter a topic you want to learn.");
- window.open(
-  "https://www.youtube.com/results?search_query="+
-  encodeURIComponent(topic+" educational lesson"),
-  "_blank","noopener,noreferrer"
- );
+ window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(topic+" educational lesson"),"_blank","noopener,noreferrer");
 };
 
 /* QUIZ CATEGORY SELECTION */
 function buildQuizCategories(){
- const holder=$("quizCategories");
- holder.replaceChildren();
+ const holder=$("quizCategories");holder.replaceChildren();
  categories.forEach(([name,icon,description])=>{
   const b=document.createElement("button");
   b.className="category"+(name===selectedCategory?" selected":"");
@@ -1199,62 +1188,47 @@ function buildQuizCategories(){
 function makeQuiz(){
  let source=[...(bank[selectedCategory]||bank["General Knowledge"])];
  const difficulty=$("difficulty").value;
- if(difficulty==="Advanced"&&advancedExtras[selectedCategory]){
-  source.push(...advancedExtras[selectedCategory]);
- }
+ if(difficulty==="Advanced"&&advancedExtras[selectedCategory])source.push(...advancedExtras[selectedCategory]);
  if(selectedCategory==="Mathematics"&&difficulty!=="Beginner"){
   for(let i=0;i<12;i++){
    const a=10+i*2,b=3+(i%8),answer=a*b;
-   source.push([
-    `Calculate ${a} × ${b}.`,String(answer),
-    [String(answer+2),String(answer-3),String(answer+10)]
-   ]);
+   source.push([`Calculate ${a} × ${b}.`,String(answer),[String(answer+2),String(answer-3),String(answer+10)]]);
   }
  }
  if(difficulty==="Beginner")source=source.slice(0,Math.max(5,source.length-2));
- return shuffle(source)
-  .slice(0,Math.min(Number($("questionCount").value),source.length))
-  .map(([q,correct,wrong])=>{
-   const options=shuffle([correct,...wrong]);
-   return {q,a:options,correct:options.indexOf(correct)};
-  });
+ return shuffle(source).slice(0,Math.min(Number($("questionCount").value),source.length)).map(([q,correct,wrong])=>{
+  const options=shuffle([correct,...wrong]);return {q,a:options,correct:options.indexOf(correct)};
+ });
 }
 
 /* LOCAL QUIZ SAVING */
 function draftKey(){return currentUser?"quizspark_quiz_"+currentUser.uid:null;}
-
 function saveQuizDraft(){
  if(!currentUser||!quizQuestions.length)return;
  try{
   localStorage.setItem(draftKey(),JSON.stringify({
-   version:2,questions:quizQuestions,index:questionIndex,
-   score,category:selectedCategory,disabled:disabledAnswers,answered
+   version:2,questions:quizQuestions,index:questionIndex,score,
+   category:selectedCategory,disabled:disabledAnswers,answered
   }));
  }catch(e){console.warn("Could not save quiz draft locally.",e);}
 }
-
 function readQuizDraft(){
  if(!currentUser)return null;
  try{
-  const raw=localStorage.getItem(draftKey());
-  if(!raw)return null;
+  const raw=localStorage.getItem(draftKey());if(!raw)return null;
   const d=JSON.parse(raw);
-  if(![1,2].includes(d.version)||!Array.isArray(d.questions)||
-   !d.questions.length||!Number.isInteger(d.index)||d.index<0||
-   d.index>d.questions.length||!Number.isFinite(d.score)||
-   !Array.isArray(d.disabled))return null;
+  if(![1,2].includes(d.version)||!Array.isArray(d.questions)||!d.questions.length||
+   !Number.isInteger(d.index)||d.index<0||d.index>d.questions.length||
+   !Number.isFinite(d.score)||!Array.isArray(d.disabled))return null;
   return d;
  }catch(e){console.warn("Saved quiz draft could not be read.",e);return null;}
 }
-
 function clearQuizDraft(){
  if(!currentUser)return;
  try{localStorage.removeItem(draftKey());}catch(e){console.warn(e);}
 }
-
 function refreshStartButton(){
- const draft=readQuizDraft();
- $("startBtn").textContent=draft?"Resume Saved Quiz ▶":"Start My Quiz 🚀";
+ const draft=readQuizDraft();$("startBtn").textContent=draft?"Resume Saved Quiz ▶":"Start My Quiz 🚀";
 }
 
 /* START OR RESUME */
@@ -1262,35 +1236,20 @@ function startOrResumeQuiz(){
  if(!currentUser||gameRunning||saving)return;
  const draft=readQuizDraft();
  if(draft){
-  quizQuestions=draft.questions;
-  questionIndex=draft.index;
-  score=draft.score;
-  selectedCategory=draft.category||selectedCategory;
-  disabledAnswers=draft.disabled||[];
+  quizQuestions=draft.questions;questionIndex=draft.index;score=draft.score;
+  selectedCategory=draft.category||selectedCategory;disabledAnswers=draft.disabled||[];
   answered=draft.version===2?Boolean(draft.answered):false;
   $("gamePoints").textContent=String(score);
-  $("quizSetup").classList.add("hidden");
-  $("quizGame").classList.remove("hidden");
-  gameRunning=true;
-  buildQuizCategories();
-  showQuestion();
-  return;
+  $("quizSetup").classList.add("hidden");$("quizGame").classList.remove("hidden");
+  gameRunning=true;buildQuizCategories();showQuestion();return;
  }
- quizQuestions=makeQuiz();
- if(!quizQuestions.length)return;
+ quizQuestions=makeQuiz();if(!quizQuestions.length)return;
  questionIndex=0;score=0;answered=false;disabledAnswers=[];gameRunning=true;
- trackAnalytics("quiz_start",{
-  category:selectedCategory,
-  difficulty:$("difficulty").value,
-  question_count:quizQuestions.length
- });
+ trackAnalytics("quiz_start",{category:selectedCategory,difficulty:$("difficulty").value,question_count:quizQuestions.length});
  saveQuizDraft();
- $("quizSetup").classList.add("hidden");
- $("quizGame").classList.remove("hidden");
- $("gamePoints").textContent="0";
- showQuestion();
+ $("quizSetup").classList.add("hidden");$("quizGame").classList.remove("hidden");
+ $("gamePoints").textContent="0";showQuestion();
 }
-
 $("startBtn").onclick=startOrResumeQuiz;
 
 /* DISPLAY QUESTION */
@@ -1302,23 +1261,15 @@ function showQuestion(){
  $("progressFill").style.width=(questionIndex/quizQuestions.length*100)+"%";
  $("answers").replaceChildren();
  q.a.forEach((answer,index)=>{
-  const b=document.createElement("button");
-  b.className="answer";b.textContent=answer;
+  const b=document.createElement("button");b.className="answer";b.textContent=answer;
   if(disabledAnswers.includes(index)){b.disabled=true;b.classList.add("wrong");}
-  if(answered){
-   b.disabled=true;
-   if(index===q.correct)b.classList.add("correct");
-  }
+  if(answered){b.disabled=true;if(index===q.correct)b.classList.add("correct");}
   b.onclick=()=>checkAnswer(index,b);
   $("answers").appendChild(b);
  });
  $("nextBtn").classList.toggle("hidden",!answered);
  $("nextBtn").textContent=questionIndex===quizQuestions.length-1?"Finish Quiz":"Next Question →";
- setMessage("gameMessage",answered
-  ?"Correct answer recorded. Continue to the next question."
-  :disabledAnswers.length
-   ?"Try another answer. Incorrect choices do not remove points."
-   :"Choose the correct answer.");
+ setMessage("gameMessage",answered?"Correct answer recorded. Continue to the next question.":disabledAnswers.length?"Try another answer. Incorrect choices do not remove points.":"Choose the correct answer.");
 }
 
 /* CHECK ANSWER */
@@ -1327,18 +1278,13 @@ function checkAnswer(index,button){
  const q=quizQuestions[questionIndex];
  const buttons=$("answers").querySelectorAll("button");
  if(index===q.correct){
-  answered=true;score+=10;
-  $("gamePoints").textContent=String(score);
-  buttons.forEach((b,i)=>{
-   b.disabled=true;
-   if(i===q.correct)b.classList.add("correct");
-  });
+  answered=true;score+=10;$("gamePoints").textContent=String(score);
+  buttons.forEach((b,i)=>{b.disabled=true;if(i===q.correct)b.classList.add("correct");});
   setMessage("gameMessage","🎉 Correct! You earned 10 points.","success");
   $("nextBtn").classList.remove("hidden");
   $("nextBtn").textContent=questionIndex===quizQuestions.length-1?"Finish Quiz":"Next Question →";
  }else{
-  disabledAnswers.push(index);
-  button.disabled=true;button.classList.add("wrong");
+  disabledAnswers.push(index);button.disabled=true;button.classList.add("wrong");
   setMessage("gameMessage","Not quite. Try another answer. You have not lost any points.","error");
  }
  saveQuizDraft();
@@ -1347,16 +1293,14 @@ function checkAnswer(index,button){
 /* NEXT QUESTION */
 $("nextBtn").onclick=()=>{
  if(!gameRunning||!answered)return;
- questionIndex++;disabledAnswers=[];answered=false;
- saveQuizDraft();showQuestion();
+ questionIndex++;disabledAnswers=[];answered=false;saveQuizDraft();showQuestion();
 };
 
 /* SAVE AND EXIT */
 $("quitBtn").onclick=()=>{
  if(!gameRunning)return;
  saveQuizDraft();gameRunning=false;
- $("quizGame").classList.add("hidden");
- $("quizSetup").classList.remove("hidden");
+ $("quizGame").classList.add("hidden");$("quizSetup").classList.remove("hidden");
  refreshStartButton();
 };
 
@@ -1367,8 +1311,7 @@ async function finishQuiz(){
  $("answers").replaceChildren();
  $("question").textContent="Quiz Completed! 🎉";
  $("progressFill").style.width="100%";
- $("nextBtn").classList.add("hidden");
- $("quitBtn").disabled=true;
+ $("nextBtn").classList.add("hidden");$("quitBtn").disabled=true;
  setMessage("gameMessage","You scored "+score+" points. Saving your result...");
  try{
   const ref=doc(db,"players",currentUser.uid);
@@ -1384,30 +1327,19 @@ async function finishQuiz(){
     updatedAt:serverTimestamp()
    });
   });
-  clearQuizDraft();
-  await loadProfile(currentUser);
-  trackAnalytics("quiz_complete",{
-   category:selectedCategory,
-   score:score,
-   question_count:quizQuestions.length
-  });
-  setMessage("gameMessage","🏆 Congratulations! You earned "+score+
-   " points. Your new balance is "+savedPoints+".","success");
+  clearQuizDraft();await loadProfile(currentUser);
+  trackAnalytics("quiz_complete",{category:selectedCategory,score:score,question_count:quizQuestions.length});
+  setMessage("gameMessage","🏆 Congratulations! You earned "+score+" points. Your new balance is "+savedPoints+".","success");
   await loadLeaderboard();
  }catch(e){
   gameRunning=true;
-  setMessage("gameMessage","Your score could not be saved: "+friendlyError(e)+
-   " Tap the button below to try saving again.","error");
-  $("nextBtn").classList.remove("hidden");
-  $("nextBtn").textContent="Retry Saving Score";
-  $("nextBtn").onclick=()=>{
-   if(gameRunning&&questionIndex>=quizQuestions.length)finishQuiz();
-  };
+  setMessage("gameMessage","Your score could not be saved: "+friendlyError(e)+" Tap the button below to try saving again.","error");
+  $("nextBtn").classList.remove("hidden");$("nextBtn").textContent="Retry Saving Score";
+  $("nextBtn").onclick=()=>{if(gameRunning&&questionIndex>=quizQuestions.length)finishQuiz();};
  }finally{
   saving=false;$("quitBtn").disabled=false;
   if(!gameRunning){
-   $("quizSetup").classList.remove("hidden");
-   $("quizGame").classList.remove("hidden");
+   $("quizSetup").classList.remove("hidden");$("quizGame").classList.remove("hidden");
    refreshStartButton();
   }
  }
@@ -1431,12 +1363,10 @@ async function loadLeaderboard(){
    const name=document.createElement("span");name.textContent=data.name||"Player";name.style.flex="1";
    const points=document.createElement("strong");points.className="yellow";
    points.textContent=(Number(data.points)||0).toLocaleString()+" ⚡";
-   row.append(rank,name,points);$("leaderboard").appendChild(row);
-   position++;
+   row.append(rank,name,points);$("leaderboard").appendChild(row);position++;
   });
  }catch(e){$("leaderboard").textContent=friendlyError(e);}
 }
-
 $("refreshLeaderboard").onclick=loadLeaderboard;
 
 /* INITIALISE WEBSITE */
@@ -1447,3 +1377,4 @@ console.log("QuizSpark initialised successfully.");
 </script>
 </body>
 </html>
+
