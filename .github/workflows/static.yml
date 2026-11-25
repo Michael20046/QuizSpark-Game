@@ -1,5 +1,5 @@
 
-name: Deploy QuizSpark to GitHub Pages
+name: Deploy QuizSpark to GitHub Pages - fresh run
 
 on:
   push:
