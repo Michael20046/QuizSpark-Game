@@ -22,7 +22,7 @@ gtag('config', 'G-95HWM1FE69');
 <style>
 :root{
  --bg:#101632;--panel:#192344;--panel2:#232f55;--line:#39466e;
- --yellow:#A78BFA;--blue:#A78BFA;--muted:#B8C2DE;
+ --yellow:#FBBF24;--blue:#A78BFA;--muted:#B8C2DE;
  --green:#22c55e;--red:#ef4444;--purple:#7047EB;--lavender:#A78BFA;
 }
 *{box-sizing:border-box}
@@ -39,9 +39,9 @@ header{
  gap:12px;padding:14px 16px;background:#101632;
  position:sticky;top:0;z-index:5;border-bottom:1px solid #39466e
 }
-.brand{display:flex;align-items:center;gap:9px;font-size:21px;font-weight:800;color:#A78BFA}
+.brand{display:flex;align-items:center;gap:9px;font-size:21px;font-weight:800;color:var(--yellow)}
 .brand img{width:34px;height:34px;object-fit:contain;border-radius:8px}
-.points-pill{background:#29365f;color:#C4B5FD;border-radius:22px;padding:9px 12px;font-size:12px;font-weight:700}
+.points-pill{background:#29365f;color:var(--yellow);border-radius:22px;padding:9px 12px;font-size:12px;font-weight:700}
 main{max-width:760px;margin:auto;padding:15px}
 .page{display:none}
 .page.active{display:block}
@@ -54,7 +54,7 @@ h3{font-size:17px;margin:8px 0 12px}
 .grid,.category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
 .stat{background:var(--panel2);border-radius:13px;padding:14px}
 .stat span{font-size:12px;color:var(--muted)}
-.stat strong{display:block;color:#C4B5FD;font-size:23px;margin-top:7px}
+.stat strong{display:block;color:var(--yellow);font-size:23px;margin-top:7px}
 .primary,.secondary,.google{
  width:100%;border:0;border-radius:11px;padding:13px;font-weight:750;margin-top:8px
 }
@@ -93,7 +93,7 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid #
 .progress-track{height:8px;background:#39466e;border-radius:10px;overflow:hidden;margin:12px 0}
 .progress-fill{height:100%;width:0;background:linear-gradient(90deg,#7047EB,#C4B5FD);transition:width .2s}
 .rank-row{display:flex;align-items:center;justify-content:space-between;padding:12px 4px;border-bottom:1px solid var(--line);gap:10px}
-.yellow{color:#C4B5FD}
+.yellow{color:var(--yellow)}
 .avatar{width:70px;height:70px;border-radius:50%;background:#35416b;display:grid;place-items:center;font-size:30px;margin:auto}
 footer{text-align:center;color:#8995b8;font-size:11px;padding:20px}
 .toolbar{display:flex;gap:8px;flex-wrap:wrap}
@@ -789,7 +789,10 @@ async function loadReviews(){
    $("submitReviewBtn").textContent="Update My Review";
    paintReviewStars();
   }else{
+   selectedReviewRating=0;
+   $("reviewComment").value="";
    $("submitReviewBtn").textContent="Submit My Review";
+   paintReviewStars();
   }
 
   holder.replaceChildren();
@@ -948,6 +951,8 @@ onAuthStateChanged(auth,async user=>{
   $("bottomNav").classList.add("hidden");
   $("signupFields").classList.remove("hidden");
   savedPoints=0;games=0;correctTotal=0;lessonsDone=[];lessonQuizzesDone=[];
+  gameRunning=false;saving=false;quizQuestions=[];questionIndex=0;score=0;answered=false;disabledAnswers=[];
+  currentLessonId=null;lessonQuestions=[];lessonQuestionIndex=0;lessonScore=0;lessonAnswered=false;lessonQuizSaving=false;
   selectedReviewRating=0;
   $("reviewComment").value="";
   paintReviewStars();
@@ -1183,9 +1188,74 @@ function buildQuizCategories(){
 }
 
 /* CREATE QUESTIONS */
+/* SUPPLEMENTAL QUESTIONS — shared across all difficulty levels */
+const supplementalQuestions={
+ "General Knowledge":[
+  ["Which planet is known as the Red Planet?","Mars",["Venus","Jupiter","Mercury"]],
+  ["What is the capital city of Japan?","Tokyo",["Seoul","Beijing","Bangkok"]],
+  ["How many sides does a hexagon have?","Six",["Five","Seven","Eight"]]
+ ],
+ "Mathematics":[
+  ["What is 15% of 200?","30",["20","25","35"]],
+  ["What is the square root of 144?","12",["10","14","16"]],
+  ["What is 7 × 8?","56",["48","54","64"]]
+ ],
+ "English":[
+  ["Which word is a synonym for 'rapid'?","Fast",["Quiet","Heavy","Late"]],
+  ["What is the plural of 'analysis'?","Analyses",["Analysises","Analysis","Analysi"]],
+  ["Which punctuation mark ends a direct question?","Question mark",["Comma","Colon","Semicolon"]]
+ ],
+ "Science":[
+  ["Which gas do plants absorb during photosynthesis?","Carbon dioxide",["Oxygen","Nitrogen","Hydrogen"]],
+  ["What is the chemical symbol for gold?","Au",["Ag","Gd","Go"]],
+  ["Which organ pumps blood around the human body?","Heart",["Liver","Lungs","Kidney"]]
+ ],
+ "Sports":[
+  ["How many players from one football team are on the field at a time?","11",["9","10","12"]],
+  ["In tennis, what is a score of zero called?","Love",["Nil","Blank","Deuce"]],
+  ["Which sport uses a shuttlecock?","Badminton",["Squash","Hockey","Table tennis"]]
+ ],
+ "Funny Questions":[
+  ["What has hands but cannot clap?","A clock",["A statue","A chair","A shoe"]],
+  ["What gets wetter as it dries?","A towel",["A sponge","A cloud","A river"]],
+  ["Which month has 28 days?","All of them",["February only","January","June"]]
+ ],
+ "Riddles":[
+  ["What has keys but cannot open locks?","A piano",["A map","A door","A book"]],
+  ["What has one eye but cannot see?","A needle",["A storm","A potato","A camera"]],
+  ["What goes up but never comes down?","Your age",["A balloon","Smoke","A bird"]]
+ ],
+ "Story Questions":[
+  ["Amina saved money every week to buy a bicycle. What does this show?","Planning and patience",["Carelessness","Wastefulness","Dishonesty"]],
+  ["Tunde found a wallet and returned it to its owner. Which value did he show?","Honesty",["Pride","Anger","Jealousy"]],
+  ["A team shared tasks to finish a project. What helped them succeed?","Teamwork",["Competition","Silence","Avoidance"]]
+ ],
+ "Business & Money":[
+  ["What is profit?","Revenue minus costs",["Costs plus debt","Money borrowed","Total expenses"]],
+  ["Why do businesses prepare a budget?","To plan income and spending",["To avoid customers","To increase waste","To stop record keeping"]],
+  ["What is a customer?","A person who buys goods or services",["A company owner only","A bank account","A supplier's vehicle"]]
+ ],
+ "Technology":[
+  ["What does CPU stand for?","Central Processing Unit",["Computer Power Utility","Central Program Upload","Control Panel Unit"]],
+  ["Which of these is a web browser?","Firefox",["Excel","Bluetooth","Android"]],
+  ["What does a strong password help protect?","Your accounts and information",["Your screen brightness","Your battery","Your internet speed"]]
+ ],
+ "Who Is Richest?":[
+  ["Who is generally described as a billionaire?","A person with at least one billion in wealth",["A person with one thousand","A person with no assets","A person with a monthly salary only"]],
+  ["Which source commonly creates business wealth?","Ownership in valuable businesses",["Spending all earnings","Avoiding investment","Having many receipts"]],
+  ["Why can rich-person rankings change?","Asset values and exchange rates change",["The calendar changes","Names change alphabetically","Every ranking is fixed forever"]]
+ ],
+ "Life Skills":[
+  ["What is the first step when setting a useful goal?","Make it clear and specific",["Ignore it","Keep it secret from yourself","Wait without planning"]],
+  ["What should you do before sharing a news story online?","Check whether it is reliable",["Forward it immediately","Change its headline","Assume it is true"]],
+  ["Which is a good way to handle disagreement?","Listen calmly and explain your view",["Shout louder","Stop listening","Insult the other person"]]
+ ]
+};
+
 function makeQuiz(){
  let source=[...(bank[selectedCategory]||bank["General Knowledge"])];
  const difficulty=$("difficulty").value;
+ source.push(...(supplementalQuestions[selectedCategory]||[]));
  if(difficulty==="Advanced"&&advancedExtras[selectedCategory])source.push(...advancedExtras[selectedCategory]);
  if(selectedCategory==="Mathematics"&&difficulty!=="Beginner"){
   for(let i=0;i<12;i++){
@@ -1193,7 +1263,7 @@ function makeQuiz(){
    source.push([`Calculate ${a} × ${b}.`,String(answer),[String(answer+2),String(answer-3),String(answer+10)]]);
   }
  }
- if(difficulty==="Beginner")source=source.slice(0,Math.max(5,source.length-2));
+ if(difficulty==="Beginner")source=source.slice(0,Math.max(5,Math.ceil(source.length*0.65)));
  return shuffle(source).slice(0,Math.min(Number($("questionCount").value),source.length)).map(([q,correct,wrong])=>{
   const options=shuffle([correct,...wrong]);return {q,a:options,correct:options.indexOf(correct)};
  });
@@ -1337,6 +1407,11 @@ async function finishQuiz(){
  }finally{
   saving=false;$("quitBtn").disabled=false;
   if(!gameRunning){
+   $("nextBtn").onclick=()=>{
+    if(!gameRunning||!answered)return;
+    questionIndex++;disabledAnswers=[];answered=false;saveQuizDraft();showQuestion();
+   };
+   $("nextBtn").textContent="Next Question";
    $("quizSetup").classList.remove("hidden");$("quizGame").classList.remove("hidden");
    refreshStartButton();
   }
