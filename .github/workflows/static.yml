@@ -1,3 +1,4 @@
+# QuizSpark GitHub Pages deployment
 name: Deploy QuizSpark to GitHub Pages
 
 on:
