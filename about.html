@@ -107,13 +107,128 @@
       }
     }
   
-/* MATCH THE MAIN QUIZSPARK PURPLE + GOLD BRAND */
-:root{--gold:#F4C95D}
-h1,h2,.logo,.tagline{color:#F4C95D}
-.back{background:linear-gradient(100deg,#7047EB,#936BFF);border:1px solid #F4C95D}
-.back:hover{background:#4930a0}
-.container{border-color:#5943a5;box-shadow:0 16px 40px #0005}
-
+/* QUIZSPARK ABOUT PAGE — PURPLE & GOLD POLISH */
+:root{
+  color-scheme:dark;
+  --qs-gold:#F4C95D;
+  --qs-gold-light:#FFE6A3;
+  --qs-purple:#8058F2;
+  --qs-panel:#211B48;
+}
+body{
+  padding:clamp(14px,3vw,28px);
+  background:
+    radial-gradient(ellipse at 12% 0%,#8058f233,transparent 38%),
+    radial-gradient(ellipse at 92% 18%,#f4c95d16,transparent 30%),
+    linear-gradient(145deg,#101329 0%,#171936 52%,#10162f 100%);
+}
+.container{
+  position:relative;
+  overflow:hidden;
+  max-width:860px;
+  margin:clamp(18px,5vw,54px) auto;
+  padding:clamp(22px,5vw,46px);
+  background:linear-gradient(145deg,#241d50 0%,#1c2446 58%,#211a43 100%);
+  border:1px solid #7960ad;
+  border-radius:24px;
+  box-shadow:0 22px 60px #05051688,inset 0 1px #ffffff12;
+}
+.container:before{
+  content:"";
+  position:absolute;
+  top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,#8058f2,#f4c95d,#ffe6a3,#8058f2);
+}
+.logo{
+  display:table;
+  margin:0 auto 24px;
+  padding:8px 18px;
+  color:#ffe6a3;
+  background:#ffffff0b;
+  border:1px solid #80652f;
+  border-radius:999px;
+  font-size:clamp(23px,5vw,29px);
+  letter-spacing:.4px;
+  text-shadow:0 2px 16px #f4c95d35;
+}
+h1{
+  margin:8px 0 22px;
+  color:var(--qs-gold-light);
+  font-size:clamp(28px,6vw,38px);
+  line-height:1.2;
+  letter-spacing:-.5px;
+  text-shadow:0 3px 22px #f4c95d20;
+}
+h2{
+  margin:32px 0 12px;
+  padding:0 0 9px 13px;
+  color:var(--qs-gold-light);
+  font-size:clamp(19px,4vw,23px);
+  line-height:1.3;
+  border-left:3px solid var(--qs-gold);
+  border-bottom:1px solid #ffffff17;
+}
+p,li{
+  color:#e6e7f5;
+  font-size:clamp(15px,2.5vw,16px);
+  line-height:1.8;
+}
+p{margin:13px 0}
+ul{padding-left:24px;margin:12px 0 20px}
+li{padding-left:4px;margin-bottom:9px}
+li::marker{color:var(--qs-gold)}
+.tagline{
+  margin:32px 0 10px;
+  padding:17px 14px;
+  color:#ffe6a3;
+  background:linear-gradient(110deg,#f4c95d16,#8058f21c);
+  border:1px solid #80652f;
+  border-radius:15px;
+  font-size:clamp(15px,3vw,17px);
+  line-height:1.55;
+}
+.back{
+  display:block;
+  width:100%;
+  max-width:320px;
+  margin:24px auto 0;
+  padding:14px 20px;
+  text-align:center;
+  color:#261a42;
+  background:linear-gradient(110deg,#f4c95d,#ffe6a3);
+  border:1px solid #fff0bd;
+  border-radius:13px;
+  font-weight:800;
+  box-shadow:0 8px 22px #f4c95d25;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.back:hover{
+  color:#261a42;
+  background:linear-gradient(110deg,#ffe6a3,#f4c95d);
+  transform:translateY(-2px);
+  box-shadow:0 11px 26px #f4c95d35;
+}
+.back:focus-visible{
+  outline:3px solid #fff0bd;
+  outline-offset:4px;
+}
+footer{
+  margin-top:30px;
+  padding-top:18px;
+  color:#b9b8d2;
+  border-top:1px solid #ffffff18;
+  line-height:1.6;
+}
+@media(max-width:600px){
+  body{padding:12px}
+  .container{padding:23px 19px;margin:14px auto;border-radius:19px}
+  .logo{margin-bottom:20px}
+  h2{margin-top:27px}
+  .back{max-width:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .back{transition:none}
+}
 </style>
 </head>
 
