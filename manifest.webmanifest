@@ -1,10 +1,10 @@
 {
-  "id": "./",
+  "id": "/QuizSpark-Game/",
   "name": "QuizSpark — Learn, Play and Grow",
   "short_name": "QuizSpark",
   "description": "Learn, play quizzes, challenge yourself and grow smarter.",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/QuizSpark-Game/index.html",
+  "scope": "/QuizSpark-Game/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#101632",
@@ -12,19 +12,19 @@
   "categories": ["education", "games"],
   "icons": [
     {
-      "src": "./quizspark-logo.svg",
+      "src": "/QuizSpark-Game/quizspark-logo.svg",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "./quizspark-logo.svg",
+      "src": "/QuizSpark-Game/quizspark-logo.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "./quizspark-logo.png",
+      "src": "/QuizSpark-Game/quizspark-logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
