@@ -8,6 +8,11 @@
 <meta name="google-adsense-account" content="ca-pub-2631012541843607">
 <title>QuizSpark — Learn, Play and Grow</title>
 <link rel="icon" href="./quizspark-logo.png" type="image/png">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./quizspark-logo.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="QuizSpark">
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-95HWM1FE69"></script>
 <script>
@@ -1811,6 +1816,15 @@ buildLearningCategories();
 buildQuizCategories();
 refreshStartButton();
 console.log("QuizSpark initialised successfully.");
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .catch(error => console.warn("QuizSpark offline support could not start:", error));
+  });
+}
 </script>
 </body>
 </html>

@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "QuizSpark — Learn, Play and Grow",
+  "short_name": "QuizSpark",
+  "description": "Learn, play quizzes, challenge yourself and grow smarter.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#101632",
+  "theme_color": "#101632",
+  "categories": ["education", "games"],
+  "icons": [
+    { "src": "./quizspark-logo.png", "sizes": "any", "type": "image/png", "purpose": "any" }
+  ]
+}
