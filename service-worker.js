@@ -1,5 +1,13 @@
-const CACHE_NAME = "quizspark-shell-v1";
-const APP_SHELL = ["./", "./index.html", "./about.html", "./quizspark-logo.png", "./manifest.webmanifest"];
+const CACHE_NAME = "quizspark-shell-v2";
+const APP_SHELL = [
+  "./",
+  "./index.html",
+  "./about.html",
+  "./privacy.html",
+  "./terms.html",
+  "./quizspark-logo.png",
+  "./manifest.webmanifest"
+];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)));
@@ -30,7 +38,18 @@ self.addEventListener("fetch", event => {
           caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
         }
         return response;
-      }).catch(async () => (await caches.match(request)) || (await caches.match("./index.html")))
+      }).catch(async () => {
+        const cachedPage = await caches.match(request, { ignoreSearch: true });
+        if (cachedPage) return cachedPage;
+
+        if (url.pathname.endsWith("/privacy.html")) {
+          return (await caches.match("./privacy.html")) || Response.error();
+        }
+        if (url.pathname.endsWith("/terms.html")) {
+          return (await caches.match("./terms.html")) || Response.error();
+        }
+        return (await caches.match("./index.html")) || Response.error();
+      })
     );
     return;
   }
