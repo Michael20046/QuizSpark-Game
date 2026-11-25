@@ -552,6 +552,87 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 #authPage #togglePassword:focus-visible{outline:3px solid #ffe6a3;outline-offset:3px}
 @media(max-width:360px){#authPage #togglePassword{min-width:66px;padding:0 9px}}
 
+
+
+/* PLAYER REVIEWS — PURPLE & GOLD EXPERIENCE */
+#homePage #reviewsSection{
+ position:relative;overflow:hidden;
+ border:1px solid #7960ad;border-radius:20px;
+ background:radial-gradient(circle at 100% 0%,#f4c95d18,transparent 34%),linear-gradient(145deg,#211a48 0%,#1c2447 58%,#251b49 100%);
+ box-shadow:0 12px 28px #08051f44
+}
+#homePage #reviewsSection>h2{color:#ffe6a3;font-size:clamp(20px,5vw,25px);line-height:1.25}
+#homePage #reviewsSection>h3{color:#f4d98c;margin:18px 0 9px}
+#homePage #reviewsSection>p.muted{color:#d2c9e8;line-height:1.6}
+#homePage #reviewsSection label{display:block;color:#f5e7bd;font-weight:700;margin:12px 0 7px}
+#homePage #reviewsSection #reviewComment{
+ width:100%;min-height:112px;resize:vertical;padding:13px 14px;
+ color:#fff;background:#151d3b;border:1px solid #65538d;border-radius:13px;
+ line-height:1.55;outline:none;transition:border-color .18s ease,box-shadow .18s ease
+}
+#homePage #reviewsSection #reviewComment::placeholder{color:#9da8c8}
+#homePage #reviewsSection #reviewComment:focus{border-color:#f4c95d;box-shadow:0 0 0 3px #f4c95d25}
+#homePage #reviewsSection .review-stars{gap:9px;margin:12px 0 16px}
+#homePage #reviewsSection .review-star{
+ display:grid;place-items:center;min-width:49px;min-height:49px;
+ border:1px solid #6c5a91;border-radius:13px;
+ background:linear-gradient(145deg,#30265b,#20294d);
+ color:#aeb8d6;font-size:29px;line-height:1;
+ box-shadow:0 4px 12px #08051f33;
+ transition:transform .16s ease,border-color .16s ease,background .16s ease,color .16s ease
+}
+#homePage #reviewsSection .review-star.selected{
+ color:#ffe6a3;border-color:#f4c95d;
+ background:linear-gradient(145deg,#6b4d18,#49330d);
+ box-shadow:0 0 0 2px #f4c95d20,0 5px 14px #08051f44
+}
+#homePage #reviewsSection .review-star:focus-visible{outline:3px solid #ffe6a3;outline-offset:3px}
+#homePage #reviewsSection .review-hint{color:#b9c2df;margin:8px 0 13px}
+#homePage #reviewsSection #submitReviewBtn{
+ width:100%;min-height:48px;border:1px solid #ffe6a3;border-radius:13px;
+ color:#281b43;background:linear-gradient(110deg,#f4c95d,#ffe6a3);
+ font-weight:850;box-shadow:0 6px 18px #f4c95d25
+}
+#homePage #reviewsSection #reviewMessage{line-height:1.5}
+#homePage #reviewsSection .stat{
+ margin-top:17px;padding:17px;border:1px solid #80652f;border-radius:16px;
+ background:linear-gradient(135deg,#382b50,#252344 70%,#202747);
+ box-shadow:inset 0 1px #ffffff0b
+}
+#homePage #reviewsSection .stat>span{color:#f4dfa6;font-weight:700}
+#homePage #reviewsSection .review-average{font-size:clamp(27px,7vw,34px);color:#ffe6a3;letter-spacing:.2px}
+#homePage #reviewsSection #reviewTotal{color:#c8c2df;margin:5px 0 0}
+#homePage #reviewsSection #reviewsList{margin-top:10px}
+#homePage #reviewsSection .review-card{
+ position:relative;overflow:hidden;margin:12px 0;padding:15px 15px 14px;
+ border:1px solid #51477b;border-radius:15px;
+ background:linear-gradient(145deg,#29244f,#202747 72%,#1b2344);
+ box-shadow:0 6px 16px #08051f2e
+}
+#homePage #reviewsSection .review-card:before{
+ content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(#ffe6a3,#b58b3b)
+}
+#homePage #reviewsSection .review-card .review-name{color:#ffe6a3;font-size:14px}
+#homePage #reviewsSection .review-card .review-rating{color:#f4c95d;font-size:16px;letter-spacing:1px}
+#homePage #reviewsSection .review-card .review-comment{color:#e5e8f6;line-height:1.65}
+#homePage #reviewsSection .review-card .review-date{color:#aeb8d6}
+#homePage #reviewsSection #refreshReviewsBtn{
+ width:100%;min-height:44px;margin-top:8px;border:1px solid #7960ad;border-radius:12px;
+ color:#f5e7bd;background:#ffffff0b;font-weight:750
+}
+@media(hover:hover){
+ #homePage #reviewsSection .review-star:hover{transform:translateY(-2px);border-color:#f4c95d;color:#ffe6a3}
+ #homePage #reviewsSection #refreshReviewsBtn:hover{background:#ffffff16;border-color:#f4c95d}
+}
+@media(max-width:420px){
+ #homePage #reviewsSection{padding:15px}
+ #homePage #reviewsSection .review-stars{gap:7px}
+ #homePage #reviewsSection .review-star{min-width:44px;min-height:46px;padding:7px}
+ #homePage #reviewsSection .review-card{padding:13px}
+}
+@media(prefers-reduced-motion:reduce){
+ #homePage #reviewsSection .review-star{transition:none}
+}
 </style>
 </head>
 
@@ -1828,83 +1909,3 @@ if ("serviceWorker" in navigator) {
 </script>
 </body>
 </html>
-
-/* PLAYER REVIEWS — PURPLE & GOLD EXPERIENCE */
-#homePage #reviewsSection{
- position:relative;overflow:hidden;
- border:1px solid #7960ad;border-radius:20px;
- background:radial-gradient(circle at 100% 0%,#f4c95d18,transparent 34%),linear-gradient(145deg,#211a48 0%,#1c2447 58%,#251b49 100%);
- box-shadow:0 12px 28px #08051f44
-}
-#homePage #reviewsSection>h2{color:#ffe6a3;font-size:clamp(20px,5vw,25px);line-height:1.25}
-#homePage #reviewsSection>h3{color:#f4d98c;margin:18px 0 9px}
-#homePage #reviewsSection>p.muted{color:#d2c9e8;line-height:1.6}
-#homePage #reviewsSection label{display:block;color:#f5e7bd;font-weight:700;margin:12px 0 7px}
-#homePage #reviewsSection #reviewComment{
- width:100%;min-height:112px;resize:vertical;padding:13px 14px;
- color:#fff;background:#151d3b;border:1px solid #65538d;border-radius:13px;
- line-height:1.55;outline:none;transition:border-color .18s ease,box-shadow .18s ease
-}
-#homePage #reviewsSection #reviewComment::placeholder{color:#9da8c8}
-#homePage #reviewsSection #reviewComment:focus{border-color:#f4c95d;box-shadow:0 0 0 3px #f4c95d25}
-#homePage #reviewsSection .review-stars{gap:9px;margin:12px 0 16px}
-#homePage #reviewsSection .review-star{
- display:grid;place-items:center;min-width:49px;min-height:49px;
- border:1px solid #6c5a91;border-radius:13px;
- background:linear-gradient(145deg,#30265b,#20294d);
- color:#aeb8d6;font-size:29px;line-height:1;
- box-shadow:0 4px 12px #08051f33;
- transition:transform .16s ease,border-color .16s ease,background .16s ease,color .16s ease
-}
-#homePage #reviewsSection .review-star.selected{
- color:#ffe6a3;border-color:#f4c95d;
- background:linear-gradient(145deg,#6b4d18,#49330d);
- box-shadow:0 0 0 2px #f4c95d20,0 5px 14px #08051f44
-}
-#homePage #reviewsSection .review-star:focus-visible{outline:3px solid #ffe6a3;outline-offset:3px}
-#homePage #reviewsSection .review-hint{color:#b9c2df;margin:8px 0 13px}
-#homePage #reviewsSection #submitReviewBtn{
- width:100%;min-height:48px;border:1px solid #ffe6a3;border-radius:13px;
- color:#281b43;background:linear-gradient(110deg,#f4c95d,#ffe6a3);
- font-weight:850;box-shadow:0 6px 18px #f4c95d25
-}
-#homePage #reviewsSection #reviewMessage{line-height:1.5}
-#homePage #reviewsSection .stat{
- margin-top:17px;padding:17px;border:1px solid #80652f;border-radius:16px;
- background:linear-gradient(135deg,#382b50,#252344 70%,#202747);
- box-shadow:inset 0 1px #ffffff0b
-}
-#homePage #reviewsSection .stat>span{color:#f4dfa6;font-weight:700}
-#homePage #reviewsSection .review-average{font-size:clamp(27px,7vw,34px);color:#ffe6a3;letter-spacing:.2px}
-#homePage #reviewsSection #reviewTotal{color:#c8c2df;margin:5px 0 0}
-#homePage #reviewsSection #reviewsList{margin-top:10px}
-#homePage #reviewsSection .review-card{
- position:relative;overflow:hidden;margin:12px 0;padding:15px 15px 14px;
- border:1px solid #51477b;border-radius:15px;
- background:linear-gradient(145deg,#29244f,#202747 72%,#1b2344);
- box-shadow:0 6px 16px #08051f2e
-}
-#homePage #reviewsSection .review-card:before{
- content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(#ffe6a3,#b58b3b)
-}
-#homePage #reviewsSection .review-card .review-name{color:#ffe6a3;font-size:14px}
-#homePage #reviewsSection .review-card .review-rating{color:#f4c95d;font-size:16px;letter-spacing:1px}
-#homePage #reviewsSection .review-card .review-comment{color:#e5e8f6;line-height:1.65}
-#homePage #reviewsSection .review-card .review-date{color:#aeb8d6}
-#homePage #reviewsSection #refreshReviewsBtn{
- width:100%;min-height:44px;margin-top:8px;border:1px solid #7960ad;border-radius:12px;
- color:#f5e7bd;background:#ffffff0b;font-weight:750
-}
-@media(hover:hover){
- #homePage #reviewsSection .review-star:hover{transform:translateY(-2px);border-color:#f4c95d;color:#ffe6a3}
- #homePage #reviewsSection #refreshReviewsBtn:hover{background:#ffffff16;border-color:#f4c95d}
-}
-@media(max-width:420px){
- #homePage #reviewsSection{padding:15px}
- #homePage #reviewsSection .review-stars{gap:7px}
- #homePage #reviewsSection .review-star{min-width:44px;min-height:46px;padding:7px}
- #homePage #reviewsSection .review-card{padding:13px}
-}
-@media(prefers-reduced-motion:reduce){
- #homePage #reviewsSection .review-star{transition:none}
-}
