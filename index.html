@@ -217,6 +217,45 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 }
 
 
+
+/* QUIZ RESULTS SCREEN POLISH */
+#playPage #quizGame.quiz-complete{
+ background:radial-gradient(circle at 50% 0%,#6b4bc044,transparent 42%),linear-gradient(155deg,#24194d,#192344 70%,#171d3a);
+ border:1px solid #d4ad52;box-shadow:0 16px 38px #08051f77;
+}
+#playPage #quizGame.quiz-complete #question{
+ display:grid;place-items:center;text-align:center;
+ min-height:104px;margin:12px 0 8px;padding:18px;
+ border:1px solid #9b7a42;border-radius:18px;
+ background:linear-gradient(135deg,#3b286d,#29234f);
+ color:#ffe6a3;font-size:clamp(23px,6vw,30px);font-weight:850;
+}
+#playPage #quizGame.quiz-complete .stat{
+ min-height:104px;display:flex;flex-direction:column;justify-content:center;
+ background:linear-gradient(145deg,#3a2b68,#252447);
+ border-color:#9b7a42;text-align:center;
+}
+#playPage #quizGame.quiz-complete .stat strong{
+ color:#ffe6a3;font-size:clamp(28px,7vw,34px);
+}
+#playPage #quizGame.quiz-complete #progressFill{
+ background:linear-gradient(90deg,#f4c95d,#fff0b8);
+}
+#playPage #quizGame.quiz-complete #gameMessage{
+ margin:16px 0 10px;padding:17px 15px;text-align:center;
+ border:1px solid #8d713e;border-radius:15px;
+ background:#302653;color:#fff0c2;font-size:15px;line-height:1.65;
+}
+#playPage #quizGame.quiz-complete #gameMessage.success{
+ color:#fff0c2;
+}
+#playPage #quizGame.quiz-complete #quitBtn{display:none}
+#playPage #quizGame.quiz-complete #nextBtn{width:100%;margin-top:10px}
+@media(max-width:420px){
+ #playPage #quizGame.quiz-complete{padding:15px}
+ #playPage #quizGame.quiz-complete #question{min-height:90px}
+}
+
 /* QUIZ GAMEPLAY SCREEN POLISH */
 #playPage #quizGame{
  background:linear-gradient(155deg,#211b43 0%,#192344 58%,#171d3a 100%);
@@ -1397,6 +1436,7 @@ function startOrResumeQuiz(){
  const draft=readQuizDraft();
  if(draft){
   quizQuestions=draft.questions;questionIndex=draft.index;score=draft.score;
+  $("quizGame").classList.remove("quiz-complete");
   selectedCategory=draft.category||selectedCategory;disabledAnswers=draft.disabled||[];
   answered=draft.version===2?Boolean(draft.answered):false;
   $("gamePoints").textContent=String(score);
@@ -1404,6 +1444,7 @@ function startOrResumeQuiz(){
   gameRunning=true;buildQuizCategories();showQuestion();return;
  }
  quizQuestions=makeQuiz();if(!quizQuestions.length)return;
+ $("quizGame").classList.remove("quiz-complete");
  questionIndex=0;score=0;answered=false;disabledAnswers=[];gameRunning=true;
  trackAnalytics("quiz_start",{category:selectedCategory,difficulty:$("difficulty").value,question_count:quizQuestions.length});
  saveQuizDraft();
@@ -1468,6 +1509,7 @@ $("quitBtn").onclick=()=>{
 async function finishQuiz(){
  if(!gameRunning||saving)return;
  gameRunning=false;saving=true;
+ $("quizGame").classList.add("quiz-complete");
  $("answers").replaceChildren();
  $("question").textContent="Quiz Completed! 🎉";
  $("progressFill").style.width="100%";
