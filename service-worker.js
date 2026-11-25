@@ -1,11 +1,11 @@
-const CACHE_NAME = "quizspark-shell-v2";
+const CACHE_NAME = "quizspark-shell-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./about.html",
   "./privacy.html",
   "./terms.html",
-  "./quizspark-logo.png",
+  "./quizspark-logo.svg",
   "./manifest.webmanifest"
 ];
 
