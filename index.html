@@ -673,6 +673,18 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
   <div id="signupFields">
    <label for="name">Your name</label>
    <input id="name" placeholder="Enter your name" autocomplete="name" maxlength="50">
+   <label for="country">Your country</label>
+   <select id="country" autocomplete="country-name">
+    <option value="">Select your country</option>
+    <option value="Nigeria">Nigeria</option>
+    <option value="United States">United States</option>
+    <option value="Canada">Canada</option>
+    <option value="United Kingdom">United Kingdom</option>
+    <option value="South Africa">South Africa</option>
+    <option value="Ghana">Ghana</option>
+    <option value="Other">Other</option>
+   </select>
+   <p class="review-hint">Your country helps us understand where QuizSpark players are joining from.</p>
   </div>
   <label for="email">Email address</label>
   <input id="email" type="email" placeholder="Email address" autocomplete="email">
@@ -1227,7 +1239,9 @@ async function createProfile(user){
  const snap=await getDoc(ref);
  if(!snap.exists()){
   await setDoc(ref,{
-   name:user.displayName||"Player",points:0,gamesPlayed:0,correctAnswers:0,
+   name:user.displayName||"Player",
+   country:$("country")?.value||"Unknown",
+   points:0,gamesPlayed:0,correctAnswers:0,
    lessonsCompleted:[],lessonQuizzesCompleted:[],createdAt:serverTimestamp()
   });
  }else if(user.displayName&&user.displayName!==snap.data().name){
@@ -1408,6 +1422,7 @@ $("signupBtn").onclick=async()=>{
  const email=$("email").value.trim();
  const password=$("password").value;
  if(!name||!email||!password)return setMessage("authMessage","Please complete all fields.","error");
+ if(!$("country").value)return setMessage("authMessage","Please select your country.","error");
  if(name.length>50)return setMessage("authMessage","Your name must be 50 characters or fewer.","error");
  if(password.length<6)return setMessage("authMessage","Password must contain at least 6 characters.","error");
  try{
