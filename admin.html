@@ -46,10 +46,11 @@ small{color:var(--muted)}@media(max-width:480px){main{padding:10px}header{paddin
 <div class="stat"><span>Total player points</span><strong id="pointsCount">—</strong></div>
 <div class="stat"><span>Reviews submitted</span><strong id="reviewCount">—</strong></div>
 <div class="stat"><span>Average rating</span><strong id="averageRating">—</strong></div>
+<div class="stat"><span>Countries represented</span><strong id="countryCount">—</strong></div>
 </div>
 <section class="card">
 <div class="section-head"><h2>Registered players</h2><input id="playerSearch" type="search" placeholder="Search players" style="max-width:260px"></div>
-<div class="table-wrap"><table><thead><tr><th>Player</th><th>Games played</th><th>Correct answers</th><th>Points</th><th>Last updated</th></tr></thead><tbody id="playersBody"><tr><td colspan="5">No data loaded yet.</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Player</th><th>Country</th><th>Games played</th><th>Correct answers</th><th>Points</th><th>Last updated</th></tr></thead><tbody id="playersBody"><tr><td colspan="6">No data loaded yet.</td></tr></tbody></table></div>
 </section>
 <section class="card">
 <h2>Player reviews</h2>
@@ -87,7 +88,7 @@ function renderPlayers(){
  const term=$("playerSearch").value.trim().toLowerCase(),body=$("playersBody");body.replaceChildren();
  const filtered=playersCache.filter(p=>(p.name||"").toLowerCase().includes(term));
  if(!filtered.length){const tr=document.createElement("tr"),td=cell("No matching players found.");td.colSpan=5;tr.append(td);body.append(tr);return;}
- filtered.forEach(p=>{const tr=document.createElement("tr");tr.append(cell(p.name||"Unnamed player"),cell(p.gamesPlayed||0),cell(p.correctAnswers||0),cell(p.points||0),cell(dateText(p.updatedAt||p.createdAt)));body.append(tr);});
+ filtered.forEach(p=>{const tr=document.createElement("tr");tr.append(cell(p.name||"Unnamed player"),cell(p.country||"Unknown"),cell(p.gamesPlayed||0),cell(p.correctAnswers||0),cell(p.points||0),cell(dateText(p.updatedAt||p.createdAt)));body.append(tr);});
 }
 async function loadDashboard(){
  showMessage("dashboardMessage","Loading QuizSpark data...");
@@ -102,6 +103,9 @@ async function loadDashboard(){
   $("reviewCount").textContent=reviews.length;
   const ratings=reviews.map(r=>Number(r.rating)).filter(n=>n>=1&&n<=5);
   $("averageRating").textContent=ratings.length?(ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1)+"/5":"—";
+  const countryTotals={};
+  playersCache.forEach(p=>{const country=(p.country||"Unknown").trim()||"Unknown";countryTotals[country]=(countryTotals[country]||0)+1;});
+  $("countryCount").textContent=Object.keys(countryTotals).filter(c=>c!=="Unknown").length;
   renderPlayers();
   const rb=$("reviewsBody");rb.replaceChildren();
   if(!reviews.length){const tr=document.createElement("tr"),td=cell("No reviews submitted yet.");td.colSpan=4;tr.append(td);rb.append(tr);}
