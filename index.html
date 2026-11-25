@@ -635,6 +635,22 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 @media(prefers-reduced-motion:reduce){
  #homePage #reviewsSection .review-star{transition:none}
 }
+
+/* APP INSTALL CONTROL */
+.install-app-btn{
+ border:1px solid #8f78d6;border-radius:10px;padding:9px 11px;
+ color:#fff;background:linear-gradient(100deg,#7047EB,#4930a0);
+ font-size:12px;font-weight:800;white-space:nowrap
+}
+.install-help{
+ margin:10px 15px 0;padding:12px 14px;border:1px solid #5943a5;
+ border-radius:12px;background:#192344;color:#D8CCFF;
+ font-size:13px;line-height:1.55
+}
+@media(max-width:380px){
+ .brand{font-size:18px}.install-app-btn{padding:8px;font-size:11px}
+ .points-pill{padding:8px;font-size:11px}
+}
 </style>
 </head>
 
@@ -642,7 +658,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 <header>
  <div class="brand"><img src="./quizspark-logo.png" alt="QuizSpark logo" onerror="this.style.display='none'">⚡ QuizSpark</div>
  <div class="points-pill" id="headerPoints">⚡ 0 Points</div>
+ <button class="install-app-btn" id="installAppBtn" type="button">Install App</button>
 </header>
+<div class="install-help hidden" id="installHelp" role="status" aria-live="polite"></div>
 
 <main>
 <section id="authPage" class="page active">
@@ -1909,5 +1927,53 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
+
+<script>
+/* QUIZSPARK APP INSTALL */
+(() => {
+  const button = document.getElementById("installAppBtn");
+  const help = document.getElementById("installHelp");
+  if (!button || !help) return;
+
+  let deferredPrompt = null;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches ||
+    navigator.standalone === true;
+
+  if (isStandalone) {
+    button.hidden = true;
+    return;
+  }
+
+  help.textContent = isIOS
+    ? "To add QuizSpark to your iPhone: open this site in Safari, tap Share, choose Add to Home Screen, then tap Add."
+    : "Tap Install App if your browser offers installation. If no install prompt appears, open your browser menu and choose Install app or Add to Home screen.";
+
+  button.addEventListener("click", async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      if (choice && choice.outcome === "accepted") {
+        button.hidden = true;
+        help.classList.add("hidden");
+      }
+      deferredPrompt = null;
+      return;
+    }
+    help.classList.toggle("hidden");
+  });
+
+  window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+    deferredPrompt = event;
+  });
+
+  window.addEventListener("appinstalled", () => {
+    button.hidden = true;
+    help.classList.add("hidden");
+  });
+})();
+</script>
+
 </body>
 </html>
