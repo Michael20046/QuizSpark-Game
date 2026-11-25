@@ -29,6 +29,8 @@ self.addEventListener("fetch", event => {
   if (request.method !== "GET") return;
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+  // Let search-engine files load directly from GitHub Pages, never from the app shell cache.
+  if (url.pathname.endsWith("/sitemap.xml") || url.pathname.endsWith("/robots.txt")) return;
 
   if (request.mode === "navigate") {
     event.respondWith(
