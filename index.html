@@ -322,6 +322,75 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
  }
 }
 
+
+/* LEADERBOARD PODIUM AND RANKING POLISH */
+#leaderboardPage .hero{
+ background:radial-gradient(circle at 92% 8%,#f4c95d2b,transparent 34%),linear-gradient(135deg,#24164f,#4930a0 55%,#182b59);
+ border-color:#a98bdf;box-shadow:0 14px 32px #08051f55;
+}
+#leaderboardPage .card{
+ padding:17px;background:linear-gradient(155deg,#211b43,#192344 72%);
+ border:1px solid #66529a;box-shadow:0 12px 28px #08051f44;
+}
+#leaderboard{
+ display:grid;gap:9px;min-width:0;
+}
+#leaderboard .rank-row{
+ display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;
+ gap:11px;min-height:62px;padding:11px 13px;
+ border:1px solid #49416f;border-radius:13px;
+ background:linear-gradient(110deg,#29264f,#202747);
+ box-shadow:0 4px 12px #08051f22;
+}
+#leaderboard .rank-row>strong:first-child{
+ display:grid;place-items:center;width:36px;height:36px;
+ border-radius:11px;background:#37305d;color:#ffe6a3;
+ font-size:15px;
+}
+#leaderboard .rank-row>span{
+ min-width:0;color:#f5f1ff;font-size:14px;font-weight:650;
+ overflow-wrap:anywhere;
+}
+#leaderboard .rank-row>strong:last-child{
+ color:#ffe6a3;font-size:14px;white-space:nowrap;
+ font-variant-numeric:tabular-nums;
+}
+#leaderboard .rank-row:nth-child(1){
+ min-height:76px;padding:14px;
+ border:1px solid #f4c95d;
+ background:radial-gradient(circle at 100% 0,#f4c95d26,transparent 48%),linear-gradient(110deg,#49356e,#30245f);
+ box-shadow:0 7px 20px #f4c95d16;
+}
+#leaderboard .rank-row:nth-child(1)>strong:first-child{
+ width:44px;height:44px;background:#f4c95d;color:#38234d;font-size:22px;
+}
+#leaderboard .rank-row:nth-child(1)>span{font-size:15px;color:#fff4d3}
+#leaderboard .rank-row:nth-child(1)>strong:last-child{font-size:16px}
+#leaderboard .rank-row:nth-child(2){
+ border-color:#9da9c5;background:linear-gradient(110deg,#303957,#242d4b);
+}
+#leaderboard .rank-row:nth-child(2)>strong:first-child{background:#aebbd3;color:#1c2542}
+#leaderboard .rank-row:nth-child(3){
+ border-color:#a87954;background:linear-gradient(110deg,#49332f,#292747);
+}
+#leaderboard .rank-row:nth-child(3)>strong:first-child{background:#b87952;color:#281a24}
+#leaderboardPage #refreshLeaderboard{
+ margin-top:16px;border:1px solid #8f7136;
+ background:linear-gradient(105deg,#f4c95d,#ffe6a3);color:#271747;
+ box-shadow:0 5px 16px #f4c95d22;
+}
+@media(max-width:380px){
+ #leaderboardPage .card{padding:12px}
+ #leaderboard .rank-row{grid-template-columns:36px minmax(0,1fr) auto;gap:8px;padding:10px}
+ #leaderboard .rank-row>strong:first-child{width:32px;height:32px}
+ #leaderboard .rank-row>span{font-size:13px}
+ #leaderboard .rank-row>strong:last-child{font-size:12px}
+}
+@media(prefers-reduced-motion:no-preference){
+ #leaderboard .rank-row{transition:transform .16s ease,border-color .16s ease}
+ #leaderboard .rank-row:hover{transform:translateY(-1px);border-color:#a98bdf}
+}
+
 </style>
 </head>
 
