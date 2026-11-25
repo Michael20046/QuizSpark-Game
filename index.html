@@ -476,6 +476,65 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
  #learnPage #lessonList .lesson{padding:14px}
 }
 
+
+/* AUTHENTICATION SCREEN — PURPLE & GOLD POLISH */
+#authPage{padding-top:8px}
+#authPage>.hero{
+ position:relative;overflow:hidden;isolation:isolate;
+ padding:30px 22px 26px;border:1px solid #a98bdf;border-radius:22px;
+ background:radial-gradient(circle at 92% 8%,#f4c95d35,transparent 34%),linear-gradient(135deg,#24164f 0%,#4930a0 55%,#182b59 100%);
+ box-shadow:0 16px 34px #08051f66
+}
+#authPage>.hero:after{
+ content:"⚡";position:absolute;z-index:-1;right:18px;top:10px;
+ color:#ffe6a3;font-size:86px;opacity:.14;transform:rotate(12deg)
+}
+#authPage>.hero h1{max-width:88%;font-size:clamp(27px,6vw,35px);line-height:1.16;color:#ffe6a3}
+#authPage>.hero p{max-width:480px;color:#eee8ff;font-size:15px;line-height:1.65}
+#authPage>.card{
+ position:relative;padding:22px 19px 20px;border:1px solid #7960ad;border-radius:21px;
+ background:linear-gradient(155deg,#211b43,#192344 76%);box-shadow:0 14px 32px #08051f55
+}
+#authPage>.card h2{margin:0 0 19px;color:#ffe6a3;font-size:23px}
+#authPage>.card label{margin:12px 0 6px;color:#e8ddff;font-weight:700}
+#authPage>.card input{
+ min-height:49px;margin:0 0 8px;padding:13px 14px;
+ border:1px solid #66558f;border-radius:12px;background:#111a38;color:#fff;
+ transition:border-color .18s ease,box-shadow .18s ease
+}
+#authPage>.card input::placeholder{color:#9da8c8}
+#authPage>.card input:focus{border-color:#f4c95d;box-shadow:0 0 0 3px #f4c95d22;outline:none}
+#authPage #signupBtn{
+ min-height:49px;margin-top:12px;border:1px solid #ffe6a3;border-radius:13px;
+ color:#281b43;background:linear-gradient(110deg,#f4c95d,#ffe6a3);
+ box-shadow:0 6px 18px #f4c95d2b;font-weight:850
+}
+#authPage #loginBtn{
+ min-height:47px;border:1px solid #9b7acb;border-radius:13px;
+ color:#f5efff;background:linear-gradient(110deg,#49356e,#30245f)
+}
+#authPage #forgotBtn{
+ min-height:43px;margin-top:5px;border:1px solid #51477b;border-radius:12px;
+ color:#d8ccff;background:#ffffff08;font-weight:700
+}
+#authPage #googleBtn{
+ min-height:48px;margin-top:13px;border:1px solid #d7cafa;border-radius:13px;
+ color:#292044;background:linear-gradient(110deg,#fff,#eee8ff);font-weight:800
+}
+#authPage #authMessage{
+ margin:15px 0 0;padding:11px 12px;border:1px solid #51477b;border-radius:11px;
+ background:#ffffff08;color:#d8ccff;line-height:1.55
+}
+@media(max-width:420px){
+ #authPage>.hero{padding:24px 16px 20px}
+ #authPage>.hero h1{max-width:100%;font-size:27px}
+ #authPage>.hero:after{right:8px;top:5px;font-size:60px}
+ #authPage>.card{padding:18px 15px}
+}
+@media(prefers-reduced-motion:reduce){
+ #authPage>.card input{transition:none}
+}
+
 </style>
 </head>
 
