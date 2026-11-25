@@ -11,6 +11,6 @@
   "theme_color": "#101632",
   "categories": ["education", "games"],
   "icons": [
-    { "src": "./quizspark-logo.png", "sizes": "any", "type": "image/png", "purpose": "any" }
+    { "src": "./quizspark-logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ]
 }
