@@ -1,5 +1,4 @@
-
-name: Deploy QuizSpark to GitHub Pages - fresh run
+name: Deploy QuizSpark to GitHub Pages
 
 on:
   push:
@@ -39,5 +38,3 @@ jobs:
       - name: Deploy website
         id: deployment
         uses: actions/deploy-pages@v5
-        with:
-          # Use the standard GitHub Pages artifact name.
