@@ -216,6 +216,73 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
+
+/* QUIZ GAMEPLAY SCREEN POLISH */
+#playPage #quizGame{
+ background:linear-gradient(155deg,#211b43 0%,#192344 58%,#171d3a 100%);
+ border:1px solid #66529a;border-radius:20px;
+ box-shadow:0 14px 30px #08051f55;padding:19px;
+}
+#playPage #quizGame .stat{
+ background:linear-gradient(145deg,#30245f,#23294d);
+ border:1px solid #68539b;border-radius:14px;min-height:83px;
+}
+#playPage #quizGame .stat span{color:#d7cafa;font-size:12px}
+#playPage #quizGame .stat strong{color:var(--gold-soft);font-size:25px}
+#playPage #quizGame .progress-track{
+ height:10px;background:#101632;border:1px solid #4a416e;
+ margin:17px 0 21px;
+}
+#playPage #quizGame .progress-fill{
+ background:linear-gradient(90deg,#8b5cf6,#f4c95d);
+ border-radius:10px;
+}
+#playPage #quizGame #question{
+ font-size:clamp(19px,5vw,24px);line-height:1.45;
+ color:#fff;margin:8px 0 17px;
+}
+#playPage #quizGame #answers{display:grid;gap:10px}
+#playPage #quizGame .answer{
+ margin:0;min-height:54px;padding:15px 16px;
+ border:1px solid #5b5682;border-radius:13px;
+ background:linear-gradient(110deg,#2a3158,#252447);
+ color:#f8f7ff;font-size:15px;line-height:1.45;
+ transition:transform .15s ease,border-color .15s ease,background .15s ease;
+}
+#playPage #quizGame .answer:not(:disabled):active{transform:scale(.985)}
+#playPage #quizGame .answer:not(:disabled):focus-visible{
+ outline:3px solid var(--gold);outline-offset:2px;
+}
+#playPage #quizGame .answer.correct{
+ background:linear-gradient(110deg,#14532d,#166534);
+ border:2px solid #4ade80;color:#f0fdf4;
+}
+#playPage #quizGame .answer.wrong{
+ background:linear-gradient(110deg,#7f1d1d,#991b1b);
+ border:1px solid #f87171;color:#fee2e2;opacity:.85;
+}
+#playPage #quizGame #gameMessage{
+ min-height:24px;margin:14px 0 8px;font-size:14px;
+}
+#playPage #quizGame #nextBtn{
+ background:linear-gradient(105deg,#f4c95d,#ffe6a3);
+ color:#271747;box-shadow:0 5px 16px #f4c95d2b;
+}
+#playPage #quizGame #quitBtn{
+ border:1px solid #68539b;background:#242447;color:#e6ddff;
+}
+@media(max-width:420px){
+ #playPage #quizGame{padding:15px}
+ #playPage #quizGame .answer{min-height:52px;padding:13px;font-size:14px}
+ #playPage #quizGame #question{font-size:19px}
+}
+@media(hover:hover){
+ #playPage #quizGame .answer:not(:disabled):hover{
+  transform:translateY(-1px);border-color:var(--gold);
+  background:linear-gradient(110deg,#3a326b,#302b59);
+ }
+}
+
 </style>
 </head>
 
