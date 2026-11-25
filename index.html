@@ -1376,6 +1376,7 @@ $("quitBtn").onclick=()=>{
 async function finishQuiz(){
  if(!gameRunning||saving)return;
  gameRunning=false;saving=true;
+ let scoreCommitted=false;
  $("answers").replaceChildren();
  $("question").textContent="Quiz Completed! 🎉";
  $("progressFill").style.width="100%";
@@ -1395,15 +1396,28 @@ async function finishQuiz(){
     updatedAt:serverTimestamp()
    });
   });
-  clearQuizDraft();await loadProfile(currentUser);
-  trackAnalytics("quiz_complete",{category:selectedCategory,score:score,question_count:quizQuestions.length});
-  setMessage("gameMessage","🏆 Congratulations! You earned "+score+" points. Your new balance is "+savedPoints+".","success");
-  await loadLeaderboard();
+  scoreCommitted=true;
+  clearQuizDraft();
+  setMessage("gameMessage","🏆 Your score was saved! Refreshing your profile...");
+  try{
+   await loadProfile(currentUser);
+   trackAnalytics("quiz_complete",{category:selectedCategory,score:score,question_count:quizQuestions.length});
+   await loadLeaderboard();
+   setMessage("gameMessage","🏆 Congratulations! You earned "+score+" points. Your new balance is "+savedPoints+".","success");
+  }catch(refreshError){
+   console.warn("Score saved, but a follow-up refresh failed:",refreshError);
+   setMessage("gameMessage","Your score was saved successfully. Your dashboard may need to be refreshed.","success");
+  }
  }catch(e){
-  gameRunning=true;
-  setMessage("gameMessage","Your score could not be saved: "+friendlyError(e)+" Tap the button below to try saving again.","error");
-  $("nextBtn").classList.remove("hidden");$("nextBtn").textContent="Retry Saving Score";
-  $("nextBtn").onclick=()=>{if(gameRunning&&questionIndex>=quizQuestions.length)finishQuiz();};
+  if(scoreCommitted){
+   clearQuizDraft();
+   setMessage("gameMessage","Your score was saved successfully. Your dashboard may need to be refreshed.","success");
+  }else{
+   gameRunning=true;
+   setMessage("gameMessage","Your score could not be saved: "+friendlyError(e)+" Tap the button below to try saving again.","error");
+   $("nextBtn").classList.remove("hidden");$("nextBtn").textContent="Retry Saving Score";
+   $("nextBtn").onclick=()=>{if(gameRunning&&questionIndex>=quizQuestions.length)finishQuiz();};
+  }
  }finally{
   saving=false;$("quitBtn").disabled=false;
   if(!gameRunning){
@@ -1417,7 +1431,6 @@ async function finishQuiz(){
   }
  }
 }
-
 /* LEADERBOARD */
 async function loadLeaderboard(){
  if(!currentUser)return;
