@@ -535,6 +535,18 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
  #authPage>.card input{transition:none}
 }
 
+
+/* PASSWORD VISIBILITY CONTROL */
+#authPage .password-field{display:flex;align-items:stretch;gap:8px;margin:7px 0 13px}
+#authPage .password-field input{flex:1;min-width:0;margin:0}
+#authPage #togglePassword{
+ flex:0 0 auto;min-width:76px;padding:0 13px;border:1px solid #8f7136;
+ border-radius:10px;background:linear-gradient(110deg,#49356e,#30245f);
+ color:#ffe6a3;font-weight:800
+}
+#authPage #togglePassword:focus-visible{outline:3px solid #ffe6a3;outline-offset:3px}
+@media(max-width:360px){#authPage #togglePassword{min-width:66px;padding:0 9px}}
+
 </style>
 </head>
 
@@ -559,7 +571,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
   <label for="email">Email address</label>
   <input id="email" type="email" placeholder="Email address" autocomplete="email">
   <label for="password">Password</label>
-  <input id="password" type="password" placeholder="At least 6 characters" autocomplete="current-password">
+  <div class="password-field"><input id="password" type="password" placeholder="At least 6 characters" autocomplete="current-password"><button id="togglePassword" type="button" aria-label="Show password" aria-pressed="false">Show</button></div>
   <button class="primary" id="signupBtn">Create Account</button>
   <button class="secondary" id="loginBtn">Sign In</button>
   <button class="secondary" id="forgotBtn">Forgot Password?</button>
@@ -1327,6 +1339,16 @@ try{
   setMessage("authMessage","Google sign-in successful.","success");
  }
 }catch(e){setMessage("authMessage",friendlyError(e),"error");}
+
+/* SHOW OR HIDE PASSWORD */
+$("togglePassword").onclick=()=>{
+ const field=$("password");
+ const showing=field.type==="password";
+ field.type=showing?"text":"password";
+ $("togglePassword").textContent=showing?"Hide":"Show";
+ $("togglePassword").setAttribute("aria-label",showing?"Hide password":"Show password");
+ $("togglePassword").setAttribute("aria-pressed",String(showing));
+};
 
 /* PASSWORD RESET */
 $("forgotBtn").onclick=async()=>{
