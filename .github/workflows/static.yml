@@ -35,10 +35,9 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: .
-          name: quizspark-pages
 
       - name: Deploy website
         id: deployment
         uses: actions/deploy-pages@v5
         with:
-          artifact_name: quizspark-pages
+          # Use the standard GitHub Pages artifact name.
