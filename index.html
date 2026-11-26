@@ -919,7 +919,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
  getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,
- GoogleAuthProvider,signInWithRedirect,getRedirectResult,signOut,
+ GoogleAuthProvider,signInWithPopup,signOut,
  onAuthStateChanged,updateProfile,sendPasswordResetEmail,
  setPersistence,browserSessionPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -1837,19 +1837,27 @@ $("loginBtn").onclick=async()=>{
  finally{button.disabled=false;$("signupBtn").disabled=false;$("googleBtn").disabled=false;}
 };
 
-/* GOOGLE SIGN IN */
+/* GOOGLE SIGN IN — POPUP AVOIDS REDIRECT SESSION-STATE ERRORS */
 $("googleBtn").onclick=async()=>{
- try{setMessage("authMessage","Connecting to Google...");await signInWithRedirect(auth,googleProvider);}
- catch(e){setMessage("authMessage",friendlyError(e),"error");}
-};
-
-try{
- const redirectResult=await getRedirectResult(auth);
- if(redirectResult?.user){
-  trackAnalytics("login",{method:"google"});
-  setMessage("authMessage","Google sign-in successful.","success");
+ const button=$("googleBtn");
+ button.disabled=true;
+ try{
+  setMessage("authMessage","Connecting securely to Google...");
+  const result=await signInWithPopup(auth,googleProvider);
+  if(result?.user){
+   trackAnalytics("login",{method:"google"});
+   setMessage("authMessage","Google sign-in successful.","success");
+  }
+ }catch(e){
+  if(e?.code==="auth/popup-blocked"||e?.code==="auth/popup-closed-by-user"){
+   setMessage("authMessage","Google sign-in was interrupted. Allow pop-ups for this site and try again.","error");
+  }else{
+   setMessage("authMessage",friendlyError(e),"error");
+  }
+ }finally{
+  button.disabled=false;
  }
-}catch(e){setMessage("authMessage",friendlyError(e),"error");}
+};
 
 /* SHOW OR HIDE PASSWORD */
 $("togglePassword").onclick=()=>{
