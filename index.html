@@ -792,7 +792,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
   <div class="category-grid" id="quizCategories"></div>
   <h3 style="margin-top:20px">2. Choose Difficulty</h3>
   <select id="difficulty">
-   <option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option><option value="Advanced">Advanced</option>
+   <option value="Beginner">Easy — Stage 1</option><option value="Intermediate">Hard — Stage 2</option><option value="Advanced">Expert — Stage 3</option>
   </select>
   <h3>3. Number of Questions</h3>
   <select id="questionCount"><option value="5">5 Questions</option><option value="10" selected>10 Questions</option></select>
@@ -1047,14 +1047,26 @@ const lessonQuestionBank={
 
 const bank={
  "General Knowledge":[
-  ["What is the capital of Nigeria?","Abuja",["Lagos","Kano","Accra"]],
-  ["Which is the largest ocean?","Pacific Ocean",["Atlantic Ocean","Indian Ocean","Arctic Ocean"]],
+  ["Which is the largest ocean on Earth?","Pacific Ocean",["Atlantic Ocean","Indian Ocean","Arctic Ocean"]],
   ["How many continents are there?","7",["5","6","8"]],
-  ["What is the capital of Japan?","Tokyo",["Seoul","Beijing","Bangkok"]],
+  ["What is the capital city of the United States?","Washington, D.C.",["New York City","Los Angeles","Chicago"]],
+  ["What is the capital of the United Kingdom?","London",["Manchester","Edinburgh","Cardiff"]],
+  ["What is the capital of Canada?","Ottawa",["Toronto","Vancouver","Montreal"]],
+  ["Which country is home to the Eiffel Tower?","France",["Italy","Spain","Germany"]],
   ["Which country has the Great Wall?","China",["India","Japan","Thailand"]],
-  ["Which is the largest continent?","Asia",["Africa","Europe","Australia"]],
-  ["What is the capital of Ghana?","Accra",["Lagos","Nairobi","Dakar"]],
-  ["Which star is closest to Earth?","The Sun",["Sirius","Polaris","Vega"]]
+  ["Which is the largest continent by area?","Asia",["Africa","Europe","North America"]],
+  ["Which planet is known as the Red Planet?","Mars",["Venus","Jupiter","Mercury"]],
+  ["Which star is closest to Earth?","The Sun",["Sirius","Polaris","Vega"]],
+  ["What is the currency of the United Kingdom?","Pound sterling",["Euro","US dollar","Canadian dollar"]],
+  ["What is the currency of Japan?","Yen",["Won","Yuan","Baht"]],
+  ["Which animal is the largest mammal?","Blue whale",["African elephant","Giraffe","Hippopotamus"]],
+  ["Which country is famous for the ancient city of Petra?","Jordan",["Egypt","Greece","Turkey"]],
+  ["What is the capital of Australia?","Canberra",["Sydney","Melbourne","Perth"]],
+  ["Which language is primarily spoken in Brazil?","Portuguese",["Spanish","French","English"]],
+  ["Which ocean lies between Africa and Australia?","Indian Ocean",["Atlantic Ocean","Pacific Ocean","Arctic Ocean"]],
+  ["What is the smallest prime number?","2",["1","3","5"]],
+  ["Which country hosted the 2016 Summer Olympics?","Brazil",["Canada","United Kingdom","China"]],
+  ["What is the name of the famous clock tower bell at the Palace of Westminster?","Big Ben",["Liberty Bell","Great Paul","Bells of St Paul's"]]
  ],
  "Mathematics":[
   ["What is 8 + 7?","15",["14","16","17"]],
@@ -1117,14 +1129,14 @@ const bank={
   ["What has pages but is not a book?","A calendar",["A phone","A table","A bag"]]
  ],
  "Story Questions":[
-  ["Ada saved money every week to buy a book. What did she save?","Money",["Food","Water","Clothes"]],
-  ["Tunde planted seeds and watered them daily. What was he growing?","Plants",["Fish","Cars","Books"]],
-  ["Musa helped an elderly neighbour carry groceries. What quality did he show?","Kindness",["Anger","Carelessness","Pride"]],
-  ["Amina studied every evening and passed her exam. What helped her succeed?","Consistent study",["Luck alone","Avoiding books","Skipping class"]],
-  ["A farmer planted maize before the rainy season. What did the farmer plant?","Maize",["Rice","Beans","Wheat"]],
-  ["Chika shared her lunch with a friend. What did she demonstrate?","Generosity",["Selfishness","Dishonesty","Impatience"]],
-  ["A boy checked both sides before crossing. What was he practising?","Road safety",["Cooking","Swimming","Shopping"]],
-  ["A girl read instructions before using a machine. Why?","To use it correctly and safely",["To waste time","To break it","To ignore it"]]
+  ["Alex saves a little money each week to buy a book. What is Alex practising?","Saving",["Borrowing","Overspending","Gambling"]],
+  ["Jordan plants seeds, waters them and gives them sunlight. What is Jordan growing?","Plants",["Fish","Cars","Books"]],
+  ["Taylor helps an older neighbour carry shopping bags. What quality does Taylor show?","Kindness",["Anger","Carelessness","Pride"]],
+  ["A student studies regularly and passes an important exam. What helped most?","Consistent preparation",["Luck alone","Avoiding books","Skipping class"]],
+  ["A family checks the weather before planning a long hike. Why?","To prepare safely",["To waste time","To avoid planning","To make the trip longer"]],
+  ["Morgan shares lunch with a classmate who forgot theirs. What does Morgan demonstrate?","Generosity",["Selfishness","Dishonesty","Impatience"]],
+  ["A pedestrian looks both ways before crossing a street. What are they practising?","Road safety",["Cooking","Swimming","Shopping"]],
+  ["A worker reads the instructions before operating new equipment. Why?","To use it correctly and safely",["To waste time","To damage it","To ignore safety"]]
  ],
  "Business & Money":[
   ["What is a budget?","A plan for income and spending",["A loan","A bank building","A receipt"]],
@@ -1168,6 +1180,18 @@ const bank={
 };
 
 const advancedExtras={
+ "General Knowledge":[
+  ["Which treaty formally established the European Union?","The Maastricht Treaty",["The Treaty of Versailles","The Treaty of Rome","The Lisbon Treaty"]],
+  ["Which Canadian province is officially bilingual at the provincial level?","New Brunswick",["Ontario","Quebec","Manitoba"]],
+  ["Which UK scientist proposed evolution by natural selection?","Charles Darwin",["Isaac Newton","Michael Faraday","James Watt"]],
+  ["Which US document begins with the words 'We the People'?","The US Constitution",["The Declaration of Independence","The Bill of Rights","The Emancipation Proclamation"]],
+  ["Which ocean current helps keep Western Europe relatively mild?","The Gulf Stream",["The Labrador Current","The California Current","The Humboldt Current"]],
+  ["What is the SI unit of electrical resistance?","Ohm",["Volt","Ampere","Watt"]],
+  ["Which country was formerly known as Ceylon?","Sri Lanka",["Myanmar","Cambodia","Laos"]],
+  ["In which year did the first human land on the Moon?","1969",["1959","1975","1981"]],
+  ["Which organisation leads global public health work?","World Health Organization",["World Trade Organization","UNESCO","International Labour Organization"]],
+  ["Which strait separates Great Britain from mainland Europe?","The Strait of Dover",["Strait of Gibraltar","Bering Strait","Strait of Hormuz"]]
+ ],
  "Mathematics":[
   ["Solve: 15 × 12","180",["160","170","190"]],
   ["What is 3/4 of 80?","60",["40","50","70"]],
