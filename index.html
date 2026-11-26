@@ -786,13 +786,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 </section>
 
 <section id="playPage" class="page">
- <div class="hero"><h1>🎮 Quiz Arena</h1><p>Choose a subject, select your difficulty and challenge yourself.</p></div>
+ <div class="hero"><h1>🎮 Quiz Arena</h1><p>Explore questions from around the world. Choose a category and progress through three challenge stages.</p></div>
  <div class="card" id="quizSetup">
   <h3>1. Choose a Category</h3>
   <div class="category-grid" id="quizCategories"></div>
   <h3 style="margin-top:20px">2. Choose Difficulty</h3>
   <select id="difficulty">
-   <option value="Beginner">Easy — Stage 1</option><option value="Intermediate">Hard — Stage 2</option><option value="Advanced">Expert — Stage 3</option>
+   <option value="Beginner">Easy — Stage 1</option><option value="Intermediate">Medium — Stage 2</option><option value="Advanced">Hard — Stage 3</option>
   </select>
   <h3>3. Number of Questions</h3>
   <select id="questionCount"><option value="5">5 Questions</option><option value="10" selected>10 Questions</option></select>
@@ -1207,6 +1207,177 @@ const advancedExtras={
   ["What is the passive form of 'She wrote the letter'?","The letter was written by her",["She was writing","The letter writes her","She writes the letter"]],
   ["What is an antonym?","A word with an opposite meaning",["A word with the same meaning","A type of noun","A punctuation mark"]]
  ]
+};
+
+const internationalStageQuestions={
+ "General Knowledge":{
+  Beginner:[
+   ["What is the capital of Japan?","Tokyo",["Seoul","Beijing","Bangkok"]],
+   ["Which planet is famous for its rings?","Saturn",["Mars","Venus","Mercury"]]
+  ],
+  Intermediate:[
+   ["Which river flows through Paris?","The Seine",["The Thames","The Danube","The Rhine"]],
+   ["Which country has the city of Marrakech?","Morocco",["Portugal","Greece","Mexico"]]
+  ],
+  Advanced:[
+   ["Which agreement created the World Trade Organization in 1995?","The Marrakesh Agreement",["The Kyoto Protocol","The Paris Agreement","The Maastricht Treaty"]],
+   ["Which ancient civilisation developed cuneiform writing?","The Sumerians",["The Romans","The Vikings","The Aztecs"]]
+  ]
+ },
+ "Mathematics":{
+  Beginner:[
+   ["What is 15 + 27?","42",["32","41","52"]],
+   ["What is 9 × 6?","54",["45","56","64"]]
+  ],
+  Intermediate:[
+   ["What is 15% of 240?","36",["24","30"," forty"]],
+   ["Solve: 3x + 5 = 20. What is x?","5",["3","4","6"]]
+  ],
+  Advanced:[
+   ["What is the value of 2⁵ × 2³?","256",["64","128","512"]],
+   ["A triangle has angles 35° and 65°. What is the third angle?","80°",["70°","90°","100°"]]
+  ]
+ },
+ "English":{
+  Beginner:[
+   ["Which word is a synonym for 'begin'?","Start",["Finish","Forget","Break"]],
+   ["Which sentence is correctly punctuated?","Where are you going?",["Where are you going.","Where are you going,","Where are you going!"]]
+  ],
+  Intermediate:[
+   ["Which word is an adverb in 'She spoke softly'?","Softly",["She","Spoke","None"]],
+   ["What is the plural of 'analysis'?","Analyses",["Analysises","Analysis","Analys"]]
+  ],
+  Advanced:[
+   ["What is the literary term for a reference to another text or event?","Allusion",["Hyperbole","Onomatopoeia","Oxymoron"]],
+   ["Which clause can stand alone as a complete sentence?","Independent clause",["Dependent clause","Relative phrase","Prepositional phrase"]]
+  ]
+ },
+ "Science":{
+  Beginner:[
+   ["Which gas do plants absorb during photosynthesis?","Carbon dioxide",["Oxygen","Nitrogen","Hydrogen"]],
+   ["What is the boiling point of water at sea level?","100°C",["50°C","80°C","120°C"]]
+  ],
+  Intermediate:[
+   ["Which blood cells help the body fight infection?","White blood cells",["Red blood cells","Platelets","Plasma cells only"]],
+   ["What is the process by which liquid changes into gas?","Evaporation",["Condensation","Freezing","Melting"]]
+  ],
+  Advanced:[
+   ["What is the name of the boundary around a black hole beyond which light cannot escape?","Event horizon",["Singularity","Accretion disc","Photon sphere"]],
+   ["Which molecule carries genetic instructions in most living organisms?","DNA",["ATP","Glucose","Collagen"]]
+  ]
+ },
+ "Sports":{
+  Beginner:[
+   ["How many points is a standard basketball free throw worth?","1",["2","3","4"]],
+   ["Which country is strongly associated with sumo wrestling?","Japan",["Brazil","Canada","Spain"]]
+  ],
+  Intermediate:[
+   ["How many sets must a player usually win to win a best-of-five tennis match?","3",["2","4","5"]],
+   ["Which athletics event combines running, jumping and throwing disciplines?","Decathlon",["Marathon","Hurdles","Relay"]]
+  ],
+  Advanced:[
+   ["In which year were the first modern Olympic Games held?","1896",["1900","1924","1932"]],
+   ["Which country won the inaugural FIFA Women's World Cup in 1991?","United States",["Norway","Germany","China"]]
+  ]
+ },
+ "Funny Questions":{
+  Beginner:[
+   ["What do you call a bear with no teeth?","A gummy bear",["A teddy bear","A polar bear","A sleepy bear"]],
+   ["Why did the bicycle fall over?","It was two-tired",["It lost a wheel","It was too fast","It missed the bus"]]
+  ],
+  Intermediate:[
+   ["What has four wheels and flies?","A rubbish truck",["A racing car","A helicopter","A bicycle"]],
+   ["Why are ghosts poor liars?","You can see right through them",["They whisper","They forget names","They dislike jokes"]]
+  ],
+  Advanced:[
+   ["What do you call a word that reads the same backwards and forwards?","A palindrome",["An acronym","A homophone","An anagram"]],
+   ["Which punctuation mark is often called an interrobang?","‽",["…","§","¶"]]
+  ]
+ },
+ "Riddles":{
+  Beginner:[
+   ["What has to be broken before you can use it?","An egg",["A window","A promise","A toy"]],
+   ["What has one eye but cannot see?","A needle",["A storm","A potato","A camera"]]
+  ],
+  Intermediate:[
+   ["I have branches but no fruit, trunk or leaves. What am I?","A bank",["A river","A family tree","A library"]],
+   ["What disappears as soon as you say its name?","Silence",["An echo","A secret","A shadow"]]
+  ],
+  Advanced:[
+   ["A man looks at a photograph and says, 'Brothers and sisters I have none, but that man's father is my father's son.' Who is in the photograph?","His son",["His father","His uncle","Himself"]],
+   ["What five-letter word becomes shorter when you add two letters to it?","Short",["Small","Brief","Tiny"]]
+  ]
+ },
+ "Story Questions":{
+  Beginner:[
+   ["Mia is visiting Rome. Which country is she in?","Italy",["France","Spain","Greece"]],
+   ["Noah checks a weather forecast before hiking. What is he doing?","Planning ahead",["Wasting time","Avoiding exercise","Guessing blindly"]]
+  ],
+  Intermediate:[
+   ["A shop compares sales across four months before ordering stock. What is it using?","Past data to guide decisions",["Random guessing","Personal opinions only","Unrelated information"]],
+   ["A train is delayed, so Ava tells her colleague she will arrive late. Which skill is she showing?","Clear communication",["Avoidance","Impatience","Carelessness"]]
+  ],
+  Advanced:[
+   ["A study finds that people who exercise report better sleep. What cannot be concluded from this alone?","That exercise definitely caused the better sleep",["That an association was observed","That further research may help","That other factors may matter"]],
+   ["A town tests a new traffic system on one road before expanding it. What approach is this?","A pilot programme",["A random sample","A final audit","A census"]]
+  ]
+ },
+ "Business & Money":{
+  Beginner:[
+   ["What is a customer?","Someone who buys a product or service",["A tax form","A company building","A bank account"]],
+   ["Which currency is used in the United Kingdom?","Pound sterling",["Euro","US dollar","Yen"]]
+  ],
+  Intermediate:[
+   ["What does a break-even point mean for a business?","Revenue equals total costs",["Revenue is zero","Costs are always rising","Profit is at its maximum"]],
+   ["What is inflation?","A general rise in prices over time",["A fall in all wages","A business loan","A type of tax"]]
+  ],
+  Advanced:[
+   ["What does the term 'opportunity cost' describe?","The value of the next-best alternative given up",["The total amount of tax paid","A company's annual revenue","The price after a discount"]],
+   ["What is a central bank's typical role?","Managing monetary policy and currency stability",["Running every private company","Setting all shop prices","Issuing company shares"]]
+  ]
+ },
+ "Technology":{
+  Beginner:[
+   ["What does GPS help devices determine?","Location",["Blood type","Screen size","Battery age"]],
+   ["Which company develops the Windows operating system?","Microsoft",["Apple","Sony","Nintendo"]]
+  ],
+  Intermediate:[
+   ["What does two-factor authentication add to an account?","A second verification step",["A second username","A public password","An extra email inbox"]],
+   ["What is an algorithm?","A set of steps for solving a problem",["A computer screen","A type of battery","A social network"]]
+  ],
+  Advanced:[
+   ["What does end-to-end encryption aim to ensure?","Only communicating endpoints can read the message",["Every server can read the message","Messages are always public","Passwords are unnecessary"]],
+   ["What is a common purpose of a database index?","To speed up data retrieval",["To encrypt every record","To delete duplicate users automatically","To increase image resolution"]]
+  ]
+ },
+ "Who Is Richest?":{
+  Beginner:[
+   ["What does 'net worth' mean?","Assets minus liabilities",["Monthly spending","Annual tax only","Cash salary only"]],
+   ["Which organisation publishes a well-known annual billionaire list?","Forbes",["UNICEF","NASA","FIFA"]]
+  ],
+  Intermediate:[
+   ["What is a stock exchange?","A marketplace where securities are traded",["A place to exchange banknotes only","A government tax office","A type of savings account"]],
+   ["What is diversification in investing?","Spreading investments across different assets",["Putting all money into one asset","Avoiding all risk completely","Borrowing to spend more"]]
+  ],
+  Advanced:[
+   ["What does market capitalisation measure for a public company?","Share price multiplied by shares outstanding",["Annual profit after tax","Total employee salaries","Cash held in bank accounts"]],
+   ["What is a sovereign wealth fund?","A state-owned investment fund",["A private credit card","A local retail bank","A company pension only"]]
+  ]
+ },
+ "Life Skills":{
+  Beginner:[
+   ["What is a useful first step when planning a busy day?","List and prioritise tasks",["Ignore deadlines","Do everything at once","Avoid making a plan"]],
+   ["Which action helps prevent the spread of many infections?","Washing hands with soap",["Sharing drinking cups","Touching your face often","Skipping cleaning"]]
+  ],
+  Intermediate:[
+   ["What is active listening?","Giving full attention and responding thoughtfully",["Planning your reply while ignoring the speaker","Interrupting often","Changing the subject"]],
+   ["What is an effective way to handle a disagreement?","Listen, clarify and discuss respectfully",["Insult the other person","Spread rumours","Refuse to hear any view"]]
+  ],
+  Advanced:[
+   ["What is confirmation bias?","Favouring information that supports existing beliefs",["Changing a view after new evidence","Checking sources carefully","Comparing several explanations"]],
+   ["Which approach best supports a difficult decision under uncertainty?","Compare evidence, risks and alternatives",["Choose the loudest opinion","Ignore possible consequences","Rely only on the first impression"]]
+  ]
+ }
 };
 
 function shuffle(list){
@@ -1765,8 +1936,9 @@ function buildQuizCategories(){
 
 /* CREATE QUESTIONS */
 function makeQuiz(){
- let source=[...(bank[selectedCategory]||bank["General Knowledge"])];
  const difficulty=$("difficulty").value;
+ const stage= difficulty==="Beginner"?"Beginner":difficulty==="Intermediate"?"Intermediate":"Advanced";
+ let source=[...(bank[selectedCategory]||bank["General Knowledge"]),...(internationalStageQuestions[selectedCategory]?.[stage]||[])];
  if(difficulty==="Advanced"&&advancedExtras[selectedCategory])source.push(...advancedExtras[selectedCategory]);
  if(selectedCategory==="Mathematics"&&difficulty!=="Beginner"){
   for(let i=0;i<12;i++){
@@ -1774,7 +1946,6 @@ function makeQuiz(){
    source.push([`Calculate ${a} × ${b}.`,String(answer),[String(answer+2),String(answer-3),String(answer+10)]]);
   }
  }
- if(difficulty==="Beginner")source=source.slice(0,Math.max(5,source.length-2));
  return shuffle(source).slice(0,Math.min(Number($("questionCount").value),source.length)).map(([q,correct,wrong])=>{
   const options=shuffle([correct,...wrong]);return {q,a:options,correct:options.indexOf(correct)};
  });
