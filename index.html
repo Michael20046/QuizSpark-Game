@@ -1891,7 +1891,8 @@ function resetLessonQuiz(){
  $("lessonQuizProgress").style.width="0%";
  $("lessonQuizAnswers").replaceChildren();
  $("lessonQuizNextBtn").classList.add("hidden");
- $("lessonQuizNextBtn").onclick=null;
+ $("lessonQuizNextBtn").disabled=false;
+ $("lessonQuizNextBtn").onclick=handleLessonQuizNext;
 }
 
 $("startLessonQuizBtn").onclick=()=>{
@@ -1944,11 +1945,12 @@ function checkLessonAnswer(index,button){
  $("lessonQuizNextBtn").textContent=lessonQuestionIndex===4?"Finish Lesson Quiz":"Next Question →";
 }
 
-$("lessonQuizNextBtn").onclick=()=>{
+function handleLessonQuizNext(){
  if(!lessonAnswered||lessonQuizSaving)return;
  if(lessonQuestionIndex<4){lessonQuestionIndex++;showLessonQuestion();}
  else{finishLessonQuiz();}
-};
+}
+$("lessonQuizNextBtn").onclick=handleLessonQuizNext;
 
 async function finishLessonQuiz(){
  if(!currentUser||!currentLessonId||lessonQuizSaving)return;
