@@ -101,7 +101,7 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid #
 .hidden{display:none!important}
 .bottom-nav{
  position:fixed;bottom:0;left:0;right:0;background:#111a38;
- border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);
+ border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(6,1fr);
  padding:8px 3px calc(8px + env(safe-area-inset-bottom));z-index:10
 }
 .nav-btn{border:0;background:transparent;color:var(--muted);font-size:10px;padding:5px 0}
@@ -671,6 +671,24 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
  .brand{font-size:18px}.install-app-btn{padding:8px;font-size:11px}
  .points-pill{padding:8px;font-size:11px}
 }
+
+/* QUIZSPARK STORY LIBRARY */
+.story-shelf{display:grid;grid-template-columns:1fr;gap:12px}
+.story-card{background:linear-gradient(145deg,#24234d,#192344);border:1px solid #5943a5;border-radius:16px;padding:16px}
+.story-card h3{color:#e2d9ff;margin:0 0 7px}
+.story-meta{font-size:12px;color:#c4b5de;margin:5px 0 10px}
+.story-card p{color:var(--muted);line-height:1.55;font-size:13px}
+.story-tag{display:inline-block;background:#30245f;color:#d8ccff;border:1px solid #5943a5;border-radius:20px;padding:4px 9px;font-size:11px;margin:3px 4px 3px 0}
+.story-reader{background:linear-gradient(160deg,#1c2548,#151d39);border:1px solid #5943a5;border-radius:17px;padding:18px}
+.story-reader h2{color:#e2d9ff;line-height:1.35}
+.story-reader .story-body{font-family:Georgia,serif;font-size:17px;line-height:1.95;color:#f0edf9;white-space:pre-line}
+.story-progress{height:7px;background:#39466e;border-radius:8px;overflow:hidden;margin:12px 0}
+.story-progress>div{height:100%;background:linear-gradient(90deg,#7047eb,#d8ccff);width:0}
+.story-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}
+.story-controls button{margin:0}
+.story-chapter{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#c4b5de}
+@media(min-width:600px){.story-shelf{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 
@@ -764,6 +782,33 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
   <h3 style="margin-top:20px">What Players Are Saying</h3>
   <div id="reviewsList">Loading reviews...</div>
   <button class="secondary" id="refreshReviewsBtn">Refresh Reviews</button>
+ </div>
+</section>
+
+
+<section id="storiesPage" class="page">
+ <div class="hero"><h1>📖 QuizSpark Stories</h1><p>Enter new worlds through original stories from different countries. Choose a book, read one page at a time, and return to your place whenever you like.</p></div>
+ <div class="card">
+  <h2>🌍 The Story Library</h2>
+  <p class="muted">Fiction from around the world: courage, love, mystery, family, adventure and second chances. New chapters and books can be added to this growing library.</p>
+  <div id="storyShelf" class="story-shelf"></div>
+ </div>
+</section>
+<section id="storyReaderPage" class="page">
+ <div class="card">
+  <button class="secondary" type="button" onclick="showPage('stories')">← Back to Story Library</button>
+  <div class="story-reader" style="margin-top:12px">
+   <div class="story-chapter" id="storyChapter">Chapter 1</div>
+   <h2 id="storyPageTitle">Story title</h2>
+   <div class="story-progress"><div id="storyProgressFill"></div></div>
+   <p class="muted" id="storyPageCount">Page 1 of 1</p>
+   <div class="story-body" id="storyPageBody"></div>
+  </div>
+  <div class="story-controls">
+   <button class="secondary" id="storyPrevBtn" type="button">← Previous</button>
+   <button class="primary" id="storyNextBtn" type="button">Next Page →</button>
+  </div>
+  <p class="message" id="storySaveMessage" aria-live="polite">Your reading place is saved on this device.</p>
  </div>
 </section>
 
@@ -862,6 +907,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 <nav class="bottom-nav hidden" id="bottomNav" aria-label="Main navigation">
  <button class="nav-btn active" data-page="home"><span class="symbol">🏠</span>Home</button>
  <button class="nav-btn" data-page="play"><span class="symbol">🎮</span>Play</button>
+ <button class="nav-btn" data-page="stories"><span class="symbol">📖</span>Stories</button>
  <button class="nav-btn" data-page="leaderboard"><span class="symbol">🏆</span>Ranks</button>
  <button class="nav-btn" data-page="wallet"><span class="symbol">💰</span>Wallet</button>
  <button class="nav-btn" data-page="profile"><span class="symbol">👤</span>Profile</button>
@@ -2314,6 +2360,70 @@ if ("serviceWorker" in navigator) {
     help.classList.add("hidden");
   });
 })();
+
+/* QUIZSPARK ORIGINAL STORY LIBRARY — page-by-page reader */
+const quizSparkStories = [
+ {id:"the-map-of-small-stars",title:"The Map of Small Stars",country:"Canada",genre:"Adventure · Friendship",description:"Two teenagers follow a mysterious map across a northern town and discover that courage can begin with one small promise.",pages:[
+  {chapter:"Chapter 1 · The Map",title:"A Letter in the Snow",body:"The first snow of December covered Bellweather in a quiet white blanket. Maya Chen was walking home from the library when she noticed a blue envelope caught beneath the bench outside the old railway station. Her name was written across it in careful silver ink.\n\nInside was a hand-drawn map of the town. Tiny stars marked the library, the harbour, the clock tower and a place beyond the pine forest. At the bottom, someone had written: “For the person who still believes there is more to discover.” Maya read the words twice. She had spent months feeling that her life was becoming smaller, not bigger. Her father had lost his job, her best friend had moved away, and she had stopped entering the science competition she once loved.\n\nShe folded the map and hurried home. That evening, she called her neighbour and classmate, Oliver. If anyone would follow a strange map, it would be him."},
+  {chapter:"Chapter 1 · The Map",title:"A Promise at the Harbour",body:"Oliver arrived the next morning wearing two different socks and carrying a backpack full of snacks. He studied the map as if it were a scientific discovery. “The stars form a route,” he said. “But why leave it for you?”\n\nMaya did not know. They began at the harbour, where an elderly boat builder named Mr. Bell recognised the handwriting. He told them the map belonged to his sister, Elise, who had travelled through the region as a young woman. She believed every town held a story worth protecting. Before she died, she had hidden a small collection of letters for someone curious enough to look.\n\nMr. Bell gave them the first clue: “Find the place where the town hears its own heart.” Oliver guessed the clock tower. Maya thought of the railway station. They agreed to search both, and for the first time in months Maya felt excitement pushing away her worries."},
+  {chapter:"Chapter 2 · The Clues",title:"The Clock That Had Stopped",body:"The clock tower had not worked for eleven years. Its hands were frozen at 4:17, and pigeons had made a home beneath its roof. Oliver climbed the narrow stairs while Maya searched the dusty room below. Behind a loose wooden panel she found a photograph of Elise standing beside a group of children. On its back was a sentence: “Time stops when nobody remembers.”\n\nAt the library, Maya found an old newspaper report about a flood that had damaged the town school decades earlier. Elise had organised the children to collect books and rebuild the reading room. The next star on the map sat beside the school.\n\nMaya began to understand that this was not a treasure hunt for gold. It was a trail of people who had quietly helped one another. She wondered whether a person could leave a legacy without becoming famous."},
+  {chapter:"Chapter 2 · The Clues",title:"A Room Full of Voices",body:"The old school was now a community centre. Its caretaker, Mrs. Alvarez, listened as the friends explained the map. She smiled when she saw Elise's photograph. “She taught me to read,” she said. “I was afraid of making mistakes, but she told me every page was a new beginning.”\n\nMrs. Alvarez led them to a cupboard where a tin box rested behind stacks of board games. Inside were letters from former students. Each described a moment when someone had helped them: a meal left at a doorstep, a winter coat, a patient lesson, a friend who stayed.\n\nOne letter was addressed to whoever found the map. It asked them to do one useful thing for someone else before following the final star. Maya and Oliver looked at each other. Their adventure had become a promise."}
+ ]},
+ {id:"the-last-train-to-london",title:"The Last Train to London",country:"United Kingdom",genre:"Mystery · Family",description:"A misplaced suitcase, an old photograph and a journey that reveals a family secret across generations.",pages:[
+  {chapter:"Chapter 1 · Platform Nine",title:"The Wrong Suitcase",body:"Rain tapped against the glass roof of King's Cross station as Daniel Reed hurried through the crowd. He had ten minutes to catch his train, one phone call to return and a job interview waiting in Manchester. At the luggage rack he grabbed a black suitcase that looked exactly like his own.\n\nOnly after the train pulled away did he notice the brass key tied to its handle. His suitcase had a red ribbon. This one had a faded photograph tucked into the side pocket: a young woman standing beside a soldier, both smiling as if the world had never been difficult. On the back were the words, “London, 1944. Come home when you can.”\n\nDaniel asked the conductor for help. The owner had boarded at the previous stop, but no name was recorded. With the train moving north, Daniel had to decide whether to open the suitcase or wait for its owner to call."},
+  {chapter:"Chapter 1 · Platform Nine",title:"The Photograph",body:"Inside the suitcase were neatly folded clothes, a notebook and a small packet of letters tied with green thread. Daniel did not want to invade a stranger's privacy, but the notebook had fallen open. A name appeared on the first page: Margaret Reed.\n\nDaniel's grandmother had been Margaret Reed. She had died when he was young, and his family rarely spoke about her years during the war. He called his mother, who went silent when he described the photograph. “Where did you find that?” she asked.\n\nShe explained that Margaret had once spoken of a brother who disappeared during the war. The family believed he had never returned. Daniel looked again at the photograph. The soldier's face was familiar in a way he could not explain."},
+  {chapter:"Chapter 2 · The Letters",title:"A Name in the Notebook",body:"At the next station Daniel met the railway staff, who contacted the passenger who had reported a missing case. The owner was an older man named Peter, travelling to visit his daughter. When Daniel described the photograph, Peter asked him to read the name beneath it.\n\n“Thomas,” Daniel said. “Thomas Reed.” Peter's hands trembled. He explained that Thomas had been his father, a man who had spent his life believing his sister Margaret had forgotten him. The letters in the suitcase were the only proof that she had searched for him.\n\nDaniel's mother joined the call. For several minutes nobody spoke. Then Peter said he would get off at the next station and wait. A wrong suitcase had carried two branches of a family towards the same platform."},
+  {chapter:"Chapter 2 · The Reunion",title:"The Journey Home",body:"They met beneath the station clock. Peter was smaller than Daniel expected, with silver hair and a brown coat buttoned to the neck. He held the photograph as though it might disappear. Daniel's mother arrived an hour later, carrying a box of family papers.\n\nThe letters showed that Margaret had written for years. Some had been returned; others had never been sent because she did not know where Thomas was living. The silence between them had not been a choice. It had grown from distance, fear and lost addresses.\n\nPeter asked to keep one letter. Daniel gave him the whole packet. The job interview was missed, but Daniel did not regret it. On the train home, he understood that sometimes a delay is not the end of a journey. Sometimes it is the reason two people finally meet."}
+ ]},
+ {id:"the-colour-of-tomorrow",title:"The Colour of Tomorrow",country:"India",genre:"Coming of age · Dreams",description:"A young artist in Jaipur must choose between the safe future planned for her and the future she wants to paint.",pages:[
+  {chapter:"Chapter 1 · The Blue Door",title:"Paint on Her Fingers",body:"Every morning, before the streets of Jaipur grew busy, seventeen-year-old Anaya opened the blue wooden door of her family's printing shop. The air smelled of paper, ink and cardamom tea. Her grandfather taught her how to mix colours, how to notice the smallest change in light, and how to be patient when a design refused to work.\n\nAnaya wanted to study art in another city. Her father wanted her to study accounting and help keep the shop alive. Neither was cruel. Both were afraid: her father feared losing the family business, while Anaya feared waking up one day inside a life she had never chosen.\n\nWhen a poster competition was announced, Anaya painted a woman standing beneath a sky of impossible colours. She submitted it secretly, then tried to forget it. But the next week, a letter arrived with her name printed in bold."},
+  {chapter:"Chapter 1 · The Blue Door",title:"The Letter",body:"The letter invited Anaya to an interview for a scholarship at an arts college. Her hands shook as she read it. The interview was in three weeks, and she would need to present a portfolio. She began working after the shop closed, sketching faces from memory and painting scenes from the market.\n\nHer father noticed the late nights. He did not shout; he simply placed a cup of tea beside her and asked how much the application would cost. Anaya admitted she had been hiding the opportunity. He looked disappointed, but he listened.\n\n“Dreams are expensive,” he said. “So is regret.” He did not promise to agree. He promised to visit the college with her and learn what the scholarship could cover. For Anaya, that small promise felt larger than applause."},
+  {chapter:"Chapter 2 · The Journey",title:"A City of New Colours",body:"The interview took place in a bright studio filled with canvases. Anaya's portfolio showed the life around her: a flower seller arranging marigolds, a mechanic repairing a bicycle, children chasing kites across rooftops. The panel asked why she painted ordinary people.\n\n“Because ordinary people carry extraordinary stories,” she answered. “I want them to see themselves as part of the beauty around us.”\n\nShe did not know whether the panel was impressed. On the journey home, she watched the landscape change and imagined what it would feel like to begin again somewhere unfamiliar. Her father sat beside her, quiet but present. At the station he bought her a notebook and wrote on its first page: “Keep making room for colour.”"},
+  {chapter:"Chapter 2 · A Different Future",title:"The First Yes",body:"The scholarship email arrived on a Tuesday afternoon. Anaya read it once, then again, then ran into the shop with tears in her eyes. Her father read the message slowly. He was proud, but the thought of the shop without her made him uneasy.\n\nThey made a plan: Anaya would study, return during holidays, and help digitise the shop's designs so the business could reach new customers. Her grandfather laughed and said the old printing blocks had finally found a new apprentice in the world of computers.\n\nOn her first day at college, Anaya carried the notebook her father had given her. She knew the road ahead would not be simple. But the blue door had not closed behind her. It had taught her how to open another."}
+ ]},
+ {id:"the-river-remembers",title:"The River Remembers",country:"Ghana",genre:"Family · Community",description:"When a river village faces a difficult season, a young woman brings neighbours together to protect their future.",pages:[
+  {chapter:"Chapter 1 · The Dry Season",title:"The Lower Waterline",body:"In Asempa, the river was more than water. It carried fishing boats, reflected evening skies and connected families who lived on both banks. When the dry season lasted longer than anyone could remember, the waterline slipped away from the old stone steps. Nets came back light. Gardens turned dusty.\n\nEsi Mensah had returned from the city after finishing her studies in environmental science. She expected to help her aunt repair the family home, not to become the person everyone asked about the river. At first she offered facts and measurements. The elders offered memories: where the fish once gathered, where the reeds grew thick, and which streams had been blocked by new construction.\n\nEsi realised that no single report could explain the whole problem. The village needed its science and its stories together."},
+  {chapter:"Chapter 1 · The Dry Season",title:"A Meeting Under the Neem Tree",body:"Esi invited fishers, farmers, shopkeepers and school students to meet beneath the neem tree. Some arrived angry. Others were certain nothing could be changed. She listened before speaking. A fisherman described a channel filled with rubbish. A farmer explained that a new pump was drawing water faster than the river could recover.\n\nThe group walked the banks and recorded what they saw. The children photographed blocked drains; the farmers mapped their wells; the fishers marked places where the current had weakened. For the first time, people who rarely shared information began comparing what they knew.\n\nEsi drew a simple map on a board. The problem was complicated, but it was no longer invisible."},
+  {chapter:"Chapter 2 · Many Hands",title:"The Work Begins",body:"The first clean-up day attracted only twelve people. By midday, the pile of collected rubbish was taller than the school desk they had brought for tools. The next week, thirty people came. A local carpenter built covered bins, and teachers helped students test water samples with a visiting university team.\n\nNot everyone agreed with the plan. A business owner worried that changing the pump schedule would cost money. Esi met him with the farmers and listened to his concerns. They worked out a shared timetable and a way to monitor water use. Progress came through negotiation, not shouting.\n\nThe river did not rise overnight. But the village had begun to care for it as one community."},
+  {chapter:"Chapter 2 · The River's Promise",title:"What the Water Carried",body:"Months later, the first rains arrived. Water ran through the cleared channel, carrying leaves and small branches towards the river. The fishers noticed young fish returning to the shallows. The farmers reported that the shared schedule had reduced waste.\n\nAt the next village meeting, Esi asked everyone to remember the people who had helped: the children who collected data, the elders who shared old knowledge, the workers who gave their time and the neighbours who changed their habits. The river belonged to no single family, she said, so protecting it could not belong to one person either.\n\nAs the sun set, Esi stood on the old stone steps. The river was still fragile, but it was moving. And now, the village was moving with it."}
+ ]}
+];
+let activeStory=null, activeStoryPage=0;
+function renderStoryShelf(){
+ const shelf=document.getElementById("storyShelf"); if(!shelf)return;
+ shelf.replaceChildren();
+ quizSparkStories.forEach(story=>{
+  const card=document.createElement("article");card.className="story-card";
+  const title=document.createElement("h3");title.textContent=story.title;
+  const meta=document.createElement("div");meta.className="story-meta";meta.textContent=story.country+" · "+story.genre+" · "+story.pages.length+" opening pages";
+  const desc=document.createElement("p");desc.textContent=story.description;
+  const tag=document.createElement("span");tag.className="story-tag";tag.textContent="Original fiction";
+  const btn=document.createElement("button");btn.className="primary";btn.type="button";btn.textContent="Open Story →";btn.addEventListener("click",()=>openQuizSparkStory(story.id));
+  card.append(title,meta,desc,tag,btn);shelf.appendChild(card);
+ });
+}
+function openQuizSparkStory(id){
+ activeStory=quizSparkStories.find(story=>story.id===id);if(!activeStory)return;
+ const saved=Number(localStorage.getItem("quizspark-story-"+id)||0);
+ activeStoryPage=Math.min(Math.max(saved,0),activeStory.pages.length-1);
+ renderQuizSparkStoryPage();showPage("storyReader");
+}
+function renderQuizSparkStoryPage(){
+ if(!activeStory)return;
+ const page=activeStory.pages[activeStoryPage],total=activeStory.pages.length;
+ document.getElementById("storyChapter").textContent=page.chapter;
+ document.getElementById("storyPageTitle").textContent=activeStory.title+" — "+page.title;
+ document.getElementById("storyPageBody").textContent=page.body;
+ document.getElementById("storyPageCount").textContent="Page "+(activeStoryPage+1)+" of "+total+" · "+activeStory.country;
+ document.getElementById("storyProgressFill").style.width=((activeStoryPage+1)/total*100)+"%";
+ document.getElementById("storyPrevBtn").disabled=activeStoryPage===0;
+ document.getElementById("storyNextBtn").textContent=activeStoryPage===total-1?"Back to Library ✓":"Next Page →";
+ localStorage.setItem("quizspark-story-"+activeStory.id,String(activeStoryPage));
+}
+document.getElementById("storyPrevBtn").addEventListener("click",()=>{if(activeStory&&activeStoryPage>0){activeStoryPage--;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}});
+document.getElementById("storyNextBtn").addEventListener("click",()=>{if(!activeStory)return;if(activeStoryPage<activeStory.pages.length-1){activeStoryPage++;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}else{showPage("stories");}});
+renderStoryShelf();
+
 </script>
 
 </body>
