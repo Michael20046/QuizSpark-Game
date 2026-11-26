@@ -2054,7 +2054,7 @@ function makeQuiz(){
    source.push([`Calculate ${a} × ${b}.`,String(answer),[String(answer+2),String(answer-3),String(answer+10)]]);
   }
  }
- if(difficulty==="Beginner")source=source.slice(0,Math.min(5,source.length));
+ if(difficulty==="Beginner")source=source.slice(0,Math.min(10,source.length));
  return shuffle(source).slice(0,Math.min(Number($("questionCount").value),source.length)).map(([q,correct,wrong])=>{
   const options=shuffle([correct,...wrong]);return {q,a:options,correct:options.indexOf(correct)};
  });
