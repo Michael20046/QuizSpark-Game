@@ -86,8 +86,8 @@ function dateText(value){
 function cell(value){const td=document.createElement("td");td.textContent=value==null?"—":String(value);return td;}
 function renderPlayers(){
  const term=$("playerSearch").value.trim().toLowerCase(),body=$("playersBody");body.replaceChildren();
- const filtered=playersCache.filter(p=>(p.name||"").toLowerCase().includes(term));
- if(!filtered.length){const tr=document.createElement("tr"),td=cell("No matching players found.");td.colSpan=5;tr.append(td);body.append(tr);return;}
+ const filtered=playersCache.filter(p=>[p.name,p.email,p.country].some(value=>String(value||"").toLowerCase().includes(term)));
+ if(!filtered.length){const tr=document.createElement("tr"),td=cell("No matching players found.");td.colSpan=6;tr.append(td);body.append(tr);return;}
  filtered.forEach(p=>{const tr=document.createElement("tr");tr.append(cell(p.name||"Unnamed player"),cell(p.country||"Unknown"),cell(p.gamesPlayed||0),cell(p.correctAnswers||0),cell(p.points||0),cell(dateText(p.updatedAt||p.createdAt)));body.append(tr);});
 }
 async function loadDashboard(){
