@@ -797,7 +797,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
   <h3>3. Number of Questions</h3>
   <select id="questionCount"><option value="5">5 Questions</option><option value="10" selected>10 Questions</option></select>
   <button class="primary" id="startBtn">Start My Quiz 🚀</button>
-  <p class="muted">Earn 10 points for every correct answer. Your unfinished quiz is saved on this device.</p>
+  <p class="muted">Earn 10 points for every correct answer. Questions cover countries and cultures around the world. Your unfinished quiz is saved on this device.</p>
  </div>
  <div class="card hidden" id="quizGame">
   <div class="grid">
@@ -1936,9 +1936,8 @@ function buildQuizCategories(){
 
 /* CREATE QUESTIONS */
 function makeQuiz(){
+ let source=[...(bank[selectedCategory]||bank["General Knowledge"])];
  const difficulty=$("difficulty").value;
- const stage= difficulty==="Beginner"?"Beginner":difficulty==="Intermediate"?"Intermediate":"Advanced";
- let source=[...(bank[selectedCategory]||bank["General Knowledge"]),...(internationalStageQuestions[selectedCategory]?.[stage]||[])];
  if(difficulty==="Advanced"&&advancedExtras[selectedCategory])source.push(...advancedExtras[selectedCategory]);
  if(selectedCategory==="Mathematics"&&difficulty!=="Beginner"){
   for(let i=0;i<12;i++){
@@ -1946,6 +1945,7 @@ function makeQuiz(){
    source.push([`Calculate ${a} × ${b}.`,String(answer),[String(answer+2),String(answer-3),String(answer+10)]]);
   }
  }
+ if(difficulty==="Beginner")source=source.slice(0,Math.min(5,source.length));
  return shuffle(source).slice(0,Math.min(Number($("questionCount").value),source.length)).map(([q,correct,wrong])=>{
   const options=shuffle([correct,...wrong]);return {q,a:options,correct:options.indexOf(correct)};
  });
