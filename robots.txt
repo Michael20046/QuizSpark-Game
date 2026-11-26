@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://michael20046.github.io/QuizSpark-Game/sitemap.xml
