@@ -725,9 +725,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
    <p class="review-hint">Your country helps us understand where QuizSpark players are joining from.</p>
   </div>
   <label for="email">Email address</label>
-  <input id="email" type="email" placeholder="Email address" autocomplete="email">
+  <input id="email" type="email" placeholder="Email address" autocomplete="username" required inputmode="email" maxlength="254">
   <label for="password">Password</label>
-  <div class="password-field"><input id="password" type="password" placeholder="At least 6 characters" autocomplete="current-password"><button id="togglePassword" type="button" aria-label="Show password" aria-pressed="false">Show</button></div>
+  <div class="password-field"><input id="password" type="password" placeholder="At least 6 characters" autocomplete="current-password" required minlength="6" maxlength="128"><button id="togglePassword" type="button" aria-label="Show password" aria-pressed="false">Show</button></div>
   <button class="primary" id="signupBtn">Create Account</button>
   <button class="secondary" id="loginBtn">Sign In</button>
   <button class="secondary" id="forgotBtn">Forgot Password?</button>
@@ -920,7 +920,8 @@ import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase
 import {
  getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,
  GoogleAuthProvider,signInWithRedirect,getRedirectResult,signOut,
- onAuthStateChanged,updateProfile,sendPasswordResetEmail
+ onAuthStateChanged,updateProfile,sendPasswordResetEmail,
+ setPersistence,browserSessionPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
  getFirestore,doc,getDoc,setDoc,runTransaction,
@@ -938,6 +939,8 @@ const firebaseConfig={
 
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
+// Keep authentication only for the active browser session; signing out or ending the session requires a fresh sign-in.
+await setPersistence(auth,browserSessionPersistence);
 const db=getFirestore(app);
 const googleProvider=new GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt:"select_account"});
@@ -1590,7 +1593,11 @@ function friendlyError(error){
 
 /* PAGE NAVIGATION — CORRECTED */
 window.showPage=function(page){
- if(!currentUser)return;
+ if(!auth.currentUser||!currentUser){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  $("authPage").classList.add("active");$("authPage").classList.remove("hidden");$("bottomNav").classList.add("hidden");
+  return;
+ }
  const target=$(page+"Page");
  if(!target)return;
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
@@ -1786,15 +1793,24 @@ $("submitReviewBtn").onclick=async()=>{
 
 $("refreshReviewsBtn").onclick=loadReviews;
 
+/* STRICT INPUT VALIDATION */
+function validAuthDetails(email,password){
+ if(!email||!password){setMessage("authMessage","Email and password are both required. Access is denied until both are entered.","error");return false;}
+ if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){setMessage("authMessage","Enter a valid email address.","error");return false;}
+ if(password.length<6||password.length>128){setMessage("authMessage","Password must be between 6 and 128 characters.","error");return false;}
+ return true;
+}
+
 /* ACCOUNT CREATION */
 $("signupBtn").onclick=async()=>{
  const name=$("name").value.trim();
  const email=$("email").value.trim();
  const password=$("password").value;
- if(!name||!email||!password)return setMessage("authMessage","Please complete all fields.","error");
- if(!$("country").value)return setMessage("authMessage","Please select your country.","error");
- if(name.length>50)return setMessage("authMessage","Your name must be 50 characters or fewer.","error");
- if(password.length<6)return setMessage("authMessage","Password must contain at least 6 characters.","error");
+ if(!name){setMessage("authMessage","Enter your name to create an account.","error");return;}
+ if(!$("country").value){setMessage("authMessage","Please select your country.","error");return;}
+ if(name.length>50){setMessage("authMessage","Your name must be 50 characters or fewer.","error");return;}
+ if(!validAuthDetails(email,password))return;
+ const button=$("signupBtn");button.disabled=true;
  try{
   setMessage("authMessage","Creating your account...");
   const result=await createUserWithEmailAndPassword(auth,email,password);
@@ -1804,17 +1820,21 @@ $("signupBtn").onclick=async()=>{
   trackAnalytics("sign_up",{method:"email"});
   setMessage("authMessage","Welcome to QuizSpark!","success");
  }catch(e){setMessage("authMessage",friendlyError(e),"error");}
+ finally{button.disabled=false;}
 };
 
-/* EMAIL SIGN IN */
+/* EMAIL SIGN IN — BOTH CREDENTIALS REQUIRED */
 $("loginBtn").onclick=async()=>{
  const email=$("email").value.trim(),password=$("password").value;
- if(!email||!password)return setMessage("authMessage","Enter your email and password.","error");
+ if(!validAuthDetails(email,password))return;
+ const button=$("loginBtn");button.disabled=true;
+ $("signupBtn").disabled=true;$("googleBtn").disabled=true;
  try{
-  setMessage("authMessage","Signing in...");
+  setMessage("authMessage","Verifying your email and password...");
   await signInWithEmailAndPassword(auth,email,password);
   trackAnalytics("login",{method:"email"});
  }catch(e){setMessage("authMessage",friendlyError(e),"error");}
+ finally{button.disabled=false;$("signupBtn").disabled=false;$("googleBtn").disabled=false;}
 };
 
 /* GOOGLE SIGN IN */
@@ -1853,16 +1873,25 @@ $("forgotBtn").onclick=async()=>{
 
 /* SIGN OUT */
 $("logoutBtn").onclick=async()=>{
+ const button=$("logoutBtn");
  try{
   if(gameRunning&&!confirm("Your unfinished quiz is saved on this device. Sign out anyway?"))return;
+  button.disabled=true;button.textContent="Signing out...";
+  currentUser=null;
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  $("authPage").classList.add("active");$("authPage").classList.remove("hidden");$("bottomNav").classList.add("hidden");
   await signOut(auth);
- }catch(e){alert(friendlyError(e));}
+  $("email").value="";$("password").value="";
+  setMessage("authMessage","You have been signed out. Enter your email and password to access QuizSpark again.","success");
+ }catch(e){currentUser=auth.currentUser;alert(friendlyError(e));if(currentUser)showPage("profile");}
+ finally{button.disabled=false;button.textContent="Sign Out";}
 };
 
 /* AUTHENTICATION STATE */
 onAuthStateChanged(auth,async user=>{
  currentUser=user;
  if(!user){
+  $("email").value="";$("password").value="";
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   $("authPage").classList.add("active");
   $("authPage").classList.remove("hidden");
