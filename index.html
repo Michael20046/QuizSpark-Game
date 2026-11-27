@@ -1098,6 +1098,16 @@ setupInviteFriends();
 
 <section id="playPage" class="page">
  <div class="hero"><h1>🎮 Quiz Arena</h1><p>Explore questions from around the world. Choose a category and progress through three challenge stages.</p></div>
+ <section class="card tournament-card" id="dailyTournamentCard">
+  <div class="daily-topline"><span class="daily-tag">🏆 DAILY QUIZ TOURNAMENT</span><span class="daily-reward">5 questions · 50 points max</span></div>
+  <h2>Compete in Today's Tournament</h2>
+  <p class="muted">Everyone gets the same five daily questions. Complete the challenge once per day and see how your score compares with other players. Your normal quiz points are still earned for correct answers.</p>
+  <p class="message" id="tournamentDate" aria-live="polite"></p>
+  <button class="primary" id="startTournamentBtn" type="button">Enter Today's Tournament →</button>
+  <h3 style="margin-top:18px">Today's Top Players</h3>
+  <div id="dailyTournamentLeaderboard" aria-live="polite"><p class="muted">Loading today's scores…</p></div>
+  <button class="secondary" id="refreshTournamentBtn" type="button">Refresh Tournament Scores</button>
+ </section>
  <div class="card" id="quizSetup">
   <h3>1. Choose a Category</h3>
   <div class="category-grid" id="quizCategories"></div>
@@ -1217,6 +1227,7 @@ let lessonsDone=[],lessonQuizzesDone=[];
 let selectedCategory="General Knowledge";
 let quizQuestions=[],questionIndex=0,score=0;
 let answered=false,gameRunning=false,saving=false;
+let quizMode="standard",tournamentDate=null;
 let currentLessonId=null,disabledAnswers=[];
 let lessonQuestions=[],lessonQuestionIndex=0,lessonScore=0;
 let lessonAnswered=false,lessonQuizSaving=false;
@@ -2548,7 +2559,7 @@ function saveQuizDraft(){
  try{
   localStorage.setItem(draftKey(),JSON.stringify({
    version:2,questions:quizQuestions,index:questionIndex,score,
-   category:selectedCategory,disabled:disabledAnswers,answered
+   category:selectedCategory,disabled:disabledAnswers,answered,mode:quizMode,tournamentDate
   }));
  }catch(e){console.warn("Could not save quiz draft locally.",e);}
 }
@@ -2577,6 +2588,7 @@ function startOrResumeQuiz(){
  const draft=readQuizDraft();
  if(draft){
   quizQuestions=draft.questions;questionIndex=draft.index;score=draft.score;
+  quizMode=draft.mode==="tournament"?"tournament":"standard";tournamentDate=draft.tournamentDate||null;
   $("quizGame").classList.remove("quiz-complete");
   selectedCategory=draft.category||selectedCategory;disabledAnswers=draft.disabled||[];
   answered=draft.version===2?Boolean(draft.answered):false;
@@ -2584,6 +2596,7 @@ function startOrResumeQuiz(){
   $("quizSetup").classList.add("hidden");$("quizGame").classList.remove("hidden");
   gameRunning=true;buildQuizCategories();showQuestion();return;
  }
+ quizMode="standard";tournamentDate=null;
  quizQuestions=makeQuiz();if(!quizQuestions.length)return;
  $("quizGame").classList.remove("quiz-complete");
  $("shareQuizResultBtn").classList.add("hidden");
@@ -2665,17 +2678,31 @@ async function finishQuiz(){
    const snap=await tx.get(ref);
    if(!snap.exists())throw new Error("Player profile not found.");
    const data=snap.data();
-   tx.update(ref,{
+   const update={
     points:(Number(data.points)||0)+score,
     gamesPlayed:(Number(data.gamesPlayed)||0)+1,
     correctAnswers:(Number(data.correctAnswers)||0)+earnedCorrect,
     updatedAt:serverTimestamp()
-   });
+   };
+   if(quizMode==="tournament"&&tournamentDate){
+    const oldDate=data.dailyTournamentDate||"";
+    const oldScore=Number(data.dailyTournamentScore)||0;
+    if(oldDate!==tournamentDate||score>oldScore){
+     update.dailyTournamentDate=tournamentDate;
+     update.dailyTournamentScore=score;
+     update.dailyTournamentCorrect=earnedCorrect;
+     update.dailyTournamentUpdatedAt=serverTimestamp();
+    }
+   }
+   tx.update(ref,update);
   });
-  clearQuizDraft();await loadProfile(currentUser);
+  clearQuizDraft();
+  if(quizMode==="tournament"&&tournamentDate){try{localStorage.setItem("quizspark-tournament-entry-v1-"+currentUser.uid+"-"+tournamentDate,"completed");}catch(error){}}
+  await loadProfile(currentUser);
   saveRecentQuizHistory();
   trackAnalytics("quiz_complete",{category:selectedCategory,score:score,question_count:quizQuestions.length});
-  setMessage("gameMessage","🏆 Congratulations! You earned "+score+" points. Your new balance is "+savedPoints+".","success");
+  setMessage("gameMessage",(quizMode==="tournament"?"🏆 Tournament completed! ":"🏆 Congratulations! ")+"You earned "+score+" points. Your new balance is "+savedPoints+".","success");
+  if(quizMode==="tournament")await loadDailyTournamentLeaderboard();
   $("shareQuizResultBtn").classList.remove("hidden");
   await loadLeaderboard();
  }catch(e){
@@ -2691,6 +2718,72 @@ async function finishQuiz(){
   }
  }
 }
+
+/* DAILY QUIZ TOURNAMENT */
+function tournamentToday(){return localChallengeDate();}
+function tournamentQuestionsForDate(date){
+ const pool=[];
+ Object.entries(bank).forEach(([category,items])=>{
+  (items||[]).forEach(item=>{if(Array.isArray(item)&&item.length>=3)pool.push({category,item});});
+ });
+ const hash=value=>{let h=2166136261;for(let i=0;i<value.length;i++){h^=value.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;};
+ pool.sort((a,b)=>hash(date+"|"+a.item[0])-hash(date+"|"+b.item[0]));
+ const chosen=pool.slice(0,5);
+ return chosen.map(({category,item},index)=>{
+  const options=[item[1],...(item[2]||[])].slice(0,4);
+  const shift=hash(date+"|"+item[0]+"|options")%options.length;
+  const rotated=options.slice(shift).concat(options.slice(0,shift));
+  return {q:item[0],a:rotated,correct:rotated.indexOf(item[1]),category};
+ });
+}
+function startDailyTournament(){
+ if(!currentUser||gameRunning||saving)return;
+ const today=tournamentToday();
+ const key="quizspark-tournament-entry-v1-"+currentUser.uid+"-"+today;
+ if(localStorage.getItem(key)==="completed"){
+  setMessage("tournamentDate","You have already completed today's tournament. Come back tomorrow.","error");return;
+ }
+ const draft=readQuizDraft();
+ if(draft&&draft.mode==="tournament"&&draft.tournamentDate===today){
+  startOrResumeQuiz();return;
+ }
+ quizMode="tournament";tournamentDate=today;
+ quizQuestions=tournamentQuestionsForDate(today);
+ if(quizQuestions.length!==5){setMessage("tournamentDate","Today's tournament questions are not available. Please try again later.","error");return;}
+ questionIndex=0;score=0;answered=false;disabledAnswers=[];gameRunning=true;
+ $("quizGame").classList.remove("quiz-complete");
+ $("shareQuizResultBtn").classList.add("hidden");
+ $("quizSetup").classList.add("hidden");$("quizGame").classList.remove("hidden");
+ $("gamePoints").textContent="0";saveQuizDraft();showQuestion();
+ trackAnalytics("daily_tournament_start",{date:today,question_count:5});
+}
+async function loadDailyTournamentLeaderboard(){
+ const host=$("dailyTournamentLeaderboard");if(!host)return;
+ host.replaceChildren();
+ const today=tournamentToday();
+ $("tournamentDate").textContent="Tournament date: "+today+" · Best score counts";
+ try{
+  const snap=await getDocs(collection(db,"players"));
+  const entries=[];
+  snap.forEach(player=>{
+   const data=player.data();
+   if(data.dailyTournamentDate===today){
+    entries.push({name:data.name||"Player",score:Number(data.dailyTournamentScore)||0,correct:Number(data.dailyTournamentCorrect)||0});
+   }
+  });
+  entries.sort((a,b)=>b.score-a.score||b.correct-a.correct||a.name.localeCompare(b.name));
+  if(!entries.length){host.textContent="No scores yet today. Be the first to enter!";return;}
+  entries.slice(0,10).forEach((entry,index)=>{
+   const row=document.createElement("div");row.className="rank-row";
+   const rank=document.createElement("strong");rank.textContent=["🥇","🥈","🥉"][index]||String(index+1)+".";
+   const name=document.createElement("span");name.textContent=entry.name;
+   const points=document.createElement("strong");points.textContent=entry.score+" / 50";
+   row.append(rank,name,points);host.appendChild(row);
+  });
+ }catch(error){host.textContent="Tournament scores could not be loaded right now.";}
+}
+$("startTournamentBtn")?.addEventListener("click",startDailyTournament);
+$("refreshTournamentBtn")?.addEventListener("click",loadDailyTournamentLeaderboard);
 
 /* RECENT QUIZ HISTORY — stored separately for each signed-in player on this device */
 function renderRecentQuizHistory(){
@@ -2783,6 +2876,7 @@ $("refreshLeaderboard").onclick=loadLeaderboard;
 /* INITIALISE WEBSITE */
 buildLearningCategories();
 buildQuizCategories();
+loadDailyTournamentLeaderboard();
 refreshStartButton();
 console.log("QuizSpark initialised successfully.");
 </script>
