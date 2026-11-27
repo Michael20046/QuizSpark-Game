@@ -776,6 +776,9 @@ setupInviteFriends();
 .achievement-progress-track{height:5px;margin:6px 2px 0;border-radius:999px;background:rgba(196,181,253,.16);overflow:hidden}
 .achievement-progress-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#9274dc,#f4d782);transition:width .25s ease}
 .achievement-badge.unlocked .achievement-progress-text{color:#f4d782}
+.next-achievement{display:flex;flex-direction:column;gap:4px;margin-top:14px;padding:12px 14px;border:1px solid rgba(244,201,93,.32);border-radius:13px;background:linear-gradient(120deg,rgba(116,83,29,.18),rgba(34,29,71,.35))}
+.next-achievement strong{font-size:12px;color:#ffe6a3}
+.next-achievement span{font-size:11px;line-height:1.5;color:#c9c4df}
 @media(max-width:390px){.achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 
@@ -902,6 +905,7 @@ setupInviteFriends();
   <div class="achievement-heading"><div><span class="achievement-kicker">YOUR PROGRESS</span><h2 id="homeAchievementsTitle">🏅 Achievement Badges</h2></div><span class="achievement-count" id="homeBadgeCount">0 earned</span></div>
   <p class="muted">Every milestone is worth celebrating. Keep learning to unlock more badges.</p>
   <div class="achievement-grid" id="homeBadgeGrid" aria-live="polite"></div>
+  <div class="next-achievement" id="homeNextAchievement" aria-live="polite"></div>
  </section>
 
  <div class="card" style="margin-top:15px">
@@ -1135,6 +1139,7 @@ setupInviteFriends();
  <div class="card achievement-card" id="profileAchievements">
   <div class="achievement-heading"><div><span class="achievement-kicker">MILESTONES</span><h3>🏅 Your Achievements</h3></div><span class="achievement-count" id="profileBadgeCount">0 earned</span></div>
   <div class="achievement-grid" id="profileBadgeGrid"></div>
+  <div class="next-achievement" id="profileNextAchievement" aria-live="polite"></div>
  </div>
 
  <div class="card">
@@ -1964,6 +1969,16 @@ const achievementDefinitions=[
 ];
 function renderAchievementBadges(){
  const unlocked=achievementDefinitions.filter(item=>item.unlocked()).length;
+ const next=achievementDefinitions.filter(item=>!item.unlocked()).map(item=>({item,progress:Math.min(item.target,Math.max(0,Number(item.progress())||0))})).sort((a,b)=>(b.progress/b.item.target)-(a.progress/a.item.target))[0]||null;
+ ["homeNextAchievement","profileNextAchievement"].forEach(id=>{
+  const target=$(id);if(!target)return;
+  target.replaceChildren();
+  const heading=document.createElement("strong");heading.textContent=next?"🎯 Next milestone: "+next.item.name:"🌟 All badges unlocked!";
+  const detail=document.createElement("span");
+  if(next){const remaining=Math.max(0,next.item.target-next.progress);detail.textContent=remaining.toLocaleString()+" more "+next.item.progressLabel.toLowerCase()+" to unlock this badge.";}
+  else{detail.textContent="You've completed every current achievement. Keep learning and playing!";}
+  target.append(heading,detail);
+ });
  [["homeBadgeGrid","homeBadgeCount"],["profileBadgeGrid","profileBadgeCount"]].forEach(([gridId,countId])=>{
   const grid=$(gridId),count=$(countId);if(!grid||!count)return;
   count.textContent=unlocked+" of "+achievementDefinitions.length+" earned";
