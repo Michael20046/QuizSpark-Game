@@ -1160,6 +1160,7 @@ setupInviteFriends();
   <div class="next-achievement" id="profileNextAchievement" aria-live="polite"></div>
  </div>
 
+ <div class="card" id="certificateCenter"><h3>🎓 My Certificates</h3><p class="muted">Earn certificates by completing quizzes and building strong results. Download an unlocked certificate, then print it or save it as a PDF.</p><div id="certificateList" aria-live="polite"><p class="muted">Your certificate progress will appear here.</p></div></div>
  <div class="card" id="learningDashboardCard">
   <h3>📊 Personal Learning Dashboard</h3>
   <p class="muted">A snapshot of your recent quiz performance and what to practise next.</p>
@@ -2044,6 +2045,7 @@ function renderAchievementBadges(){
 
 function updateDashboard(){
  renderQuizLevelProgress();
+ renderCertificateCenter();
  renderLearningDashboard();
  const name=currentUser?.displayName||"Player";
  $("homeGreeting").textContent="Hello, "+name+"! 👋";
@@ -2852,6 +2854,55 @@ async function loadDailyTournamentLeaderboard(){
 }
 $("startTournamentBtn")?.addEventListener("click",startDailyTournament);
 $("refreshTournamentBtn")?.addEventListener("click",loadDailyTournamentLeaderboard);
+
+
+/* CERTIFICATE CENTRE — milestones use cumulative standard-quiz stats saved to the player profile */
+function certificateMilestones(){
+ const attempts=Number(quizLevelStats.attempts)||0,correct=Number(quizLevelStats.correct)||0,total=Number(quizLevelStats.total)||0,accuracy=total?correct/total:0;
+ return [
+  {id:"quiz-explorer",title:"Quiz Explorer",icon:"🧭",description:"Complete 5 standard quizzes",earned:attempts>=5,progress:attempts,target:5,detail:attempts+" of 5 quizzes completed"},
+  {id:"dedicated-learner",title:"Dedicated Learner",icon:"📚",description:"Complete 10 standard quizzes",earned:attempts>=10,progress:attempts,target:10,detail:attempts+" of 10 quizzes completed"},
+  {id:"accuracy-star",title:"Accuracy Star",icon:"⭐",description:"Reach 80% average accuracy across at least 5 standard quizzes",earned:attempts>=5&&accuracy>=0.8,progress:Math.round(accuracy*100),target:80,detail:Math.round(accuracy*100)+"% average accuracy · "+attempts+" quizzes"}
+ ];
+}
+function escapeCertificateText(value){
+ return String(value??"").replace(/[&<>"']/g,function(char){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char];});
+}
+function downloadLearningCertificate(milestoneId){
+ const item=certificateMilestones().find(function(m){return m.id===milestoneId;});
+ if(!item||!item.earned||!currentUser)return;
+ const playerName=currentUser.displayName||(currentUser.email?currentUser.email.split("@")[0]:"QuizSpark Learner");
+ const date=new Date().toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
+ const attempts=Number(quizLevelStats.attempts)||0,accuracy=Number(quizLevelStats.total)?Math.round(Number(quizLevelStats.correct)/Number(quizLevelStats.total)*100):0;
+ const detail=item.id==="accuracy-star"?"Achieved "+accuracy+"% average accuracy across "+attempts+" completed standard quizzes.":"Successfully completed "+(item.id==="quiz-explorer"?"at least 5":"at least 10")+" standard quizzes on QuizSpark.";
+ const html=[
+ "<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>",escapeCertificateText(item.title)," - QuizSpark Certificate</title>",
+ "<style>*{box-sizing:border-box}body{margin:0;padding:28px;background:#f4f0ff;font-family:Georgia,'Times New Roman',serif;color:#21183d}.certificate{max-width:950px;min-height:650px;margin:0 auto;padding:54px 42px;border:12px double #b58b35;background:linear-gradient(135deg,#fff,#faf6e8);text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}.brand{font:800 18px Arial,sans-serif;letter-spacing:5px;color:#6541a5}.eyebrow{margin-top:28px;font:700 13px Arial,sans-serif;letter-spacing:4px;color:#96702a}.title{font-size:48px;color:#4b2a83;margin:14px 0}.name{font-size:38px;color:#936c22;border-bottom:1px solid #c7a65a;padding:12px 34px;margin:16px 0}.description{font-size:19px;line-height:1.7;max-width:680px}.award{font-size:48px;margin:4px}.date{margin-top:32px;font:15px Arial,sans-serif;color:#625878}.footer{margin-top:36px;font:700 13px Arial,sans-serif;letter-spacing:2px;color:#6541a5}@media print{body{padding:0;background:white}.certificate{min-height:96vh;page-break-inside:avoid}}</style></head><body>",
+ "<main class='certificate'><div class='brand'>QUIZSPARK</div><div class='eyebrow'>CERTIFICATE OF ACHIEVEMENT</div><div class='award'>",item.icon,"</div><h1 class='title'>",escapeCertificateText(item.title),"</h1><p class='description'>This certificate is proudly presented to</p><div class='name'>",escapeCertificateText(playerName),"</div><p class='description'>",escapeCertificateText(detail),"</p><p class='date'>Awarded on ",escapeCertificateText(date),"</p><div class='footer'>LEARN MORE · PLAY MORE · GROW SMARTER</div></main>",
+ "<script>window.addEventListener('load',function(){setTimeout(function(){window.print();},500);});<","/script></body></html>"
+ ].join("");
+ const blob=new Blob([html],{type:"text/html;charset=utf-8"}),url=URL.createObjectURL(blob),link=document.createElement("a");
+ link.href=url;link.download="QuizSpark-"+item.id+"-Certificate.html";document.body.appendChild(link);link.click();link.remove();setTimeout(function(){URL.revokeObjectURL(url);},60000);
+}
+function renderCertificateCenter(){
+ const host=$("certificateList");if(!host)return;host.replaceChildren();
+ certificateMilestones().forEach(function(item){
+  const card=document.createElement("div");card.className="quiz-history-row";
+  const title=document.createElement("strong");title.textContent=item.icon+" "+item.title;
+  const desc=document.createElement("span");desc.textContent=item.description;
+  const progress=document.createElement("small");progress.textContent=item.earned?"🏅 Certificate unlocked":item.detail;
+  card.append(title,desc,progress);
+  if(item.earned){
+   const button=document.createElement("button");button.type="button";button.className="secondary";button.textContent="⬇ Download Certificate";
+   button.addEventListener("click",function(){downloadLearningCertificate(item.id);});card.appendChild(button);
+  }else{
+   const track=document.createElement("div");track.style.height="7px";track.style.background="rgba(150,150,150,.22)";track.style.borderRadius="99px";track.style.overflow="hidden";
+   const fill=document.createElement("div");fill.style.height="100%";fill.style.width=Math.min(100,Math.round(item.progress/item.target*100))+"%";fill.style.background="linear-gradient(90deg,#7652c8,#e4b84c)";
+   track.appendChild(fill);card.appendChild(track);
+  }
+  host.appendChild(card);
+ });
+}
 
 /* PERSONAL LEARNING DASHBOARD — uses the player's recent saved quiz results */
 function renderLearningDashboard(){
