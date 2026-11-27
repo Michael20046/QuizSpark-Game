@@ -956,6 +956,14 @@ setupInviteFriends();
    <p class="muted" style="margin:8px 0 12px">Save specific pages and return directly to them whenever you want. Bookmarks stay on this device.</p>
    <div id="storyBookmarkShelf" class="story-shelf" aria-live="polite"></div>
   </section>
+  <section class="recent-reading" aria-labelledby="completedStoriesHeading" style="margin:0 0 22px;padding:15px;border:1px solid #8f7136;border-radius:15px;background:linear-gradient(145deg,#302653,#192344)">
+   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+    <h2 id="completedStoriesHeading" style="margin:0">🏆 Completed Stories</h2>
+    <span id="completedStoryCount" class="muted">0 completed</span>
+   </div>
+   <p class="muted" style="margin:8px 0 12px">Books you have finished will appear here. Finish the final page and tap “Finish Book” to add a story.</p>
+   <div id="completedStoryShelf" class="story-shelf" aria-live="polite"></div>
+  </section>
   <section class="recent-reading" aria-labelledby="recentReadingHeading" style="margin:0 0 22px;padding:15px;border:1px solid #66529a;border-radius:15px;background:linear-gradient(145deg,#25204b,#192344)">
    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
     <h2 id="recentReadingHeading" style="margin:0">🕘 Recently Read</h2>
@@ -3141,6 +3149,55 @@ function setupStoryReadingTools(){
  applyStoryFontSize(getStoryFontSize());
  applyStoryTheme(getStoryTheme());
 }
+const QUIZSPARK_COMPLETED_STORIES_KEY="quizspark-completed-stories-v1";
+function getCompletedStoryIds(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(QUIZSPARK_COMPLETED_STORIES_KEY)||"[]");
+  return Array.isArray(saved)?saved.filter(item=>item&&typeof item.id==="string"&&quizSparkStories.some(story=>story.id===item.id)): [];
+ }catch(error){return [];}
+}
+function isStoryCompleted(id){
+ return getCompletedStoryIds().some(item=>item.id===id);
+}
+function renderCompletedStories(){
+ const shelf=document.getElementById("completedStoryShelf");if(!shelf)return;
+ shelf.replaceChildren();
+ const completed=getCompletedStoryIds();
+ const count=document.getElementById("completedStoryCount");
+ if(count)count.textContent=completed.length+" completed";
+ if(!completed.length){
+  const empty=document.createElement("p");empty.className="muted";empty.textContent="No completed books yet. Your finished stories will be collected here.";
+  shelf.appendChild(empty);return;
+ }
+ completed.forEach(item=>{
+  const story=quizSparkStories.find(book=>book.id===item.id);if(!story)return;
+  const card=document.createElement("article");card.className="story-card";
+  const title=document.createElement("h3");title.textContent="🏆 "+story.title;
+  const meta=document.createElement("div");meta.className="story-meta";meta.textContent=story.country+" · "+story.genre;
+  const date=document.createElement("p");date.className="muted";
+  const stamp=Number(item.completedAt);
+  date.textContent=Number.isFinite(stamp)&&stamp>0?"Completed "+new Date(stamp).toLocaleDateString():"Completed";
+  const reopen=document.createElement("button");reopen.className="primary";reopen.type="button";reopen.textContent="Read Again →";
+  reopen.addEventListener("click",()=>{activeStory=story;activeStoryPage=0;renderQuizSparkStoryPage();showPage("storyReader");window.scrollTo({top:0,behavior:"smooth"});});
+  const remove=document.createElement("button");remove.className="secondary";remove.type="button";remove.textContent="Remove from Completed";
+  remove.addEventListener("click",()=>{localStorage.setItem(QUIZSPARK_COMPLETED_STORIES_KEY,JSON.stringify(getCompletedStoryIds().filter(saved=>saved.id!==item.id)));renderCompletedStories();});
+  card.append(title,meta,date,reopen,remove);shelf.appendChild(card);
+ });
+}
+function completeActiveStory(){
+ if(!activeStory)return;
+ const completed=getCompletedStoryIds();
+ if(!completed.some(item=>item.id===activeStory.id)){
+  completed.unshift({id:activeStory.id,completedAt:Date.now()});
+  try{localStorage.setItem(QUIZSPARK_COMPLETED_STORIES_KEY,JSON.stringify(completed));}
+  catch(error){const message=document.getElementById("storySaveMessage");if(message)message.textContent="Could not save completion on this device. Check available storage.";return;}
+ }
+ renderCompletedStories();
+ const message=document.getElementById("storySaveMessage");
+ if(message)message.textContent="🎉 Book completed! You can find it in Completed Stories.";
+ showPage("stories");
+ window.scrollTo({top:0,behavior:"smooth"});
+}
 const QUIZSPARK_STORY_BOOKMARKS_KEY="quizspark-story-bookmarks-v1";
 function getStoryBookmarks(){
  try{
@@ -3323,13 +3380,13 @@ function renderQuizSparkStoryPage(){
  document.getElementById("storyPageCount").textContent="Page "+(activeStoryPage+1)+" of "+total+" · "+activeStory.country;
  document.getElementById("storyProgressFill").style.width=((activeStoryPage+1)/total*100)+"%";
  document.getElementById("storyPrevBtn").disabled=activeStoryPage===0;
- document.getElementById("storyNextBtn").textContent=activeStoryPage===total-1?"Back to Library ✓":"Next Page →";
+ document.getElementById("storyNextBtn").textContent=activeStoryPage===total-1?"Finish Book ✓":"Next Page →";
  updateStoryBookmarkButton();
  localStorage.setItem("quizspark-story-"+activeStory.id,String(activeStoryPage));
  saveReadingHistory(activeStory.id,activeStoryPage);
 }
 document.getElementById("storyPrevBtn").addEventListener("click",()=>{if(activeStory&&activeStoryPage>0){activeStoryPage--;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}});
-document.getElementById("storyNextBtn").addEventListener("click",()=>{if(!activeStory)return;if(activeStoryPage<activeStory.pages.length-1){activeStoryPage++;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}else{showPage("stories");}});
+document.getElementById("storyNextBtn").addEventListener("click",()=>{if(!activeStory)return;if(activeStoryPage<activeStory.pages.length-1){activeStoryPage++;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}else{completeActiveStory();}});
 setupStoryFilters();
 setupStoryReadingTools();
 document.getElementById("toggleStoryBookmark")?.addEventListener("click",toggleCurrentStoryBookmark);
@@ -3340,6 +3397,7 @@ document.getElementById("clearStoryBookmarks")?.addEventListener("click",()=>{
 renderStoryShelf();
 renderRecentStoryShelf();
 renderStoryBookmarkShelf();
+renderCompletedStories();
 document.getElementById("clearReadingHistory")?.addEventListener("click",()=>{
  localStorage.removeItem(QUIZSPARK_READING_HISTORY_KEY);renderRecentStoryShelf();
 });
