@@ -2171,6 +2171,7 @@ $("submitReviewBtn").onclick=async()=>{
   setMessage("reviewMessage","Thank you! Your review has been saved.","success");
   $("submitReviewBtn").textContent="Update My Review";
   await loadReviews();
+  await loadDailyTournamentLeaderboard();
  }catch(error){
   setMessage("reviewMessage","Could not save your review: "+friendlyError(error),"error");
  }finally{
@@ -2678,21 +2679,18 @@ async function finishQuiz(){
    const snap=await tx.get(ref);
    if(!snap.exists())throw new Error("Player profile not found.");
    const data=snap.data();
-   const update={
-    points:(Number(data.points)||0)+score,
-    gamesPlayed:(Number(data.gamesPlayed)||0)+1,
-    correctAnswers:(Number(data.correctAnswers)||0)+earnedCorrect,
-    updatedAt:serverTimestamp()
-   };
-   if(quizMode==="tournament"&&tournamentDate){
-    const oldDate=data.dailyTournamentDate||"";
-    const oldScore=Number(data.dailyTournamentScore)||0;
-    if(oldDate!==tournamentDate||score>oldScore){
-     update.dailyTournamentDate=tournamentDate;
-     update.dailyTournamentScore=score;
-     update.dailyTournamentCorrect=earnedCorrect;
-     update.dailyTournamentUpdatedAt=serverTimestamp();
-    }
+   const alreadyEntered=quizMode==="tournament"&&tournamentDate&&data.dailyTournamentDate===tournamentDate;
+   const update={updatedAt:serverTimestamp()};
+   if(!alreadyEntered){
+    update.points=(Number(data.points)||0)+score;
+    update.gamesPlayed=(Number(data.gamesPlayed)||0)+1;
+    update.correctAnswers=(Number(data.correctAnswers)||0)+earnedCorrect;
+   }
+   if(quizMode==="tournament"&&tournamentDate&&!alreadyEntered){
+    update.dailyTournamentDate=tournamentDate;
+    update.dailyTournamentScore=score;
+    update.dailyTournamentCorrect=earnedCorrect;
+    update.dailyTournamentUpdatedAt=serverTimestamp();
    }
    tx.update(ref,update);
   });
@@ -2701,7 +2699,7 @@ async function finishQuiz(){
   await loadProfile(currentUser);
   saveRecentQuizHistory();
   trackAnalytics("quiz_complete",{category:selectedCategory,score:score,question_count:quizQuestions.length});
-  setMessage("gameMessage",(quizMode==="tournament"?"🏆 Tournament completed! ":"🏆 Congratulations! ")+"You earned "+score+" points. Your new balance is "+savedPoints+".","success");
+  setMessage("gameMessage",(quizMode==="tournament"?"🏆 Tournament completed! ":"🏆 Congratulations! ")+(quizMode==="tournament"?"Your tournament score is "+score+" / 50. ":"You earned "+score+" points. ")+"Your new balance is "+savedPoints+".","success");
   if(quizMode==="tournament")await loadDailyTournamentLeaderboard();
   $("shareQuizResultBtn").classList.remove("hidden");
   await loadLeaderboard();
@@ -2720,7 +2718,7 @@ async function finishQuiz(){
 }
 
 /* DAILY QUIZ TOURNAMENT */
-function tournamentToday(){return localChallengeDate();}
+function tournamentToday(){return new Date().toISOString().slice(0,10);}
 function tournamentQuestionsForDate(date){
  const pool=[];
  Object.entries(bank).forEach(([category,items])=>{
@@ -2760,6 +2758,7 @@ function startDailyTournament(){
 async function loadDailyTournamentLeaderboard(){
  const host=$("dailyTournamentLeaderboard");if(!host)return;
  host.replaceChildren();
+ if(!currentUser){host.textContent="Sign in to view and enter the tournament.";return;}
  const today=tournamentToday();
  $("tournamentDate").textContent="Tournament date: "+today+" · Best score counts";
  try{
