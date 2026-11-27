@@ -976,6 +976,12 @@ setupInviteFriends();
     <div class="story-card" style="text-align:center"><strong id="readingBestStreak" style="display:block;font-size:25px;color:#f2cf78">0</strong><span class="muted">🏅 Best streak</span></div>
    </div>
    <p class="muted" id="readingStreakMessage" style="margin:8px 0 0">Open a story and read each day to build your streak.</p>
+   <div class="story-card" style="margin-top:13px;border:1px solid #8f7136">
+    <h3 style="margin:0 0 5px;color:#ffe6a3">🗓️ This Week's Reading Calendar</h3>
+    <p class="muted" id="readingWeekRange" style="margin:0 0 12px">Monday – Sunday</p>
+    <div id="readingWeekCalendar" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px" role="group" aria-label="Reading activity for this week"></div>
+    <p class="muted" id="readingWeekSummary" aria-live="polite" style="margin:10px 0 0">Your reading days will appear here.</p>
+   </div>
    <p class="muted" style="margin:10px 0 0">Your reading progress is counted on this device. Pages reached means the furthest page saved in each book.</p>
   </section>
   <section class="recent-reading" aria-labelledby="completedStoriesHeading" style="margin:0 0 22px;padding:15px;border:1px solid #8f7136;border-radius:15px;background:linear-gradient(145deg,#302653,#192344)">
@@ -3219,6 +3225,35 @@ function calculateReadingStreaks(){
  });
  return {current,best,readToday:set.has(today)};
 }
+function renderWeeklyReadingCalendar(){
+ const calendar=document.getElementById("readingWeekCalendar");if(!calendar)return;
+ calendar.replaceChildren();
+ const today=getLocalReadingDate();
+ const parts=today.split("-").map(Number);
+ const todayDate=new Date(parts[0],parts[1]-1,parts[2]);
+ const mondayOffset=(todayDate.getDay()+6)%7;
+ const monday=new Date(parts[0],parts[1]-1,parts[2]-mondayOffset);
+ const days=getReadingDays();
+ let count=0;
+ const labels=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+ labels.forEach((label,index)=>{
+  const date=new Date(monday.getFullYear(),monday.getMonth(),monday.getDate()+index);
+  const key=date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");
+  const read=days.includes(key);if(read)count++;
+  const cell=document.createElement("div");
+  cell.style.cssText="min-width:0;text-align:center;padding:8px 2px;border-radius:10px;border:1px solid "+(read?"#b18b43":"#59658c")+";background:"+(read?"#49356e":"#202747");
+  const day=document.createElement("span");day.style.cssText="display:block;font-size:11px;color:#d8d0ee";day.textContent=label;
+  const number=document.createElement("strong");number.style.cssText="display:block;font-size:17px;margin:5px 0;color:"+(read?"#ffe6a3":"#fff");number.textContent=String(date.getDate());
+  const mark=document.createElement("span");mark.style.cssText="display:block;font-size:12px";mark.textContent=read?"✓":key===today?"Today":"—";
+  cell.setAttribute("aria-label",label+" "+date.toLocaleDateString()+": "+(read?"read a story":key===today?"today, no reading yet":"no reading recorded"));
+  if(key===today)cell.style.outline="2px solid #f4c95d";
+  cell.append(day,number,mark);calendar.appendChild(cell);
+ });
+ const range=document.getElementById("readingWeekRange");
+ if(range){const end=new Date(monday.getFullYear(),monday.getMonth(),monday.getDate()+6);range.textContent=monday.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" – "+end.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});}
+ const summary=document.getElementById("readingWeekSummary");
+ if(summary)summary.textContent=count+" of 7 days read this week"+(days.includes(today)?". You have read today — great work!":". Read a story today to mark today's box.");
+}
 function renderReadingStatistics(){
  const completed=getCompletedStoryIds();
  const completedIds=new Set(completed.map(item=>item.id));
@@ -3255,6 +3290,7 @@ function renderReadingStatistics(){
  set("readingCurrentStreak",streaks.current+" days");
  set("readingBestStreak",streaks.best+" days");
  set("readingStreakMessage",streaks.readToday?"You've read today. Great work keeping your streak alive!":streaks.current>0?"Read a story today to keep your "+streaks.current+"-day streak going.":"Read a story today to start a new streak.");
+ renderWeeklyReadingCalendar();
 }
 function renderCompletedStories(){
  const shelf=document.getElementById("completedStoryShelf");if(!shelf)return;
