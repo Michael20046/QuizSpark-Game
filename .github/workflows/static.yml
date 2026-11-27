@@ -36,6 +36,10 @@ jobs:
         with:
           path: .
 
+      # Allow GitHub Actions artifact metadata to become available before deployment lookup.
+      - name: Wait for Pages artifact registration
+        run: sleep 15
+
       - name: Deploy website
         id: deployment
         uses: actions/deploy-pages@v4
