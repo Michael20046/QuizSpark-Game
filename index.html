@@ -711,6 +711,23 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 .daily-answer:disabled{opacity:.8}.daily-answer.correct{border-color:#86efac;background:#123c32}.daily-answer.wrong{border-color:#fca5a5;background:#49232e}
 @media(max-width:420px){.daily-answers{grid-template-columns:1fr}}
 
+
+/* quizspark-achievements-v1 */
+.achievement-card{margin:16px 0;border:1px solid rgba(226,202,133,.42);background:linear-gradient(145deg,rgba(39,30,76,.96),rgba(23,34,66,.96));border-radius:20px}
+.achievement-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.achievement-heading h2,.achievement-heading h3{margin:5px 0 8px}
+.achievement-kicker{font-size:10px;letter-spacing:.15em;font-weight:800;color:#f2d27b}
+.achievement-count{font-size:12px;font-weight:800;color:#f5d98a;background:rgba(226,202,133,.12);border:1px solid rgba(226,202,133,.3);padding:7px 10px;border-radius:999px;white-space:nowrap}
+.achievement-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.achievement-badge{min-width:0;text-align:center;padding:13px 7px 11px;border-radius:15px;border:1px solid rgba(196,181,253,.22);background:rgba(13,18,43,.48)}
+.achievement-badge.unlocked{border-color:rgba(244,201,93,.62);background:linear-gradient(145deg,rgba(116,83,29,.28),rgba(34,29,71,.68));box-shadow:inset 0 0 18px rgba(244,201,93,.06)}
+.achievement-icon{font-size:27px;line-height:1.35;filter:grayscale(1);opacity:.42}
+.achievement-badge.unlocked .achievement-icon{filter:none;opacity:1}
+.achievement-name{font-size:11px;font-weight:800;line-height:1.35;margin-top:5px;color:#fff}
+.achievement-status{font-size:10px;color:#b8b4ca;margin-top:4px}
+.achievement-badge.unlocked .achievement-status{color:#f4d782}
+@media(max-width:390px){.achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style>
 </head>
 
@@ -783,6 +800,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
   <div class="stat"><span>🏆 Correct Answers</span><strong id="correctAnswers">0</strong></div>
   <div class="stat"><span>📖 Lessons Completed</span><strong id="lessonsCompleted">0</strong></div>
  </div>
+
+ <section class="card achievement-card" id="homeAchievements" aria-labelledby="homeAchievementsTitle">
+  <div class="achievement-heading"><div><span class="achievement-kicker">YOUR PROGRESS</span><h2 id="homeAchievementsTitle">🏅 Achievement Badges</h2></div><span class="achievement-count" id="homeBadgeCount">0 earned</span></div>
+  <p class="muted">Every milestone is worth celebrating. Keep learning to unlock more badges.</p>
+  <div class="achievement-grid" id="homeBadgeGrid" aria-live="polite"></div>
+ </section>
+
  <div class="card" style="margin-top:15px">
   <h3>🌟 Keep Growing</h3>
   <p class="muted">A little learning every day makes a difference.</p>
@@ -936,6 +960,12 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
   <div class="avatar">👤</div><h2 id="profileName">Player</h2>
   <p id="profileEmail" class="muted"></p><h2 id="profilePoints" class="yellow">0 Points</h2>
  </div>
+
+ <div class="card achievement-card" id="profileAchievements">
+  <div class="achievement-heading"><div><span class="achievement-kicker">MILESTONES</span><h3>🏅 Your Achievements</h3></div><span class="achievement-count" id="profileBadgeCount">0 earned</span></div>
+  <div class="achievement-grid" id="profileBadgeGrid"></div>
+ </div>
+
  <div class="card">
   <h3>Player Information</h3>
   <p class="muted">Games played: <strong id="profileGames">0</strong></p>
@@ -1750,6 +1780,35 @@ async function answerDailyChallenge(choice,button,item,today){
  }finally{dailyChallengeSaving=false;}
 }
 
+
+/* quizspark-achievements-v1 */
+const achievementDefinitions=[
+ {id:"first-quiz",icon:"🎮",name:"First Steps",description:"Complete your first quiz",unlocked:()=>games>=1},
+ {id:"quiz-explorer",icon:"🧭",name:"Quiz Explorer",description:"Play 5 quizzes",unlocked:()=>games>=5},
+ {id:"brain-builder",icon:"🧠",name:"Brain Builder",description:"Get 25 correct answers",unlocked:()=>correctTotal>=25},
+ {id:"scholar",icon:"📚",name:"Scholar",description:"Complete your first lesson",unlocked:()=>lessonsDone.length>=1},
+ {id:"daily-spark",icon:"⚡",name:"Daily Spark",description:"Complete 3 daily challenges",unlocked:()=>dailyChallengeDates.length>=3},
+ {id:"point-collector",icon:"💎",name:"Point Collector",description:"Earn 100 points",unlocked:()=>savedPoints>=100},
+ {id:"gold-legend",icon:"👑",name:"Gold Legend",description:"Reach 500 points",unlocked:()=>savedPoints>=500}
+];
+function renderAchievementBadges(){
+ const unlocked=achievementDefinitions.filter(item=>item.unlocked()).length;
+ [["homeBadgeGrid","homeBadgeCount"],["profileBadgeGrid","profileBadgeCount"]].forEach(([gridId,countId])=>{
+  const grid=$(gridId),count=$(countId);if(!grid||!count)return;
+  count.textContent=unlocked+" of "+achievementDefinitions.length+" earned";
+  grid.replaceChildren();
+  achievementDefinitions.forEach(item=>{
+   const earned=item.unlocked(),card=document.createElement("div");
+   card.className="achievement-badge"+(earned?" unlocked":"");
+   card.title=item.description;
+   const icon=document.createElement("div");icon.className="achievement-icon";icon.textContent=item.icon;
+   const name=document.createElement("div");name.className="achievement-name";name.textContent=item.name;
+   const status=document.createElement("div");status.className="achievement-status";status.textContent=earned?"✓ Unlocked":"🔒 Locked";
+   card.append(icon,name,status);grid.appendChild(card);
+  });
+ });
+}
+
 function updateDashboard(){
  const name=currentUser?.displayName||"Player";
  $("homeGreeting").textContent="Hello, "+name+"! 👋";
@@ -1760,6 +1819,7 @@ function updateDashboard(){
  $("gamesPlayed").textContent=games;$("profileGames").textContent=games;
  $("correctAnswers").textContent=correctTotal;$("profileCorrect").textContent=correctTotal;
  $("profileName").textContent=name;$("profileEmail").textContent=currentUser?.email||"";
+ renderAchievementBadges();
  renderDailyChallenge();
  $("lessonsCompleted").textContent=lessonsDone.length;$("profileLessons").textContent=lessonsDone.length;
 }
