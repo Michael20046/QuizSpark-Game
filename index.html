@@ -4208,7 +4208,8 @@ function renderStoryShelf(){
   const card=document.createElement("article");card.className="story-card";
   const title=document.createElement("h3");title.textContent=story.title;
   const meta=document.createElement("div");meta.className="story-meta";meta.textContent=story.country+(story.region?" · "+story.region:"")+" · "+story.genre+" · "+story.pages.length+" pages";
-  const desc=document.createElement("p");desc.textContent=story.description;\n  const backCover=document.createElement("p");backCover.className="story-back-cover";backCover.textContent="📘 Back cover · "+(story.backCover||story.description);backCover.style.cssText="padding:11px 12px;margin:9px 0 12px;border-left:3px solid #d8b45f;border-radius:8px;background:rgba(216,180,95,.09);line-height:1.65;color:inherit";
+  const desc=document.createElement("p");desc.textContent=story.description;
+  const backCover=document.createElement("p");backCover.className="story-back-cover";backCover.textContent="📘 Back cover · "+(story.backCover||story.description);backCover.style.cssText="padding:11px 12px;margin:9px 0 12px;border-left:3px solid #d8b45f;border-radius:8px;background:rgba(216,180,95,.09);line-height:1.65;color:inherit";
   const tag=document.createElement("span");tag.className="story-tag";tag.textContent="✦ Original fiction";
   const saved=Math.min(Math.max(Number(localStorage.getItem("quizspark-story-"+story.id)||0),0),story.pages.length-1);
   const progress=document.createElement("p");progress.className="story-progress-note";
