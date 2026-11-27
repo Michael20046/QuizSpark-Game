@@ -3588,6 +3588,7 @@ const nigeriaRomanceBooks=[
 {chapter:"Chapter 4 · A New Beginning",title:"A Date Without a Checklist",body:"The next morning, Morenike met Tunde at a quiet café. For once, she brought no clipboard and he brought no catering schedule. They talked about what a relationship might look like and agreed to begin with honesty, patience and the same teamwork that had carried them through the wedding. They did not pretend that friendship guaranteed romance would be easy. They simply decided to give it a chance. When Tunde asked what time their next meeting should be, Morenike smiled and said, 'Let's leave this one open.'"}]}
 ];
 quizSparkStories.push(...nigeriaRomanceBooks);
+quizSparkStories.push({id:"the-boy-in-lagos",title:"The Boy in Lagos",country:"Nigeria",genre:"Coming Soon",description:"A new Lagos story is being prepared. The story will be added after the author shares it.",pages:[],coverImage:"assets/the-boy-in-lagos-cover.svg"});
 
 
 /* quizspark-west-africa-literature: original regional collection */
@@ -4169,6 +4170,12 @@ function renderStoryBookmarkShelf(){
   const page=Math.min(Math.max(Number(item.page)||0,0),story.pages.length-1);
   const card=document.createElement("article");card.className="story-card";
   const title=document.createElement("h3");title.textContent=story.title;
+  if(story.id==="the-boy-in-lagos"){
+   const cover=document.createElement("img");cover.className="story-front-cover";cover.src=story.coverImage;cover.alt="The Boy in Lagos book cover";cover.loading="lazy";
+   cover.style.cssText="display:block;width:min(100%,230px);height:auto;aspect-ratio:2/3;object-fit:cover;margin:0 auto 14px;border:2px solid #c6a45a;border-radius:12px;box-shadow:0 8px 22px #08081788";
+   const coming=document.createElement("p");coming.className="story-meta";coming.textContent="📖 Cover added · Story coming soon";
+   card.append(cover,title,coming);shelf.appendChild(card);return;
+  }
   const pageTitle=document.createElement("p");pageTitle.textContent=item.pageTitle||story.pages[page].title;
   const meta=document.createElement("div");meta.className="story-meta";meta.textContent=(item.chapter||story.pages[page].chapter)+" · Page "+(page+1)+" of "+story.pages.length;
   const open=document.createElement("button");open.className="primary";open.type="button";open.textContent="Open Bookmarked Page →";
