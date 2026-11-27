@@ -4258,6 +4258,16 @@ function renderStoryShelf(){
   shelf.appendChild(empty);return;
  }
  filtered.forEach(story=>{
+  if(story.id==="the-boy-in-lagos"){
+   const card=document.createElement("article");card.className="story-card story-coming-soon";
+   const title=document.createElement("h3");title.textContent=story.title;
+   const meta=document.createElement("div");meta.className="story-meta";meta.textContent="Nigeria · Cover preview · Story coming soon";
+   const cover=document.createElement("img");cover.src=story.coverImage;cover.alt="Illustrated cover for The Boy in Lagos";cover.loading="lazy";
+   cover.style.cssText="display:block;width:min(100%,260px);aspect-ratio:2/3;object-fit:cover;margin:12px auto 16px;border:2px solid #d7b65f;border-radius:12px;box-shadow:0 8px 22px #090d2077";
+   const desc=document.createElement("p");desc.textContent=story.description;
+   const label=document.createElement("p");label.className="story-progress-note";label.textContent="📖 Cover added · Full story will be added when you share it";
+   card.append(title,meta,cover,desc,label);shelf.appendChild(card);return;
+  }
   const card=document.createElement("article");card.className="story-card";
   const title=document.createElement("h3");title.textContent=story.title;
   const meta=document.createElement("div");meta.className="story-meta";meta.textContent=story.country+(story.region?" · "+story.region:"")+" · "+story.genre+" · "+story.pages.length+" pages";
