@@ -1,0 +1,28 @@
+name: Diagnose Story Library JavaScript
+on:
+  push:
+    branches:
+      - diagnose-story-library-script
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  syntax-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract the main QuizSpark script
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          html = Path("index.html").read_text(encoding="utf-8")
+          scripts = re.findall(r"<script\\b[^>]*>([\\s\\S]*?)</script>", html, re.I)
+          matches = [s for s in scripts if "QUIZSPARK APP INSTALL" in s]
+          if len(matches) != 1:
+              raise SystemExit(f"Expected one main app script; found {len(matches)}")
+          Path("/tmp/quizspark-main.js").write_text(matches[0], encoding="utf-8")
+          print(f"Extracted {len(matches[0])} characters")
+          PY
+      - name: Check JavaScript syntax and report exact line
+        run: node --check /tmp/quizspark-main.js
