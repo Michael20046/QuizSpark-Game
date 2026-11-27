@@ -679,6 +679,11 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 .story-card h3{color:#f3e7bd;margin:0 0 8px;font-size:18px;line-height:1.35}
 .story-meta{font-size:12px;color:#d4c7f0;margin:6px 0 12px;line-height:1.5}
 .story-card p{color:#d9d5e8;line-height:1.65;font-size:14px}
+.story-back-cover{position:relative;display:block;margin:14px 0 15px!important;padding:20px 16px 18px!important;min-height:120px;border:1px solid #c6a45a;border-radius:13px;background:linear-gradient(145deg,#3b2d65 0%,#211b43 58%,#171d3a 100%);box-shadow:inset 0 0 0 3px rgba(245,212,119,.07),0 7px 16px #090d2044;color:#f5e8c2!important;overflow:hidden}
+.story-back-cover:before{content:"QUIZSPARK  ·  THE STORY COLLECTION";display:block;margin:0 0 12px;padding-bottom:9px;border-bottom:1px solid rgba(245,212,119,.48);color:#f5d477;font-size:9px;font-weight:800;letter-spacing:.16em}
+.story-back-cover:after{content:"✦  ✦  ✦";display:block;margin-top:12px;text-align:center;color:#e4c16b;letter-spacing:.5em;font-size:12px}
+.story-back-cover-label{display:block;margin-bottom:7px;color:#f5d477;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.story-back-cover-copy{margin:0!important;color:#f5e8c2!important;font-family:Georgia,serif;font-size:14px!important;line-height:1.75!important}
 .story-tag{display:inline-block;background:#3a2d64;color:#f6dfa0;border:1px solid #9878cb;border-radius:20px;padding:5px 10px;font-size:11px;margin:3px 4px 7px 0}
 .story-card button{width:100%;margin-top:10px}
 
@@ -4250,7 +4255,7 @@ function renderStoryShelf(){
   const title=document.createElement("h3");title.textContent=story.title;
   const meta=document.createElement("div");meta.className="story-meta";meta.textContent=story.country+(story.region?" · "+story.region:"")+" · "+story.genre+" · "+story.pages.length+" pages";
   const desc=document.createElement("p");desc.textContent=story.description;
-  const backCover=document.createElement("p");backCover.className="story-back-cover";backCover.textContent="📘 Back cover · "+(story.backCover||story.description);backCover.style.cssText="padding:11px 12px;margin:9px 0 12px;border-left:3px solid #d8b45f;border-radius:8px;background:rgba(216,180,95,.09);line-height:1.65;color:inherit";
+  const backCover=document.createElement("div");backCover.className="story-back-cover";backCover.setAttribute("aria-label","Book back cover");const backCoverLabel=document.createElement("span");backCoverLabel.className="story-back-cover-label";backCoverLabel.textContent="📖 Back Cover";const backCoverCopy=document.createElement("p");backCoverCopy.className="story-back-cover-copy";backCoverCopy.textContent=story.backCover||story.description;backCover.append(backCoverLabel,backCoverCopy);
   const tag=document.createElement("span");tag.className="story-tag";tag.textContent="✦ Original fiction";
   const saved=Math.min(Math.max(Number(localStorage.getItem("quizspark-story-"+story.id)||0),0),story.pages.length-1);
   const progress=document.createElement("p");progress.className="story-progress-note";
