@@ -1131,6 +1131,7 @@ setupInviteFriends();
   <p id="gameMessage" class="message" aria-live="polite"></p>
   <button class="primary hidden" id="nextBtn">Next Question →</button>
   <button class="secondary hidden" id="shareQuizResultBtn" type="button">📤 Share Quiz Result</button>
+  <button class="primary hidden" id="challengeFriendBtn" type="button">🤝 Challenge a Friend</button>
   <button class="secondary" id="quitBtn">Save and Exit Quiz</button>
  </div>
 </section>
@@ -2600,7 +2601,7 @@ function startOrResumeQuiz(){
  quizMode="standard";tournamentDate=null;
  quizQuestions=makeQuiz();if(!quizQuestions.length)return;
  $("quizGame").classList.remove("quiz-complete");
- $("shareQuizResultBtn").classList.add("hidden");
+ $("shareQuizResultBtn").classList.add("hidden");$("challengeFriendBtn").classList.add("hidden");
  questionIndex=0;score=0;answered=false;disabledAnswers=[];gameRunning=true;
  trackAnalytics("quiz_start",{category:selectedCategory,difficulty:$("difficulty").value,question_count:quizQuestions.length});
  saveQuizDraft();
@@ -2701,7 +2702,7 @@ async function finishQuiz(){
   trackAnalytics("quiz_complete",{category:selectedCategory,score:score,question_count:quizQuestions.length});
   setMessage("gameMessage",(quizMode==="tournament"?"🏆 Tournament completed! ":"🏆 Congratulations! ")+(quizMode==="tournament"?"Your tournament score is "+score+" / 50. ":"You earned "+score+" points. ")+"Your new balance is "+savedPoints+".","success");
   if(quizMode==="tournament")await loadDailyTournamentLeaderboard();
-  $("shareQuizResultBtn").classList.remove("hidden");
+  $("shareQuizResultBtn").classList.remove("hidden");$("challengeFriendBtn").classList.remove("hidden");
   await loadLeaderboard();
  }catch(e){
   gameRunning=true;
@@ -2750,7 +2751,7 @@ function startDailyTournament(){
  if(quizQuestions.length!==5){setMessage("tournamentDate","Today's tournament questions are not available. Please try again later.","error");return;}
  questionIndex=0;score=0;answered=false;disabledAnswers=[];gameRunning=true;
  $("quizGame").classList.remove("quiz-complete");
- $("shareQuizResultBtn").classList.add("hidden");
+ $("shareQuizResultBtn").classList.add("hidden");$("challengeFriendBtn").classList.add("hidden");
  $("quizSetup").classList.add("hidden");$("quizGame").classList.remove("hidden");
  $("gamePoints").textContent="0";saveQuizDraft();showQuestion();
  trackAnalytics("daily_tournament_start",{date:today,question_count:5});
@@ -2845,6 +2846,32 @@ $("shareQuizResultBtn").onclick=async()=>{
   }
  }catch(e){
   if(e?.name!=="AbortError")setMessage("gameMessage","Sharing was unavailable. You can still copy the QuizSpark link from your browser address bar.","error");
+ }finally{button.disabled=false;}
+};
+
+/* CHALLENGE A FRIEND */
+$("challengeFriendBtn").onclick=async()=>{
+ if(!currentUser||gameRunning||saving)return;
+ const total=quizQuestions.length*10;
+ const modeLabel=quizMode==="tournament"?"today's Daily Quiz Tournament":"a "+selectedCategory+" quiz";
+ const invite="🤝 I challenge you to beat my QuizSpark score! I scored "+score+" out of "+total+" in "+modeLabel+". Play the quiz and see if you can beat me: https://michael20046.github.io/QuizSpark-Game/ — No purchase or payment needed. Just have fun learning!";
+ const button=$("challengeFriendBtn");button.disabled=true;
+ try{
+  if(navigator.share){
+   await navigator.share({title:"You're challenged on QuizSpark!",text:invite});
+   setMessage("gameMessage","Challenge shared! Your friend can try to beat your score.","success");
+  }else if(navigator.clipboard?.writeText){
+   await navigator.clipboard.writeText(invite);
+   setMessage("gameMessage","Challenge copied. Paste it into a message and send it to your friend.","success");
+  }else{
+   const field=document.createElement("textarea");field.value=invite;field.setAttribute("readonly","");
+   field.style.position="fixed";field.style.opacity="0";document.body.appendChild(field);field.select();
+   const copied=document.execCommand("copy");field.remove();
+   if(!copied)throw new Error("Copy is not supported.");
+   setMessage("gameMessage","Challenge copied. Paste it into a message and send it to your friend.","success");
+  }
+ }catch(error){
+  if(error?.name!=="AbortError")setMessage("gameMessage","Sharing is unavailable. Try the Share Quiz Result button or copy the website link manually.","error");
  }finally{button.disabled=false;}
 };
 
