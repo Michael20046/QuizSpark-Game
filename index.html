@@ -1115,6 +1115,7 @@ setupInviteFriends();
   <div id="answers"></div>
   <p id="gameMessage" class="message" aria-live="polite"></p>
   <button class="primary hidden" id="nextBtn">Next Question →</button>
+  <button class="secondary hidden" id="shareQuizResultBtn" type="button">📤 Share Quiz Result</button>
   <button class="secondary" id="quitBtn">Save and Exit Quiz</button>
  </div>
 </section>
@@ -2573,6 +2574,7 @@ function startOrResumeQuiz(){
  }
  quizQuestions=makeQuiz();if(!quizQuestions.length)return;
  $("quizGame").classList.remove("quiz-complete");
+ $("shareQuizResultBtn").classList.add("hidden");
  questionIndex=0;score=0;answered=false;disabledAnswers=[];gameRunning=true;
  trackAnalytics("quiz_start",{category:selectedCategory,difficulty:$("difficulty").value,question_count:quizQuestions.length});
  saveQuizDraft();
@@ -2637,6 +2639,7 @@ $("quitBtn").onclick=()=>{
 async function finishQuiz(){
  if(!gameRunning||saving)return;
  gameRunning=false;saving=true;
+ $("shareQuizResultBtn").classList.add("hidden");
  $("quizGame").classList.add("quiz-complete");
  $("answers").replaceChildren();
  $("question").textContent="Quiz Completed! 🎉";
@@ -2660,6 +2663,7 @@ async function finishQuiz(){
   clearQuizDraft();await loadProfile(currentUser);
   trackAnalytics("quiz_complete",{category:selectedCategory,score:score,question_count:quizQuestions.length});
   setMessage("gameMessage","🏆 Congratulations! You earned "+score+" points. Your new balance is "+savedPoints+".","success");
+  $("shareQuizResultBtn").classList.remove("hidden");
   await loadLeaderboard();
  }catch(e){
   gameRunning=true;
@@ -2674,6 +2678,33 @@ async function finishQuiz(){
   }
  }
 }
+
+/* SHARE A COMPLETED QUIZ RESULT */
+$("shareQuizResultBtn").onclick=async()=>{
+ if(!currentUser||gameRunning||saving)return;
+ const button=$("shareQuizResultBtn");
+ const shareText="I scored "+score+" points in the "+selectedCategory+" quiz on QuizSpark! Test your knowledge too: https://michael20046.github.io/QuizSpark-Game/";
+ button.disabled=true;
+ try{
+  if(navigator.share){
+   await navigator.share({title:"My QuizSpark result",text:shareText,url:"https://michael20046.github.io/QuizSpark-Game/"});
+   setMessage("gameMessage","Your quiz result was shared. Thanks for helping others discover QuizSpark!","success");
+  }else if(navigator.clipboard?.writeText){
+   await navigator.clipboard.writeText(shareText);
+   setMessage("gameMessage","Your result and QuizSpark link were copied. You can paste them into a message or social post.","success");
+  }else{
+   const field=document.createElement("textarea");
+   field.value=shareText;field.setAttribute("readonly","");
+   field.style.position="fixed";field.style.opacity="0";
+   document.body.appendChild(field);field.select();
+   const copied=document.execCommand("copy");field.remove();
+   if(!copied)throw new Error("Copy is not supported by this browser.");
+   setMessage("gameMessage","Your result and QuizSpark link were copied. You can paste them into a message or social post.","success");
+  }
+ }catch(e){
+  if(e?.name!=="AbortError")setMessage("gameMessage","Sharing was unavailable. You can still copy the QuizSpark link from your browser address bar.","error");
+ }finally{button.disabled=false;}
+};
 
 /* LEADERBOARD */
 async function loadLeaderboard(){
