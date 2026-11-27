@@ -805,6 +805,11 @@ setupInviteFriends();
 .welcome-note{margin:14px 2px 0;text-align:center;color:#bcb4d6;font-size:11px;line-height:1.5}
 @media(max-width:360px){.welcome-features{padding:16px 12px}.welcome-feature{padding:11px}.welcome-feature h3{font-size:13px}.welcome-feature p{font-size:12px}}
 
+.quiz-history-row{display:flex;flex-direction:column;gap:4px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.quiz-history-row:last-child{border-bottom:0}
+.quiz-history-row strong{color:var(--gold,#f5c451)}
+.quiz-history-row span{font-size:.94rem}
+.quiz-history-row small{opacity:.72;font-size:.8rem}
 </style>
 </head>
 
@@ -1141,6 +1146,12 @@ setupInviteFriends();
   <div class="achievement-heading"><div><span class="achievement-kicker">MILESTONES</span><h3>🏅 Your Achievements</h3></div><span class="achievement-count" id="profileBadgeCount">0 earned</span></div>
   <div class="achievement-grid" id="profileBadgeGrid"></div>
   <div class="next-achievement" id="profileNextAchievement" aria-live="polite"></div>
+ </div>
+
+ <div class="card" id="recentQuizHistoryCard">
+  <h3>🕘 Recent Quiz History</h3>
+  <p class="muted">Your latest quiz results are saved on this device.</p>
+  <div id="recentQuizHistory" aria-live="polite"><p class="muted">Complete a quiz to see your results here.</p></div>
  </div>
 
  <div class="card">
@@ -1856,6 +1867,7 @@ window.showPage=function(page){
  if(page==="leaderboard")loadLeaderboard();
  if(page==="home")loadReviews();
  if(["home","wallet","profile"].includes(page))updateDashboard();
+ if(page==="profile")renderRecentQuizHistory();
  window.scrollTo({top:0,behavior:"smooth"});
 };
 
@@ -2661,6 +2673,7 @@ async function finishQuiz(){
    });
   });
   clearQuizDraft();await loadProfile(currentUser);
+  saveRecentQuizHistory();
   trackAnalytics("quiz_complete",{category:selectedCategory,score:score,question_count:quizQuestions.length});
   setMessage("gameMessage","🏆 Congratulations! You earned "+score+" points. Your new balance is "+savedPoints+".","success");
   $("shareQuizResultBtn").classList.remove("hidden");
@@ -2677,6 +2690,43 @@ async function finishQuiz(){
    refreshStartButton();
   }
  }
+}
+
+/* RECENT QUIZ HISTORY — stored separately for each signed-in player on this device */
+function renderRecentQuizHistory(){
+ const host=$("recentQuizHistory");
+ if(!host)return;
+ host.replaceChildren();
+ if(!currentUser){host.textContent="Sign in to view your quiz history.";return;}
+ let entries=[];
+ try{entries=JSON.parse(localStorage.getItem("quizspark-quiz-history-v1-"+currentUser.uid)||"[]");}
+ catch(e){entries=[];}
+ if(!Array.isArray(entries)||!entries.length){
+  const empty=document.createElement("p");empty.className="muted";
+  empty.textContent="No completed quizzes yet. Your results will appear here.";
+  host.appendChild(empty);return;
+ }
+ entries.slice(0,10).forEach(entry=>{
+  const row=document.createElement("div");row.className="quiz-history-row";
+  const heading=document.createElement("strong");
+  heading.textContent=entry.category||"Quiz";
+  const scoreLine=document.createElement("span");
+  scoreLine.textContent=(Number(entry.correct)||0)+" / "+(Number(entry.total)||0)+" correct · "+(Number(entry.points)||0)+" points";
+  const date=document.createElement("small");
+  const parsed=new Date(entry.date);
+  date.textContent=Number.isNaN(parsed.getTime())?"Recently completed":parsed.toLocaleString();
+  row.append(heading,scoreLine,date);host.appendChild(row);
+ });
+}
+function saveRecentQuizHistory(){
+ if(!currentUser)return;
+ const key="quizspark-quiz-history-v1-"+currentUser.uid;
+ let entries=[];
+ try{entries=JSON.parse(localStorage.getItem(key)||"[]");}catch(e){entries=[];}
+ if(!Array.isArray(entries))entries=[];
+ entries.unshift({category:selectedCategory,correct:Math.round(score/10),total:quizQuestions.length,points:score,date:new Date().toISOString()});
+ try{localStorage.setItem(key,JSON.stringify(entries.slice(0,10)));}catch(e){console.warn("Quiz history could not be saved on this device.",e);}
+ renderRecentQuizHistory();
 }
 
 /* SHARE A COMPLETED QUIZ RESULT */
