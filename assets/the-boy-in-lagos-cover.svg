@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" role="img" aria-labelledby="title desc">
+<title id="title">The Boy in Lagos — QuizSpark Stories</title><desc id="desc">A young Nigerian boy stands before Lagos city, a yellow danfo bus, market stalls and the Nigerian flag, in a purple and gold book-cover design.</desc>
+<defs>
+ <linearGradient id="bg" x2="0" y2="1"><stop stop-color="#15133c"/><stop offset=".48" stop-color="#1763a0"/><stop offset="1" stop-color="#f4a34a"/></linearGradient>
+ <linearGradient id="purple" x2="1" y2="1"><stop stop-color="#54268c"/><stop offset="1" stop-color="#171039"/></linearGradient>
+ <linearGradient id="gold" x2="0" y2="1"><stop stop-color="#fff2a6"/><stop offset=".45" stop-color="#f7ce55"/><stop offset="1" stop-color="#b97818"/></linearGradient>
+ <linearGradient id="shirt" x2="0" y2="1"><stop stop-color="#3479c4"/><stop offset="1" stop-color="#102c60"/></linearGradient>
+</defs>
+<rect width="600" height="900" fill="url(#bg)"/><circle cx="470" cy="260" r="105" fill="#ffe9a0" opacity=".28"/>
+<path d="M0 430L80 350 130 395 205 300 270 390 340 285 410 380 480 310 600 400V650H0Z" fill="#1b2c5c"/>
+<g fill="#12244c"><path d="M360 240h45v290h-45zM420 205h60v325h-60zM492 160h45v370h-45zM545 265h38v265h-38z"/><path d="M375 215h15v25h-15zm60-30h15v20h-15zm75-42h12v17h-12z" fill="#f5d477"/></g>
+<path d="M0 540Q120 505 250 540T600 525V900H0Z" fill="#273052"/>
+<!-- Third mainland bridge -->
+<path d="M220 520L380 400 550 520M380 400V555M300 460L300 520M460 460L460 520" fill="none" stroke="#e7c16a" stroke-width="8"/>
+<path d="M0 560H600" stroke="#f4cb65" stroke-width="6"/>
+<!-- Nigerian flag -->
+<path d="M65 245V500" stroke="#f3e6c5" stroke-width="7"/><path d="M72 250H185V325H72Z" fill="#fff"/><path d="M72 250H110V325H72ZM147 250H185V325H147Z" fill="#16864b"/>
+<!-- market -->
+<g><path d="M0 575H180V670H0Z" fill="#8b4b2c"/><path d="M-8 575L30 525H150L188 575Z" fill="#e8a33e"/><path d="M12 575L40 535 68 575 96 535 124 575 152 535 180 575" fill="#8b2f42"/><rect x="18" y="610" width="40" height="60" fill="#4e3154"/><rect x="80" y="610" width="45" height="60" fill="#d6a04a"/></g>
+<!-- danfo -->
+<g transform="translate(385 600)"><rect x="0" y="0" width="190" height="105" rx="18" fill="#f6c52e" stroke="#17152d" stroke-width="8"/><rect x="18" y="14" width="65" height="38" fill="#9ed6e8" stroke="#17152d" stroke-width="5"/><rect x="92" y="14" width="78" height="38" fill="#9ed6e8" stroke="#17152d" stroke-width="5"/><rect x="65" y="62" width="65" height="22" rx="5" fill="#202044"/><text x="97" y="78" font-size="13" text-anchor="middle" fill="#fff" font-family="Arial" font-weight="bold">LAGOS</text><circle cx="38" cy="105" r="17" fill="#161629"/><circle cx="151" cy="105" r="17" fill="#161629"/></g>
+<!-- boy silhouette and face -->
+<path d="M155 900Q165 730 215 680Q260 645 330 670Q410 700 430 900Z" fill="url(#shirt)" stroke="#10162f" stroke-width="8"/>
+<path d="M238 665L270 730 315 730 348 665" fill="#f5f0e8"/><path d="M225 655Q215 590 232 525Q245 465 310 460Q375 465 390 530L382 640Q360 690 310 700Q255 690 225 655Z" fill="#8c4b32"/>
+<path d="M226 548Q207 490 255 455Q305 420 357 456Q405 485 385 550L365 520Q335 495 300 510Q265 525 246 560Z" fill="#151326"/>
+<path d="M262 574Q277 560 292 574M326 574Q341 560 356 574" fill="none" stroke="#211321" stroke-width="8" stroke-linecap="round"/>
+<path d="M290 620Q312 640 338 618" fill="none" stroke="#fff0d8" stroke-width="8" stroke-linecap="round"/>
+<path d="M214 700L180 900M390 700L455 900" stroke="#e0b45a" stroke-width="14"/>
+<path d="M168 735Q200 710 230 740L260 900H160Z" fill="#171b39" stroke="#d8ae51" stroke-width="5"/>
+<!-- frame and typography -->
+<rect x="14" y="14" width="572" height="872" rx="24" fill="none" stroke="url(#gold)" stroke-width="9"/>
+<path d="M25 30H575V150H25Z" fill="url(#purple)" stroke="url(#gold)" stroke-width="5"/>
+<text x="300" y="78" fill="url(#gold)" font-family="Georgia,serif" font-size="38" font-weight="bold" text-anchor="middle">QuizSpark Stories</text><text x="300" y="118" fill="#fff0c4" font-family="Georgia,serif" font-size="20" text-anchor="middle">READ • DREAM • DISCOVER</text>
+<text x="300" y="220" fill="url(#gold)" stroke="#30164f" stroke-width="2" paint-order="stroke" font-family="Georgia,serif" font-size="67" font-weight="bold" text-anchor="middle">The Boy</text><text x="300" y="292" fill="url(#gold)" stroke="#30164f" stroke-width="2" paint-order="stroke" font-family="Georgia,serif" font-size="67" font-weight="bold" text-anchor="middle">in Lagos</text>
+<path d="M25 810H575V870H25Z" fill="url(#purple)" stroke="url(#gold)" stroke-width="5"/><text x="300" y="848" fill="#ffe8a0" font-family="Georgia,serif" font-size="25" font-weight="bold" text-anchor="middle">A NIGERIAN STORY</text>
+</svg>
