@@ -956,6 +956,15 @@ setupInviteFriends();
    <p class="muted" style="margin:8px 0 12px">Save specific pages and return directly to them whenever you want. Bookmarks stay on this device.</p>
    <div id="storyBookmarkShelf" class="story-shelf" aria-live="polite"></div>
   </section>
+  <section class="recent-reading" aria-labelledby="readingStatsHeading" style="margin:0 0 22px;padding:15px;border:1px solid #b18b43;border-radius:15px;background:linear-gradient(145deg,#302653,#192344)">
+   <h2 id="readingStatsHeading" style="margin:0 0 12px">📊 My Reading Statistics</h2>
+   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:10px">
+    <div class="story-card" style="text-align:center"><strong id="readingBooksStarted" style="display:block;font-size:25px;color:#f2cf78">0</strong><span class="muted">Books started</span></div>
+    <div class="story-card" style="text-align:center"><strong id="readingBooksCompleted" style="display:block;font-size:25px;color:#f2cf78">0</strong><span class="muted">Books finished</span></div>
+    <div class="story-card" style="text-align:center"><strong id="readingPagesReached" style="display:block;font-size:25px;color:#f2cf78">0</strong><span class="muted">Pages reached</span></div>
+   </div>
+   <p class="muted" style="margin:10px 0 0">Your reading progress is counted on this device. Pages reached means the furthest page saved in each book.</p>
+  </section>
   <section class="recent-reading" aria-labelledby="completedStoriesHeading" style="margin:0 0 22px;padding:15px;border:1px solid #8f7136;border-radius:15px;background:linear-gradient(145deg,#302653,#192344)">
    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
     <h2 id="completedStoriesHeading" style="margin:0">🏆 Completed Stories</h2>
@@ -3159,6 +3168,24 @@ function getCompletedStoryIds(){
 function isStoryCompleted(id){
  return getCompletedStoryIds().some(item=>item.id===id);
 }
+function renderReadingStatistics(){
+ const completed=getCompletedStoryIds();
+ const completedIds=new Set(completed.map(item=>item.id));
+ let started=0,pagesReached=0;
+ quizSparkStories.forEach(story=>{
+  const saved=localStorage.getItem("quizspark-story-"+story.id);
+  if(saved===null&&!completedIds.has(story.id))return;
+  started++;
+  const pageCount=story.pages.length;
+  const savedPage=Number(saved);
+  const reached=completedIds.has(story.id)?pageCount:(Number.isFinite(savedPage)?Math.min(pageCount,Math.max(1,savedPage+1)):0);
+  pagesReached+=reached;
+ });
+ const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=String(value);};
+ set("readingBooksStarted",started);
+ set("readingBooksCompleted",completedIds.size);
+ set("readingPagesReached",pagesReached);
+}
 function renderCompletedStories(){
  const shelf=document.getElementById("completedStoryShelf");if(!shelf)return;
  shelf.replaceChildren();
@@ -3180,7 +3207,8 @@ function renderCompletedStories(){
   const reopen=document.createElement("button");reopen.className="primary";reopen.type="button";reopen.textContent="Read Again →";
   reopen.addEventListener("click",()=>{activeStory=story;activeStoryPage=0;renderQuizSparkStoryPage();showPage("storyReader");window.scrollTo({top:0,behavior:"smooth"});});
   const remove=document.createElement("button");remove.className="secondary";remove.type="button";remove.textContent="Remove from Completed";
-  remove.addEventListener("click",()=>{localStorage.setItem(QUIZSPARK_COMPLETED_STORIES_KEY,JSON.stringify(getCompletedStoryIds().filter(saved=>saved.id!==item.id)));renderCompletedStories();});
+  remove.addEventListener("click",()=>{localStorage.setItem(QUIZSPARK_COMPLETED_STORIES_KEY,JSON.stringify(getCompletedStoryIds().filter(saved=>saved.id!==item.id)));renderCompletedStories();
+renderReadingStatistics();});
   card.append(title,meta,date,reopen,remove);shelf.appendChild(card);
  });
 }
@@ -3193,6 +3221,7 @@ function completeActiveStory(){
   catch(error){const message=document.getElementById("storySaveMessage");if(message)message.textContent="Could not save completion on this device. Check available storage.";return;}
  }
  renderCompletedStories();
+ renderReadingStatistics();
  const message=document.getElementById("storySaveMessage");
  if(message)message.textContent="🎉 Book completed! You can find it in Completed Stories.";
  showPage("stories");
@@ -3265,6 +3294,7 @@ function saveReadingHistory(id,page){
  history.unshift({id,page:Math.max(0,Number(page)||0),lastReadAt:Date.now()});
  localStorage.setItem(QUIZSPARK_READING_HISTORY_KEY,JSON.stringify(history.slice(0,10)));
  renderRecentStoryShelf();
+ renderReadingStatistics();
 }
 function renderRecentStoryShelf(){
  const shelf=document.getElementById("recentStoryShelf");if(!shelf)return;
