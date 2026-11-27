@@ -1160,6 +1160,21 @@ setupInviteFriends();
   <div class="next-achievement" id="profileNextAchievement" aria-live="polite"></div>
  </div>
 
+ <div class="card" id="learningDashboardCard">
+  <h3>📊 Personal Learning Dashboard</h3>
+  <p class="muted">A snapshot of your recent quiz performance and what to practise next.</p>
+  <div class="grid" id="learningDashboardStats">
+   <div class="stat"><span>Recent quizzes</span><strong id="learningQuizCount">0</strong></div>
+   <div class="stat"><span>Overall accuracy</span><strong id="learningAccuracy">0%</strong></div>
+   <div class="stat"><span>Questions answered</span><strong id="learningQuestions">0</strong></div>
+  </div>
+  <div style="margin-top:18px">
+   <h4>🌟 Your strongest subject</h4><p id="learningStrength" class="muted">Complete a quiz to discover your strongest subject.</p>
+   <h4>🎯 Subject to practise</h4><p id="learningFocus" class="muted">Your practice recommendation will appear here.</p>
+  </div>
+  <h4>Subject performance</h4>
+  <div id="learningSubjectBreakdown" aria-live="polite"><p class="muted">Your subject progress will appear after your first quiz.</p></div>
+ </div>
  <div class="card" id="recentQuizHistoryCard">
   <h3>🕘 Recent Quiz History</h3>
   <p class="muted">Your latest quiz results are saved on this device.</p>
@@ -2029,6 +2044,7 @@ function renderAchievementBadges(){
 
 function updateDashboard(){
  renderQuizLevelProgress();
+ renderLearningDashboard();
  const name=currentUser?.displayName||"Player";
  $("homeGreeting").textContent="Hello, "+name+"! 👋";
  $("homePoints").textContent=savedPoints.toLocaleString();
@@ -2837,6 +2853,50 @@ async function loadDailyTournamentLeaderboard(){
 $("startTournamentBtn")?.addEventListener("click",startDailyTournament);
 $("refreshTournamentBtn")?.addEventListener("click",loadDailyTournamentLeaderboard);
 
+/* PERSONAL LEARNING DASHBOARD — uses the player's recent saved quiz results */
+function renderLearningDashboard(){
+ const countEl=$("learningQuizCount"),accuracyEl=$("learningAccuracy"),questionsEl=$("learningQuestions");
+ const strengthEl=$("learningStrength"),focusEl=$("learningFocus"),breakdown=$("learningSubjectBreakdown");
+ if(!countEl||!accuracyEl||!questionsEl||!strengthEl||!focusEl||!breakdown)return;
+ let entries=[];
+ if(currentUser){try{entries=JSON.parse(localStorage.getItem("quizspark-quiz-history-v1-"+currentUser.uid)||"[]");}catch(error){entries=[];}}
+ if(!Array.isArray(entries))entries=[];
+ entries=entries.filter(entry=>entry&&typeof entry.category==="string"&&Number.isFinite(Number(entry.correct))&&Number.isFinite(Number(entry.total))&&Number(entry.total)>0).slice(0,10);
+ const totalQuestions=entries.reduce((sum,item)=>sum+Number(item.total),0);
+ const totalCorrect=entries.reduce((sum,item)=>sum+Math.max(0,Math.min(Number(item.correct),Number(item.total))),0);
+ countEl.textContent=String(entries.length);
+ accuracyEl.textContent=(totalQuestions?Math.round(totalCorrect/totalQuestions*100):0)+"%";
+ questionsEl.textContent=String(totalQuestions);
+ breakdown.replaceChildren();
+ if(!entries.length){
+  strengthEl.textContent="Complete a quiz to discover your strongest subject.";
+  focusEl.textContent="Start with any subject in Quiz Arena. Your results will guide your next practice.";
+  const empty=document.createElement("p");empty.className="muted";empty.textContent="No quiz results yet. Complete a quiz and your subject performance will appear here.";
+  breakdown.appendChild(empty);return;
+ }
+ const subjects={};
+ entries.forEach(item=>{
+  const key=item.category;
+  if(!subjects[key])subjects[key]={correct:0,total:0,quizzes:0};
+  subjects[key].correct+=Math.max(0,Math.min(Number(item.correct),Number(item.total)));
+  subjects[key].total+=Number(item.total);subjects[key].quizzes++;
+ });
+ const ranked=Object.entries(subjects).map(([name,data])=>({name,...data,rate:data.total?data.correct/data.total:0})).sort((a,b)=>b.rate-a.rate||b.total-a.total);
+ const strongest=ranked[0],focus=ranked.length>1?ranked[ranked.length-1]:ranked[0];
+ strengthEl.textContent=strongest.name+" — "+Math.round(strongest.rate*100)+"% accuracy across "+strongest.quizzes+" recent quiz"+(strongest.quizzes===1?"":"zes")+".";
+ focusEl.textContent=focus.name+" — "+Math.round(focus.rate*100)+"% accuracy. Try another "+focus.name+" quiz to build confidence.";
+ ranked.forEach(subject=>{
+  const row=document.createElement("div");row.style.margin="12px 0";
+  const line=document.createElement("div");line.style.display="flex";line.style.justifyContent="space-between";line.style.gap="12px";
+  const name=document.createElement("strong");name.textContent=subject.name;
+  const value=document.createElement("span");value.textContent=Math.round(subject.rate*100)+"% · "+subject.correct+"/"+subject.total;
+  line.append(name,value);
+  const track=document.createElement("div");track.style.height="9px";track.style.background="rgba(150,150,150,.22)";track.style.borderRadius="99px";track.style.overflow="hidden";track.style.marginTop="6px";
+  const fill=document.createElement("div");fill.style.height="100%";fill.style.width=Math.round(subject.rate*100)+"%";fill.style.background="linear-gradient(90deg,#7652c8,#e4b84c)";fill.style.borderRadius="99px";
+  track.appendChild(fill);row.append(line,track);breakdown.appendChild(row);
+ });
+}
+
 /* RECENT QUIZ HISTORY — stored separately for each signed-in player on this device */
 function renderRecentQuizHistory(){
  const host=$("recentQuizHistory");
@@ -2872,6 +2932,7 @@ function saveRecentQuizHistory(){
  entries.unshift({category:selectedCategory,correct:Math.round(score/10),total:quizQuestions.length,points:score,date:new Date().toISOString()});
  try{localStorage.setItem(key,JSON.stringify(entries.slice(0,10)));}catch(e){console.warn("Quiz history could not be saved on this device.",e);}
  renderRecentQuizHistory();
+ renderLearningDashboard();
 }
 
 /* SHARE A COMPLETED QUIZ RESULT */
