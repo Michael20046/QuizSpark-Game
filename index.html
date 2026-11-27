@@ -971,6 +971,11 @@ setupInviteFriends();
     <div class="story-progress" style="margin-top:12px"><div id="readingLevelProgressFill" style="width:0%"></div></div>
     <p class="muted" id="readingLevelNext" style="margin:7px 0 0">0 of 1 books completed toward Beginner Reader</p>
    </div>
+   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:10px;margin-top:10px">
+    <div class="story-card" style="text-align:center"><strong id="readingCurrentStreak" style="display:block;font-size:25px;color:#f2cf78">0</strong><span class="muted">🔥 Current streak</span></div>
+    <div class="story-card" style="text-align:center"><strong id="readingBestStreak" style="display:block;font-size:25px;color:#f2cf78">0</strong><span class="muted">🏅 Best streak</span></div>
+   </div>
+   <p class="muted" id="readingStreakMessage" style="margin:8px 0 0">Open a story and read each day to build your streak.</p>
    <p class="muted" style="margin:10px 0 0">Your reading progress is counted on this device. Pages reached means the furthest page saved in each book.</p>
   </section>
   <section class="recent-reading" aria-labelledby="completedStoriesHeading" style="margin:0 0 22px;padding:15px;border:1px solid #8f7136;border-radius:15px;background:linear-gradient(145deg,#302653,#192344)">
@@ -3176,6 +3181,44 @@ function getCompletedStoryIds(){
 function isStoryCompleted(id){
  return getCompletedStoryIds().some(item=>item.id===id);
 }
+const QUIZSPARK_READING_DAYS_KEY="quizspark-reading-days-v1";
+function getLocalReadingDate(){
+ const now=new Date();
+ return now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");
+}
+function shiftReadingDate(dateString,days){
+ const parts=dateString.split("-").map(Number);
+ const date=new Date(parts[0],parts[1]-1,parts[2]+days);
+ return date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");
+}
+function getReadingDays(){
+ try{
+  const days=JSON.parse(localStorage.getItem(QUIZSPARK_READING_DAYS_KEY)||"[]");
+  return Array.isArray(days)?[...new Set(days.filter(day=>typeof day==="string"&&/^\\d{4}-\\d{2}-\\d{2}$/.test(day)))].sort():[];
+ }catch(error){return [];}
+}
+function recordReadingDay(){
+ const days=getReadingDays();
+ const today=getLocalReadingDate();
+ if(!days.includes(today)){
+  days.push(today);
+  try{localStorage.setItem(QUIZSPARK_READING_DAYS_KEY,JSON.stringify(days));}catch(error){}
+ }
+}
+function calculateReadingStreaks(){
+ const days=getReadingDays();
+ const set=new Set(days);
+ const today=getLocalReadingDate();
+ let current=0;
+ let cursor=set.has(today)?today:shiftReadingDate(today,-1);
+ while(set.has(cursor)){current++;cursor=shiftReadingDate(cursor,-1);}
+ let best=0,run=0,previous="";
+ days.forEach(day=>{
+  run=previous&&shiftReadingDate(previous,1)===day?run+1:1;
+  best=Math.max(best,run);previous=day;
+ });
+ return {current,best,readToday:set.has(today)};
+}
 function renderReadingStatistics(){
  const completed=getCompletedStoryIds();
  const completedIds=new Set(completed.map(item=>item.id));
@@ -3208,6 +3251,10 @@ function renderReadingStatistics(){
  set("readingLevelProgress",level.name==="Story Champion"?"Congratulations — you have reached the highest reading level!":"Keep reading to unlock "+level.nextName+".");
  set("readingLevelNext",level.name==="Story Champion"?"All 15 or more completed books celebrated":completedIds.size+" of "+next+" books completed toward "+level.nextName);
  const bar=document.getElementById("readingLevelProgressFill");if(bar)bar.style.width=progress+"%";
+ const streaks=calculateReadingStreaks();
+ set("readingCurrentStreak",streaks.current+" days");
+ set("readingBestStreak",streaks.best+" days");
+ set("readingStreakMessage",streaks.readToday?"You've read today. Great work keeping your streak alive!":streaks.current>0?"Read a story today to keep your "+streaks.current+"-day streak going.":"Read a story today to start a new streak.");
 }
 function renderCompletedStories(){
  const shelf=document.getElementById("completedStoryShelf");if(!shelf)return;
@@ -3313,6 +3360,7 @@ function getReadingHistory(){
  }catch(error){return [];}
 }
 function saveReadingHistory(id,page){
+ recordReadingDay();
  const history=getReadingHistory().filter(item=>item.id!==id);
  history.unshift({id,page:Math.max(0,Number(page)||0),lastReadAt:Date.now()});
  localStorage.setItem(QUIZSPARK_READING_HISTORY_KEY,JSON.stringify(history.slice(0,10)));
