@@ -700,6 +700,30 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 @media(min-width:600px){.story-shelf{grid-template-columns:1fr 1fr}.story-library-intro{padding:26px}.story-card{padding:20px}}
 
 
+/* quizspark-invite-friends-v1 */
+function getQuizSparkInviteLink(){return window.location.origin+window.location.pathname;}
+function setupInviteFriends(){
+ const link=$("inviteLink"),copy=$("copyInviteBtn"),share=$("shareInviteBtn"),message=$("inviteMessage");
+ if(!link||!copy||!share||!message)return;
+ link.value=getQuizSparkInviteLink();
+ copy.addEventListener("click",async()=>{
+  try{
+   if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(link.value);
+   else{link.focus();link.select();if(!document.execCommand("copy"))throw new Error("Copy unavailable");}
+   message.textContent="✅ QuizSpark link copied. Send it to your friends!";
+  }catch(error){link.focus();link.select();message.textContent="Select the link above and copy it to share QuizSpark."}
+ });
+ share.addEventListener("click",async()=>{
+  const shareData={title:"Join me on QuizSpark!",text:"Play quizzes, read stories and learn something new on QuizSpark.",url:link.value};
+  try{
+   if(navigator.share)await navigator.share(shareData);
+   else if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(link.value);message.textContent="✅ Link copied. Paste it into a message to invite your friends."}
+   else{link.focus();link.select();message.textContent="Select the link above and copy it to share QuizSpark."}
+  }catch(error){if(error?.name!=="AbortError")message.textContent="Sharing isn't available here. Copy the link above instead."}
+ });
+}
+setupInviteFriends();
+
 /* quizspark-daily-challenge-v1 */
 .daily-challenge{margin:16px 0;border:1px solid rgba(226,202,133,.55);background:linear-gradient(135deg,#211746,#18264a 70%,#302052);box-shadow:0 12px 28px rgba(0,0,0,.18)}
 .daily-topline{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
@@ -792,6 +816,15 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
   <p id="dailyChallengeMessage" class="message" aria-live="polite"></p>
  </section>
 
+
+ <section class="card invite-card" id="inviteFriendsCard" aria-labelledby="inviteFriendsTitle">
+  <div class="daily-topline"><span class="daily-tag">🤝 GROW THE COMMUNITY</span><span class="daily-reward">🌍 Share the fun</span></div>
+  <h2 id="inviteFriendsTitle">Invite Friends to QuizSpark</h2>
+  <p class="muted">Know someone who loves quizzes, stories and learning? Invite them to play and grow with our community.</p>
+  <div class="invite-link-row"><input id="inviteLink" type="text" readonly aria-label="QuizSpark invitation link"><button class="secondary" id="copyInviteBtn" type="button">📋 Copy Link</button></div>
+  <button class="primary" id="shareInviteBtn" type="button">📲 Share with Friends</button>
+  <p class="message" id="inviteMessage" aria-live="polite">Share QuizSpark with someone today!</p>
+ </section>
  <a class="about-link" href="./about.html">ℹ️ About QuizSpark — Learn More About the Game</a>
  <h2>Your Dashboard</h2>
  <div class="grid">
