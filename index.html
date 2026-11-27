@@ -699,6 +699,18 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 .story-chapter{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#e2ca85}
 @media(min-width:600px){.story-shelf{grid-template-columns:1fr 1fr}.story-library-intro{padding:26px}.story-card{padding:20px}}
 
+
+/* quizspark-daily-challenge-v1 */
+.daily-challenge{margin:16px 0;border:1px solid rgba(226,202,133,.55);background:linear-gradient(135deg,#211746,#18264a 70%,#302052);box-shadow:0 12px 28px rgba(0,0,0,.18)}
+.daily-topline{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.daily-tag{font-size:11px;font-weight:800;letter-spacing:.12em;color:#f3d98a}
+.daily-reward{font-size:12px;font-weight:700;color:#f5d77f;background:rgba(226,202,133,.12);border:1px solid rgba(226,202,133,.35);padding:7px 10px;border-radius:999px}
+.daily-challenge h2{margin:4px 0 6px}.daily-challenge h3{line-height:1.5;margin:15px 0}
+.daily-answers{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.daily-answer{border:1px solid rgba(196,181,253,.35);background:#28204b;color:#fff;border-radius:12px;padding:13px 10px;text-align:left;font-weight:600;min-height:48px}
+.daily-answer:disabled{opacity:.8}.daily-answer.correct{border-color:#86efac;background:#123c32}.daily-answer.wrong{border-color:#fca5a5;background:#49232e}
+@media(max-width:420px){.daily-answers{grid-template-columns:1fr}}
+
 </style>
 </head>
 
@@ -753,6 +765,16 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
   <button class="primary" onclick="showPage('learn')">📚 Explore Learning Centre</button>
   <button class="secondary" onclick="showPage('play')">🎮 Enter Quiz Arena</button>
  </div>
+
+ <section class="daily-challenge card" id="dailyChallengeCard" aria-labelledby="dailyChallengeTitle">
+  <div class="daily-topline"><span class="daily-tag">⚡ DAILY CHALLENGE</span><span class="daily-reward">🏆 +10 points</span></div>
+  <h2 id="dailyChallengeTitle">Today's Brain Boost</h2>
+  <p class="muted" id="dailyChallengeDate">A fresh question every day. Give it your best!</p>
+  <h3 id="dailyChallengeQuestion">Loading today's question...</h3>
+  <div id="dailyChallengeAnswers" class="daily-answers"></div>
+  <p id="dailyChallengeMessage" class="message" aria-live="polite"></p>
+ </section>
+
  <a class="about-link" href="./about.html">ℹ️ About QuizSpark — Learn More About the Game</a>
  <h2>Your Dashboard</h2>
  <div class="grid">
@@ -972,6 +994,7 @@ function trackAnalytics(eventName,parameters={}){
 const $=id=>document.getElementById(id);
 
 let currentUser=null,savedPoints=0,games=0,correctTotal=0;
+let dailyChallengeDates=[]; // quizspark-daily-challenge-v1
 let lessonsDone=[],lessonQuizzesDone=[];
 let selectedCategory="General Knowledge";
 let quizQuestions=[],questionIndex=0,score=0;
@@ -1655,7 +1678,76 @@ async function loadProfile(user){
  correctTotal=Number(data.correctAnswers)||0;
  lessonsDone=Array.isArray(data.lessonsCompleted)?data.lessonsCompleted:[];
  lessonQuizzesDone=Array.isArray(data.lessonQuizzesCompleted)?data.lessonQuizzesCompleted:[];
+ dailyChallengeDates=Array.isArray(data.dailyChallengeDates)?data.dailyChallengeDates:[];
  updateDashboard();
+}
+
+
+/* quizspark-daily-challenge-v1 */
+const dailyChallengeQuestions=[
+ {q:"Which planet is known as the Red Planet?",a:"Mars",o:["Venus","Jupiter","Mercury"]},
+ {q:"How many sides does a hexagon have?",a:"Six",o:["Five","Seven","Eight"]},
+ {q:"Which ocean is the largest?",a:"Pacific Ocean",o:["Atlantic Ocean","Indian Ocean","Arctic Ocean"]},
+ {q:"What is the plural of 'child'?",a:"Children",o:["Childs","Childes","Childrens"]},
+ {q:"Which gas do plants absorb from the air?",a:"Carbon dioxide",o:["Oxygen","Hydrogen","Nitrogen"]},
+ {q:"What is 12 multiplied by 8?",a:"96",o:["84","88","108"]},
+ {q:"Which continent is the Sahara Desert in?",a:"Africa",o:["Asia","Australia","South America"]}
+];
+function localChallengeDate(){
+ const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function todaysChallenge(){
+ const key=localChallengeDate().replaceAll("-","");
+ const n=Number(key);
+ return dailyChallengeQuestions[n%dailyChallengeQuestions.length];
+}
+function renderDailyChallenge(){
+ const question=$("dailyChallengeQuestion"),answers=$("dailyChallengeAnswers"),date=$("dailyChallengeDate"),message=$("dailyChallengeMessage");
+ if(!question||!answers||!date||!message)return;
+ const today=localChallengeDate(),item=todaysChallenge(),done=dailyChallengeDates.includes(today);
+ date.textContent="Today's challenge · "+today+" · One correct answer earns 10 points.";
+ question.textContent=item.q;answers.replaceChildren();message.className="message";
+ if(done){message.textContent="✅ You've completed today's challenge. Come back tomorrow for a new one!";return;}
+ const options=[item.a,...item.o].sort((a,b)=>a.localeCompare(b));
+ options.forEach(option=>{
+  const button=document.createElement("button");button.type="button";button.className="daily-answer";button.textContent=option;
+  button.addEventListener("click",()=>answerDailyChallenge(option,button,item,today));
+  answers.appendChild(button);
+ });
+ message.textContent="Choose your answer. You can try again if you miss it.";
+}
+let dailyChallengeSaving=false;
+async function answerDailyChallenge(choice,button,item,today){
+ if(dailyChallengeSaving||dailyChallengeDates.includes(today))return;
+ if(choice!==item.a){
+  button.classList.add("wrong");button.disabled=true;
+  $("dailyChallengeMessage").textContent="Not quite — try another answer. You haven't lost any points.";
+  $("dailyChallengeMessage").className="message error";return;
+ }
+ dailyChallengeSaving=true;
+ $("dailyChallengeAnswers").querySelectorAll("button").forEach(b=>b.disabled=true);
+ $("dailyChallengeMessage").textContent="Correct! Saving your 10 points...";
+ try{
+  const ref=doc(db,"players",currentUser.uid);
+  let awarded=false;
+  await runTransaction(db,async tx=>{
+   const snap=await tx.get(ref);if(!snap.exists())throw new Error("Player profile not found.");
+   const data=snap.data(),completed=Array.isArray(data.dailyChallengeDates)?data.dailyChallengeDates:[];
+   if(!completed.includes(today)){
+    tx.update(ref,{points:(Number(data.points)||0)+10,correctAnswers:(Number(data.correctAnswers)||0)+1,dailyChallengeDates:[...completed.slice(-59),today],updatedAt:serverTimestamp()});
+    awarded=true;
+   }
+  });
+  await loadProfile(currentUser);
+  $("dailyChallengeAnswers").replaceChildren();
+  $("dailyChallengeMessage").textContent=awarded?"🎉 Brilliant! You earned 10 points. Your new balance is "+savedPoints+" points. See you tomorrow!":"You've already collected today's reward. Come back tomorrow!";
+  $("dailyChallengeMessage").className="message success";
+  trackAnalytics("daily_challenge_complete",{date:today,points_awarded:awarded?10:0});
+ }catch(e){
+  $("dailyChallengeMessage").textContent="We couldn't save your reward. Please try again.";
+  $("dailyChallengeMessage").className="message error";
+  $("dailyChallengeAnswers").querySelectorAll("button").forEach(b=>{b.disabled=false;b.classList.remove("wrong");});
+ }finally{dailyChallengeSaving=false;}
 }
 
 function updateDashboard(){
@@ -1668,6 +1760,7 @@ function updateDashboard(){
  $("gamesPlayed").textContent=games;$("profileGames").textContent=games;
  $("correctAnswers").textContent=correctTotal;$("profileCorrect").textContent=correctTotal;
  $("profileName").textContent=name;$("profileEmail").textContent=currentUser?.email||"";
+ renderDailyChallenge();
  $("lessonsCompleted").textContent=lessonsDone.length;$("profileLessons").textContent=lessonsDone.length;
 }
 
