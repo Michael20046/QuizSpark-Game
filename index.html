@@ -704,6 +704,16 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 .story-reader{background:linear-gradient(160deg,#24234d,#151d39);border:1px solid #8065c8;border-radius:18px;padding:18px;box-shadow:0 12px 28px #090d2044}
 .story-reader h2{color:#f3e7bd;line-height:1.4}
 .story-reader .story-body{font-family:Georgia,serif;font-size:17px;line-height:1.95;color:#f0edf9;white-space:pre-line}
+.story-reader.reader-theme-sepia{background:#f2e5c9;border-color:#b99a67;box-shadow:0 12px 28px #090d2030}
+.story-reader.reader-theme-sepia h2{color:#49351f}
+.story-reader.reader-theme-sepia .story-body{color:#49351f}
+.story-reader.reader-theme-sepia .story-chapter{color:#79572d}
+.story-reader.reader-theme-light{background:#fff;border-color:#cbd5e1;box-shadow:0 12px 28px #090d2020}
+.story-reader.reader-theme-light h2{color:#172033}
+.story-reader.reader-theme-light .story-body{color:#263247}
+.story-reader.reader-theme-light .story-chapter{color:#475569}
+.story-theme-btn[aria-pressed="true"]{border:2px solid #f4c95d;background:#49356e;color:#fff0c2}
+.story-reader.reader-theme-sepia .story-theme-btn[aria-pressed="true"],.story-reader.reader-theme-light .story-theme-btn[aria-pressed="true"]{background:#49356e;color:#fff0c2}
 .story-progress{height:8px;background:#39466e;border-radius:8px;overflow:hidden;margin:12px 0}
 .story-progress>div{height:100%;background:linear-gradient(90deg,#9a70ed,#f5d477);width:0}
 .story-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}
@@ -970,11 +980,15 @@ setupInviteFriends();
    <h2 id="storyPageTitle">Story title</h2>
    <div class="story-progress"><div id="storyProgressFill"></div></div>
    <p class="muted" id="storyPageCount">Page 1 of 1</p>
-   <div class="story-reading-tools" role="group" aria-label="Reading text size" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 16px;padding:10px;border:1px solid #51447e;border-radius:12px;background:#1b2042">
-    <span style="color:#d8ccff;font-size:13px;font-weight:700;margin-right:auto">Reading text size</span>
+   <div class="story-reading-tools" role="group" aria-label="Story reading preferences" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 16px;padding:10px;border:1px solid #51447e;border-radius:12px;background:#1b2042">
+    <span style="color:#d8ccff;font-size:13px;font-weight:700;margin-right:auto">Text size</span>
     <button class="secondary" id="storyFontDown" type="button" aria-label="Decrease reading text size" style="width:auto;margin:0;padding:8px 13px">A−</button>
     <button class="secondary" id="storyFontReset" type="button" style="width:auto;margin:0;padding:8px 12px">Reset</button>
     <button class="secondary" id="storyFontUp" type="button" aria-label="Increase reading text size" style="width:auto;margin:0;padding:8px 13px">A+</button>
+    <span style="width:100%;color:#d8ccff;font-size:13px;font-weight:700;margin-top:5px">Reading background</span>
+    <button class="secondary story-theme-btn" id="storyThemeDark" type="button" aria-pressed="true" style="width:auto;margin:0;padding:8px 11px">🌙 Dark</button>
+    <button class="secondary story-theme-btn" id="storyThemeSepia" type="button" aria-pressed="false" style="width:auto;margin:0;padding:8px 11px">📜 Sepia</button>
+    <button class="secondary story-theme-btn" id="storyThemeLight" type="button" aria-pressed="false" style="width:auto;margin:0;padding:8px 11px">☀️ Light</button>
    </div>
    <div class="story-body" id="storyPageBody"></div>
   </div>
@@ -3088,11 +3102,35 @@ function applyStoryFontSize(size){
  if(body)body.style.fontSize=safeSize+"px";
  try{localStorage.setItem(QUIZSPARK_STORY_FONT_KEY,String(safeSize));}catch(error){}
 }
+const QUIZSPARK_STORY_THEME_KEY="quizspark-story-theme-v1";
+function getStoryTheme(){
+ try{
+  const theme=localStorage.getItem(QUIZSPARK_STORY_THEME_KEY);
+  return ["dark","sepia","light"].includes(theme)?theme:"dark";
+ }catch(error){return "dark";}
+}
+function applyStoryTheme(theme){
+ const safeTheme=["dark","sepia","light"].includes(theme)?theme:"dark";
+ const reader=document.querySelector("#storyReaderPage .story-reader");
+ if(reader){
+  reader.classList.remove("reader-theme-sepia","reader-theme-light");
+  if(safeTheme!=="dark")reader.classList.add("reader-theme-"+safeTheme);
+ }
+ ["Dark","Sepia","Light"].forEach(label=>{
+  const button=document.getElementById("storyTheme"+label);
+  if(button)button.setAttribute("aria-pressed",String(label.toLowerCase()===safeTheme));
+ });
+ try{localStorage.setItem(QUIZSPARK_STORY_THEME_KEY,safeTheme);}catch(error){}
+}
 function setupStoryReadingTools(){
  document.getElementById("storyFontDown")?.addEventListener("click",()=>applyStoryFontSize(getStoryFontSize()-2));
  document.getElementById("storyFontUp")?.addEventListener("click",()=>applyStoryFontSize(getStoryFontSize()+2));
  document.getElementById("storyFontReset")?.addEventListener("click",()=>applyStoryFontSize(17));
+ document.getElementById("storyThemeDark")?.addEventListener("click",()=>applyStoryTheme("dark"));
+ document.getElementById("storyThemeSepia")?.addEventListener("click",()=>applyStoryTheme("sepia"));
+ document.getElementById("storyThemeLight")?.addEventListener("click",()=>applyStoryTheme("light"));
  applyStoryFontSize(getStoryFontSize());
+ applyStoryTheme(getStoryTheme());
 }
 const QUIZSPARK_READING_HISTORY_KEY="quizspark-reading-history-v1";
 function getReadingHistory(){
