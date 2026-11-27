@@ -681,6 +681,15 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 .story-card p{color:#d9d5e8;line-height:1.65;font-size:14px}
 .story-tag{display:inline-block;background:#3a2d64;color:#f6dfa0;border:1px solid #9878cb;border-radius:20px;padding:5px 10px;font-size:11px;margin:3px 4px 7px 0}
 .story-card button{width:100%;margin-top:10px}
+
+.story-filters{padding:15px;margin:14px 0 18px;border:1px solid #8065c8;border-radius:16px;background:linear-gradient(145deg,#211b43,#192344)}
+.story-filters input,.story-filters select{margin:7px 0 12px;background:#111b3b;border-color:#66529a}
+.story-filter-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.story-filter-count{font-size:12px;margin:8px 0 0}
+.story-card .story-progress-note{font-size:12px;color:#ffe6a3;margin:8px 0 2px}
+.story-empty{padding:22px;text-align:center;border:1px dashed #8065c8;border-radius:14px;color:#ded5f5;line-height:1.6}
+@media(max-width:380px){.story-filter-row{grid-template-columns:1fr}}
+
 .story-library-intro{background:linear-gradient(135deg,#292456,#171d3a);border:1px solid #8065c8;border-radius:20px;padding:20px;margin-bottom:16px;box-shadow:0 12px 28px #090d2044}
 .story-library-intro h2{color:#f4df9d;margin:0 0 9px}
 .story-library-intro p{color:#e0d9ef;line-height:1.7;margin:8px 0}
@@ -927,7 +936,17 @@ setupInviteFriends();
    </div>
   </div>
   <h2>✨ Choose Your Next Adventure</h2>
-  <p class="muted">Find a story that speaks to you. Open any book to begin reading.</p>
+  <p class="muted">Search the library or narrow your choices by country and genre.</p>
+  <div class="story-filters" role="search" aria-label="Find a story">
+   <label for="storySearch">Search books</label>
+   <input id="storySearch" type="search" placeholder="Search title, character, country or topic..." autocomplete="off">
+   <div class="story-filter-row">
+    <div><label for="storyCountryFilter">Country</label><select id="storyCountryFilter"><option value="">All countries</option></select></div>
+    <div><label for="storyGenreFilter">Genre</label><select id="storyGenreFilter"><option value="">All genres</option></select></div>
+   </div>
+   <div class="toolbar"><button class="secondary" id="clearStoryFilters" type="button">Clear Filters</button></div>
+   <p class="story-filter-count muted" id="storyFilterCount" aria-live="polite"></p>
+  </div>
   <div id="storyShelf" class="story-shelf"></div>
  </div>
 </section>
@@ -3045,14 +3064,51 @@ function renderStoryShelf(){
  const pageTotal=document.getElementById("storyPageTotal");
  if(bookCount)bookCount.textContent=quizSparkStories.length;
  if(pageTotal)pageTotal.textContent=quizSparkStories.reduce((sum,story)=>sum+story.pages.length,0).toLocaleString();
- quizSparkStories.forEach(story=>{
+ const search=(document.getElementById("storySearch")?.value||"").trim().toLowerCase();
+ const country=document.getElementById("storyCountryFilter")?.value||"";
+ const genre=document.getElementById("storyGenreFilter")?.value||"";
+ const filtered=quizSparkStories.filter(story=>{
+  const haystack=[story.title,story.description,story.country,story.genre].join(" ").toLowerCase();
+  return (!search||haystack.includes(search))&&(!country||story.country===country)&&(!genre||story.genre===genre);
+ });
+ const count=document.getElementById("storyFilterCount");
+ if(count)count.textContent="Showing "+filtered.length+" of "+quizSparkStories.length+" books";
+ if(!filtered.length){
+  const empty=document.createElement("div");empty.className="story-empty";
+  empty.textContent="No stories match those filters. Try another search or clear the filters.";
+  shelf.appendChild(empty);return;
+ }
+ filtered.forEach(story=>{
   const card=document.createElement("article");card.className="story-card";
   const title=document.createElement("h3");title.textContent=story.title;
   const meta=document.createElement("div");meta.className="story-meta";meta.textContent=story.country+" · "+story.genre+" · "+story.pages.length+" pages";
   const desc=document.createElement("p");desc.textContent=story.description;
   const tag=document.createElement("span");tag.className="story-tag";tag.textContent="✦ Original fiction";
-  const btn=document.createElement("button");btn.className="primary";btn.type="button";btn.textContent="Begin Reading →";btn.addEventListener("click",()=>openQuizSparkStory(story.id));
-  card.append(title,meta,desc,tag,btn);shelf.appendChild(card);
+  const saved=Math.min(Math.max(Number(localStorage.getItem("quizspark-story-"+story.id)||0),0),story.pages.length-1);
+  const progress=document.createElement("p");progress.className="story-progress-note";
+  progress.textContent=saved>0?"📖 Continue from page "+(saved+1)+" of "+story.pages.length:"✨ Ready to begin";
+  const btn=document.createElement("button");btn.className="primary";btn.type="button";
+  btn.textContent=saved>0?"Continue Reading →":"Begin Reading →";
+  btn.addEventListener("click",()=>openQuizSparkStory(story.id));
+  card.append(title,meta,desc,tag,progress,btn);shelf.appendChild(card);
+ });
+}
+function setupStoryFilters(){
+ const countrySelect=document.getElementById("storyCountryFilter");
+ const genreSelect=document.getElementById("storyGenreFilter");
+ if(!countrySelect||!genreSelect)return;
+ [...new Set(quizSparkStories.map(story=>story.country))].sort().forEach(country=>{
+  const option=document.createElement("option");option.value=country;option.textContent=country;countrySelect.appendChild(option);
+ });
+ [...new Set(quizSparkStories.map(story=>story.genre))].sort().forEach(genre=>{
+  const option=document.createElement("option");option.value=genre;option.textContent=genre;genreSelect.appendChild(option);
+ });
+ ["storySearch","storyCountryFilter","storyGenreFilter"].forEach(id=>{
+  document.getElementById(id)?.addEventListener(id==="storySearch"?"input":"change",renderStoryShelf);
+ });
+ document.getElementById("clearStoryFilters")?.addEventListener("click",()=>{
+  document.getElementById("storySearch").value="";
+  countrySelect.value="";genreSelect.value="";renderStoryShelf();
  });
 }
 function openQuizSparkStory(id){
@@ -3075,6 +3131,7 @@ function renderQuizSparkStoryPage(){
 }
 document.getElementById("storyPrevBtn").addEventListener("click",()=>{if(activeStory&&activeStoryPage>0){activeStoryPage--;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}});
 document.getElementById("storyNextBtn").addEventListener("click",()=>{if(!activeStory)return;if(activeStoryPage<activeStory.pages.length-1){activeStoryPage++;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}else{showPage("stories");}});
+setupStoryFilters();
 renderStoryShelf();
 
 </script>
