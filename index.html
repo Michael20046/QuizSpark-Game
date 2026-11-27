@@ -672,22 +672,32 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
  .points-pill{padding:8px;font-size:11px}
 }
 
-/* QUIZSPARK STORY LIBRARY */
-.story-shelf{display:grid;grid-template-columns:1fr;gap:12px}
-.story-card{background:linear-gradient(145deg,#24234d,#192344);border:1px solid #5943a5;border-radius:16px;padding:16px}
-.story-card h3{color:#e2d9ff;margin:0 0 7px}
-.story-meta{font-size:12px;color:#c4b5de;margin:5px 0 10px}
-.story-card p{color:var(--muted);line-height:1.55;font-size:13px}
-.story-tag{display:inline-block;background:#30245f;color:#d8ccff;border:1px solid #5943a5;border-radius:20px;padding:4px 9px;font-size:11px;margin:3px 4px 3px 0}
-.story-reader{background:linear-gradient(160deg,#1c2548,#151d39);border:1px solid #5943a5;border-radius:17px;padding:18px}
-.story-reader h2{color:#e2d9ff;line-height:1.35}
+/* QUIZSPARK STORY LIBRARY — purple & gold reading experience */
+.story-shelf{display:grid;grid-template-columns:1fr;gap:14px;margin-top:18px}
+.story-card{position:relative;overflow:hidden;background:linear-gradient(145deg,#292456,#171d3a 78%);border:1px solid #8065c8;border-radius:18px;padding:18px;box-shadow:0 10px 25px #090d2055}
+.story-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(#f5d477,#9a70ed)}
+.story-card h3{color:#f3e7bd;margin:0 0 8px;font-size:18px;line-height:1.35}
+.story-meta{font-size:12px;color:#d4c7f0;margin:6px 0 12px;line-height:1.5}
+.story-card p{color:#d9d5e8;line-height:1.65;font-size:14px}
+.story-tag{display:inline-block;background:#3a2d64;color:#f6dfa0;border:1px solid #9878cb;border-radius:20px;padding:5px 10px;font-size:11px;margin:3px 4px 7px 0}
+.story-card button{width:100%;margin-top:10px}
+.story-library-intro{background:linear-gradient(135deg,#292456,#171d3a);border:1px solid #8065c8;border-radius:20px;padding:20px;margin-bottom:16px;box-shadow:0 12px 28px #090d2044}
+.story-library-intro h2{color:#f4df9d;margin:0 0 9px}
+.story-library-intro p{color:#e0d9ef;line-height:1.7;margin:8px 0}
+.story-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
+.story-stat{background:#171b36;border:1px solid #6852a5;border-radius:13px;padding:11px 7px;text-align:center}
+.story-stat strong{display:block;color:#f5d477;font-size:21px}
+.story-stat span{display:block;color:#d2c8e6;font-size:10px;line-height:1.4;margin-top:3px}
+.story-welcome{color:#f6dfa0;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.story-reader{background:linear-gradient(160deg,#24234d,#151d39);border:1px solid #8065c8;border-radius:18px;padding:18px;box-shadow:0 12px 28px #090d2044}
+.story-reader h2{color:#f3e7bd;line-height:1.4}
 .story-reader .story-body{font-family:Georgia,serif;font-size:17px;line-height:1.95;color:#f0edf9;white-space:pre-line}
-.story-progress{height:7px;background:#39466e;border-radius:8px;overflow:hidden;margin:12px 0}
-.story-progress>div{height:100%;background:linear-gradient(90deg,#7047eb,#d8ccff);width:0}
+.story-progress{height:8px;background:#39466e;border-radius:8px;overflow:hidden;margin:12px 0}
+.story-progress>div{height:100%;background:linear-gradient(90deg,#9a70ed,#f5d477);width:0}
 .story-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}
 .story-controls button{margin:0}
-.story-chapter{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#c4b5de}
-@media(min-width:600px){.story-shelf{grid-template-columns:1fr 1fr}}
+.story-chapter{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#e2ca85}
+@media(min-width:600px){.story-shelf{grid-template-columns:1fr 1fr}.story-library-intro{padding:26px}.story-card{padding:20px}}
 
 </style>
 </head>
@@ -787,10 +797,20 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 
 
 <section id="storiesPage" class="page">
- <div class="hero"><h1>📖 QuizSpark Stories</h1><p>Enter new worlds through original stories from different countries. Choose a book, read one page at a time, and return to your place whenever you like.</p></div>
+ <div class="hero story-hero"><span class="story-welcome">A world of stories awaits</span><h1>📖 QuizSpark Stories</h1><p>Step into unforgettable worlds, meet remarkable characters and discover stories that stay with you. Choose a book, read one page at a time, and return whenever you like — your reading place is saved on this device.</p></div>
  <div class="card">
-  <h2>🌍 The Story Library</h2>
-  <p class="muted">Fiction from around the world: courage, love, mystery, family, adventure and second chances. New chapters and books can be added to this growing library.</p>
+  <div class="story-library-intro">
+   <h2>🌍 The Story Library</h2>
+   <p>Travel through fiction from around the world — from the busy streets of Lagos to quiet villages, distant cities and mysterious coastlines. Discover courage, love, friendship, family, mystery, adventure and second chances in original stories created for curious readers.</p>
+   <p>Every book unfolds page by page. Take your time, follow each character's journey and pick up exactly where you left off. This library keeps growing, with new books and chapters added along the way.</p>
+   <div class="story-stats">
+    <div class="story-stat"><strong id="storyBookCount">15</strong><span>Original books</span></div>
+    <div class="story-stat"><strong id="storyPageTotal">—</strong><span>Reading pages</span></div>
+    <div class="story-stat"><strong>🌍</strong><span>Stories across countries</span></div>
+   </div>
+  </div>
+  <h2>✨ Choose Your Next Adventure</h2>
+  <p class="muted">Find a story that speaks to you. Open any book to begin reading.</p>
   <div id="storyShelf" class="story-shelf"></div>
  </div>
 </section>
@@ -2642,13 +2662,17 @@ let activeStory=null, activeStoryPage=0;
 function renderStoryShelf(){
  const shelf=document.getElementById("storyShelf"); if(!shelf)return;
  shelf.replaceChildren();
+ const bookCount=document.getElementById("storyBookCount");
+ const pageTotal=document.getElementById("storyPageTotal");
+ if(bookCount)bookCount.textContent=quizSparkStories.length;
+ if(pageTotal)pageTotal.textContent=quizSparkStories.reduce((sum,story)=>sum+story.pages.length,0).toLocaleString();
  quizSparkStories.forEach(story=>{
   const card=document.createElement("article");card.className="story-card";
   const title=document.createElement("h3");title.textContent=story.title;
-  const meta=document.createElement("div");meta.className="story-meta";meta.textContent=story.country+" · "+story.genre+" · "+story.pages.length+" opening pages";
+  const meta=document.createElement("div");meta.className="story-meta";meta.textContent=story.country+" · "+story.genre+" · "+story.pages.length+" pages";
   const desc=document.createElement("p");desc.textContent=story.description;
-  const tag=document.createElement("span");tag.className="story-tag";tag.textContent="Original fiction";
-  const btn=document.createElement("button");btn.className="primary";btn.type="button";btn.textContent="Open Story →";btn.addEventListener("click",()=>openQuizSparkStory(story.id));
+  const tag=document.createElement("span");tag.className="story-tag";tag.textContent="✦ Original fiction";
+  const btn=document.createElement("button");btn.className="primary";btn.type="button";btn.textContent="Begin Reading →";btn.addEventListener("click",()=>openQuizSparkStory(story.id));
   card.append(title,meta,desc,tag,btn);shelf.appendChild(card);
  });
 }
