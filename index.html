@@ -1113,8 +1113,9 @@ setupInviteFriends();
   <div class="category-grid" id="quizCategories"></div>
   <h3 style="margin-top:20px">2. Choose Difficulty</h3>
   <select id="difficulty">
-   <option value="Beginner">Easy — Stage 1</option><option value="Intermediate">Medium — Stage 2</option><option value="Advanced">Hard — Stage 3</option>
+   <option value="Beginner">Beginner — Level 1</option><option value="Intermediate">Intermediate — Level 2</option><option value="Advanced">Advanced — Level 3</option><option value="Expert">Expert — Level 4</option>
   </select>
+  <p class="muted" id="quizLevelProgress" aria-live="polite">Begin as a Beginner and unlock higher levels as you improve.</p>
   <h3>3. Number of Questions</h3>
   <select id="questionCount"><option value="5">5 Questions</option><option value="10" selected>10 Questions</option></select>
   <button class="primary" id="startBtn">Start My Quiz 🚀</button>
@@ -1223,6 +1224,7 @@ function trackAnalytics(eventName,parameters={}){
 const $=id=>document.getElementById(id);
 
 let currentUser=null,savedPoints=0,games=0,correctTotal=0;
+let quizLevelStats={attempts:0,correct:0,total:0};
 let dailyChallengeDates=[]; // quizspark-daily-challenge-v1
 let lessonsDone=[],lessonQuizzesDone=[];
 let selectedCategory="General Knowledge";
@@ -1910,6 +1912,7 @@ async function loadProfile(user){
  lessonsDone=Array.isArray(data.lessonsCompleted)?data.lessonsCompleted:[];
  lessonQuizzesDone=Array.isArray(data.lessonQuizzesCompleted)?data.lessonQuizzesCompleted:[];
  dailyChallengeDates=Array.isArray(data.dailyChallengeDates)?data.dailyChallengeDates:[];
+ quizLevelStats=data.quizLevelStats&&typeof data.quizLevelStats==="object"?data.quizLevelStats:{attempts:0,correct:0,total:0};
  updateDashboard();
 }
 
@@ -2025,6 +2028,7 @@ function renderAchievementBadges(){
 }
 
 function updateDashboard(){
+ renderQuizLevelProgress();
  const name=currentUser?.displayName||"Player";
  $("homeGreeting").textContent="Hello, "+name+"! 👋";
  $("homePoints").textContent=savedPoints.toLocaleString();
@@ -2537,11 +2541,50 @@ function buildQuizCategories(){
  });
 }
 
+/* QUIZ LEVEL PROGRESSION */
+function quizLevelRequirements(){
+ const attempts=Number(quizLevelStats.attempts)||0;
+ const correct=Number(quizLevelStats.correct)||0;
+ const total=Number(quizLevelStats.total)||0;
+ const average=total?correct/total:0;
+ return {
+  Beginner:true,
+  Intermediate:attempts>=1&&average>=0.60,
+  Advanced:attempts>=3&&average>=0.70,
+  Expert:attempts>=5&&average>=0.80
+ };
+}
+function renderQuizLevelProgress(){
+ const select=$("difficulty"),note=$("quizLevelProgress");
+ if(!select||!note)return;
+ const unlocked=quizLevelRequirements();
+ Array.from(select.options).forEach(option=>{
+  option.disabled=!unlocked[option.value];
+  if(option.value==="Beginner")option.textContent="Beginner — Level 1";
+  if(option.value==="Intermediate")option.textContent=unlocked.Intermediate?"Intermediate — Level 2 ✓":"Intermediate — Level 2 🔒";
+  if(option.value==="Advanced")option.textContent=unlocked.Advanced?"Advanced — Level 3 ✓":"Advanced — Level 3 🔒";
+  if(option.value==="Expert")option.textContent=unlocked.Expert?"Expert — Level 4 ✓":"Expert — Level 4 🔒";
+ });
+ if(!unlocked[select.value])select.value="Beginner";
+ const attempts=Number(quizLevelStats.attempts)||0;
+ const average=Number(quizLevelStats.total)?Math.round(Number(quizLevelStats.correct)/Number(quizLevelStats.total)*100):0;
+ note.textContent="Progress: "+attempts+" standard quizzes completed · "+average+"% average accuracy. Unlock Intermediate at 60% after 1 quiz, Advanced at 70% after 3 quizzes, and Expert at 80% after 5 quizzes.";
+}
+$("difficulty")?.addEventListener("change",()=>{
+ if(!quizLevelRequirements()[$("difficulty").value]){
+  $("difficulty").value="Beginner";
+  setMessage("gameMessage","Complete more quizzes with strong accuracy to unlock this level.","error");
+ }
+});
+
 /* CREATE QUESTIONS */
 function makeQuiz(){
  let source=[...(bank[selectedCategory]||bank["General Knowledge"])];
  const difficulty=$("difficulty").value;
- if(difficulty==="Advanced"&&advancedExtras[selectedCategory])source.push(...advancedExtras[selectedCategory]);
+ if((difficulty==="Advanced"||difficulty==="Expert")&&advancedExtras[selectedCategory])source.push(...advancedExtras[selectedCategory]);
+ if(difficulty==="Expert"&&selectedCategory==="Mathematics"){
+  for(let i=0;i<15;i++){const a=17+i*3,b=7+(i%9),answer=a*b;source.push([`What is ${a} × ${b}?`,String(answer),[String(answer+7),String(answer-9),String(answer+13)]]);}
+ }
  if(selectedCategory==="Mathematics"&&difficulty!=="Beginner"){
   for(let i=0;i<12;i++){
    const a=10+i*2,b=3+(i%8),answer=a*b;
@@ -2686,6 +2729,14 @@ async function finishQuiz(){
     update.points=(Number(data.points)||0)+score;
     update.gamesPlayed=(Number(data.gamesPlayed)||0)+1;
     update.correctAnswers=(Number(data.correctAnswers)||0)+earnedCorrect;
+    if(quizMode==="standard"){
+     const stats=data.quizLevelStats&&typeof data.quizLevelStats==="object"?data.quizLevelStats:{attempts:0,correct:0,total:0};
+     update.quizLevelStats={
+      attempts:(Number(stats.attempts)||0)+1,
+      correct:(Number(stats.correct)||0)+earnedCorrect,
+      total:(Number(stats.total)||0)+quizQuestions.length
+     };
+    }
    }
    if(quizMode==="tournament"&&tournamentDate&&!alreadyEntered){
     update.dailyTournamentDate=tournamentDate;
@@ -2698,6 +2749,7 @@ async function finishQuiz(){
   clearQuizDraft();
   if(quizMode==="tournament"&&tournamentDate){try{localStorage.setItem("quizspark-tournament-entry-v1-"+currentUser.uid+"-"+tournamentDate,"completed");}catch(error){}}
   await loadProfile(currentUser);
+  renderQuizLevelProgress();
   saveRecentQuizHistory();
   trackAnalytics("quiz_complete",{category:selectedCategory,score:score,question_count:quizQuestions.length});
   setMessage("gameMessage",(quizMode==="tournament"?"🏆 Tournament completed! ":"🏆 Congratulations! ")+(quizMode==="tournament"?"Your tournament score is "+score+" / 50. ":"You earned "+score+" points. ")+"Your new balance is "+savedPoints+".","success");
@@ -2902,6 +2954,7 @@ $("refreshLeaderboard").onclick=loadLeaderboard;
 /* INITIALISE WEBSITE */
 buildLearningCategories();
 buildQuizCategories();
+renderQuizLevelProgress();
 loadDailyTournamentLeaderboard();
 refreshStartButton();
 console.log("QuizSpark initialised successfully.");
