@@ -948,6 +948,14 @@ setupInviteFriends();
     <div class="story-stat"><strong>🌍</strong><span>Stories across countries</span></div>
    </div>
   </div>
+  <section class="recent-reading" aria-labelledby="storyBookmarksHeading" style="margin:0 0 22px;padding:15px;border:1px solid #8f7136;border-radius:15px;background:linear-gradient(145deg,#302653,#192344)">
+   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+    <h2 id="storyBookmarksHeading" style="margin:0">🔖 My Bookmarks</h2>
+    <button class="secondary" id="clearStoryBookmarks" type="button" style="width:auto;margin:0;padding:9px 12px">Clear Bookmarks</button>
+   </div>
+   <p class="muted" style="margin:8px 0 12px">Save specific pages and return directly to them whenever you want. Bookmarks stay on this device.</p>
+   <div id="storyBookmarkShelf" class="story-shelf" aria-live="polite"></div>
+  </section>
   <section class="recent-reading" aria-labelledby="recentReadingHeading" style="margin:0 0 22px;padding:15px;border:1px solid #66529a;border-radius:15px;background:linear-gradient(145deg,#25204b,#192344)">
    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
     <h2 id="recentReadingHeading" style="margin:0">🕘 Recently Read</h2>
@@ -991,6 +999,7 @@ setupInviteFriends();
     <button class="secondary story-theme-btn" id="storyThemeLight" type="button" aria-pressed="false" style="width:auto;margin:0;padding:8px 11px">☀️ Light</button>
    </div>
    <div class="story-body" id="storyPageBody"></div>
+   <button class="secondary" id="toggleStoryBookmark" type="button" aria-pressed="false" style="width:100%;margin:16px 0 0;border:1px solid #8f7136">🔖 Bookmark This Page</button>
   </div>
   <div class="story-controls">
    <button class="secondary" id="storyPrevBtn" type="button">← Previous</button>
@@ -3132,6 +3141,61 @@ function setupStoryReadingTools(){
  applyStoryFontSize(getStoryFontSize());
  applyStoryTheme(getStoryTheme());
 }
+const QUIZSPARK_STORY_BOOKMARKS_KEY="quizspark-story-bookmarks-v1";
+function getStoryBookmarks(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(QUIZSPARK_STORY_BOOKMARKS_KEY)||"[]");
+  return Array.isArray(saved)?saved.filter(item=>item&&typeof item.id==="string"&&Number.isInteger(Number(item.page))&&quizSparkStories.some(story=>story.id===item.id)).slice(0,100):[];
+ }catch(error){return [];}
+}
+function isCurrentStoryPageBookmarked(){
+ return !!activeStory&&getStoryBookmarks().some(item=>item.id===activeStory.id&&Number(item.page)===activeStoryPage);
+}
+function updateStoryBookmarkButton(){
+ const button=document.getElementById("toggleStoryBookmark");
+ if(!button)return;
+ const saved=isCurrentStoryPageBookmarked();
+ button.textContent=saved?"🔖 Bookmarked · Remove Bookmark":"🔖 Bookmark This Page";
+ button.setAttribute("aria-pressed",String(saved));
+}
+function toggleCurrentStoryBookmark(){
+ if(!activeStory)return;
+ const bookmarks=getStoryBookmarks();
+ const exists=bookmarks.some(item=>item.id===activeStory.id&&Number(item.page)===activeStoryPage);
+ const next=exists
+  ?bookmarks.filter(item=>!(item.id===activeStory.id&&Number(item.page)===activeStoryPage))
+  :[{id:activeStory.id,page:activeStoryPage,title:activeStory.title,chapter:activeStory.pages[activeStoryPage].chapter,pageTitle:activeStory.pages[activeStoryPage].title,savedAt:Date.now()},...bookmarks].slice(0,100);
+ try{
+  localStorage.setItem(QUIZSPARK_STORY_BOOKMARKS_KEY,JSON.stringify(next));
+  renderStoryBookmarkShelf();
+  updateStoryBookmarkButton();
+ }catch(error){
+  const button=document.getElementById("toggleStoryBookmark");
+  if(button)button.textContent="Unable to save — device storage may be full";
+ }
+}
+function renderStoryBookmarkShelf(){
+ const shelf=document.getElementById("storyBookmarkShelf");if(!shelf)return;
+ shelf.replaceChildren();
+ const bookmarks=getStoryBookmarks();
+ if(!bookmarks.length){
+  const empty=document.createElement("p");empty.className="muted";empty.textContent="You have not bookmarked any pages yet. Open a story and tap “Bookmark This Page”.";
+  shelf.appendChild(empty);return;
+ }
+ bookmarks.forEach(item=>{
+  const story=quizSparkStories.find(book=>book.id===item.id);if(!story)return;
+  const page=Math.min(Math.max(Number(item.page)||0,0),story.pages.length-1);
+  const card=document.createElement("article");card.className="story-card";
+  const title=document.createElement("h3");title.textContent=story.title;
+  const pageTitle=document.createElement("p");pageTitle.textContent=item.pageTitle||story.pages[page].title;
+  const meta=document.createElement("div");meta.className="story-meta";meta.textContent=(item.chapter||story.pages[page].chapter)+" · Page "+(page+1)+" of "+story.pages.length;
+  const open=document.createElement("button");open.className="primary";open.type="button";open.textContent="Open Bookmarked Page →";
+  open.addEventListener("click",()=>{activeStory=story;activeStoryPage=page;renderQuizSparkStoryPage();showPage("storyReader");window.scrollTo({top:0,behavior:"smooth"});});
+  const remove=document.createElement("button");remove.className="secondary";remove.type="button";remove.textContent="Remove Bookmark";
+  remove.addEventListener("click",()=>{localStorage.setItem(QUIZSPARK_STORY_BOOKMARKS_KEY,JSON.stringify(getStoryBookmarks().filter(saved=>!(saved.id===item.id&&Number(saved.page)===page))));renderStoryBookmarkShelf();updateStoryBookmarkButton();});
+  card.append(title,pageTitle,meta,open,remove);shelf.appendChild(card);
+ });
+}
 const QUIZSPARK_READING_HISTORY_KEY="quizspark-reading-history-v1";
 function getReadingHistory(){
  try{
@@ -3260,6 +3324,7 @@ function renderQuizSparkStoryPage(){
  document.getElementById("storyProgressFill").style.width=((activeStoryPage+1)/total*100)+"%";
  document.getElementById("storyPrevBtn").disabled=activeStoryPage===0;
  document.getElementById("storyNextBtn").textContent=activeStoryPage===total-1?"Back to Library ✓":"Next Page →";
+ updateStoryBookmarkButton();
  localStorage.setItem("quizspark-story-"+activeStory.id,String(activeStoryPage));
  saveReadingHistory(activeStory.id,activeStoryPage);
 }
@@ -3267,8 +3332,14 @@ document.getElementById("storyPrevBtn").addEventListener("click",()=>{if(activeS
 document.getElementById("storyNextBtn").addEventListener("click",()=>{if(!activeStory)return;if(activeStoryPage<activeStory.pages.length-1){activeStoryPage++;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}else{showPage("stories");}});
 setupStoryFilters();
 setupStoryReadingTools();
+document.getElementById("toggleStoryBookmark")?.addEventListener("click",toggleCurrentStoryBookmark);
+document.getElementById("clearStoryBookmarks")?.addEventListener("click",()=>{
+ try{localStorage.removeItem(QUIZSPARK_STORY_BOOKMARKS_KEY);}catch(error){}
+ renderStoryBookmarkShelf();updateStoryBookmarkButton();
+});
 renderStoryShelf();
 renderRecentStoryShelf();
+renderStoryBookmarkShelf();
 document.getElementById("clearReadingHistory")?.addEventListener("click",()=>{
  localStorage.removeItem(QUIZSPARK_READING_HISTORY_KEY);renderRecentStoryShelf();
 });
