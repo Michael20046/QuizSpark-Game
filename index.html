@@ -1067,6 +1067,11 @@ setupInviteFriends();
    <h2 id="storyPageTitle">Story title</h2>
    <div class="story-progress"><div id="storyProgressFill"></div></div>
    <p class="muted" id="storyPageCount">Page 1 of 1</p>
+   <div class="story-listen-tools" role="group" aria-label="Listen to story" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px">
+    <button class="primary" id="storyReadAloudBtn" type="button" style="width:auto;margin:0">🔊 Read Aloud</button>
+    <button class="secondary" id="storyStopReadingBtn" type="button" style="width:auto;margin:0" disabled>⏹ Stop</button>
+    <span class="muted" id="storyListenStatus" role="status" aria-live="polite" style="align-self:center;font-size:13px">Listen to this page read aloud</span>
+   </div>
    <div class="story-reading-tools" role="group" aria-label="Story reading preferences" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 16px;padding:10px;border:1px solid #51447e;border-radius:12px;background:#1b2042">
     <span style="color:#d8ccff;font-size:13px;font-weight:700;margin-right:auto">Text size</span>
     <button class="secondary" id="storyFontDown" type="button" aria-label="Decrease reading text size" style="width:auto;margin:0;padding:8px 13px">A−</button>
@@ -3801,6 +3806,48 @@ function setupStoryReadingTools(){
  applyStoryFontSize(getStoryFontSize());
  applyStoryTheme(getStoryTheme());
 }
+let quizSparkSpeechUtterance=null;
+function stopStoryReadAloud(){
+ if("speechSynthesis" in window)window.speechSynthesis.cancel();
+ quizSparkSpeechUtterance=null;
+ const play=document.getElementById("storyReadAloudBtn");
+ const stop=document.getElementById("storyStopReadingBtn");
+ const status=document.getElementById("storyListenStatus");
+ if(play)play.disabled=false;
+ if(stop)stop.disabled=true;
+ if(status)status.textContent="Reading stopped";
+}
+function readStoryAloud(){
+ const body=document.getElementById("storyPageBody");
+ const play=document.getElementById("storyReadAloudBtn");
+ const stop=document.getElementById("storyStopReadingBtn");
+ const status=document.getElementById("storyListenStatus");
+ if(!body||!body.textContent.trim())return;
+ if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){
+  if(status)status.textContent="Read aloud is not supported by this browser. Try your device's text-to-speech accessibility setting.";
+  return;
+ }
+ window.speechSynthesis.cancel();
+ const textToRead=(document.getElementById("storyPageTitle")?.textContent||"")+". "+body.textContent;
+ quizSparkSpeechUtterance=new SpeechSynthesisUtterance(textToRead);
+ quizSparkSpeechUtterance.rate=0.9;
+ quizSparkSpeechUtterance.onstart=()=>{
+  if(play)play.disabled=true;
+  if(stop)stop.disabled=false;
+  if(status)status.textContent="Reading this page aloud…";
+ };
+ quizSparkSpeechUtterance.onend=()=>{
+  if(play)play.disabled=false;
+  if(stop)stop.disabled=true;
+  if(status)status.textContent="Finished reading this page";
+ };
+ quizSparkSpeechUtterance.onerror=()=>{
+  if(play)play.disabled=false;
+  if(stop)stop.disabled=true;
+  if(status)status.textContent="Audio could not start. Please try again.";
+ };
+ window.speechSynthesis.speak(quizSparkSpeechUtterance);
+}
 const QUIZSPARK_COMPLETED_STORIES_KEY="quizspark-completed-stories-v1";
 function getCompletedStoryIds(){
  try{
@@ -4133,6 +4180,7 @@ function openQuizSparkStory(id){
 }
 function renderQuizSparkStoryPage(){
  if(!activeStory)return;
+ stopStoryReadAloud();
  const page=activeStory.pages[activeStoryPage],total=activeStory.pages.length;
  document.getElementById("storyChapter").textContent=page.chapter;
  document.getElementById("storyPageTitle").textContent=activeStory.title+" — "+page.title;
@@ -4150,6 +4198,8 @@ document.getElementById("storyPrevBtn").addEventListener("click",()=>{if(activeS
 document.getElementById("storyNextBtn").addEventListener("click",()=>{if(!activeStory)return;if(activeStoryPage<activeStory.pages.length-1){activeStoryPage++;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}else{completeActiveStory();}});
 setupStoryFilters();
 setupStoryReadingTools();
+document.getElementById("storyReadAloudBtn")?.addEventListener("click",readStoryAloud);
+document.getElementById("storyStopReadingBtn")?.addEventListener("click",stopStoryReadAloud);
 document.getElementById("toggleStoryBookmark")?.addEventListener("click",toggleCurrentStoryBookmark);
 document.getElementById("clearStoryBookmarks")?.addEventListener("click",()=>{
  try{localStorage.removeItem(QUIZSPARK_STORY_BOOKMARKS_KEY);}catch(error){}
