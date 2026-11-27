@@ -772,6 +772,10 @@ setupInviteFriends();
 .achievement-name{font-size:11px;font-weight:800;line-height:1.35;margin-top:5px;color:#fff}
 .achievement-status{font-size:10px;color:#b8b4ca;margin-top:4px}
 .achievement-badge.unlocked .achievement-status{color:#f4d782}
+.achievement-progress-text{font-size:9px;line-height:1.35;color:#c8c3dc;margin-top:7px;overflow-wrap:anywhere}
+.achievement-progress-track{height:5px;margin:6px 2px 0;border-radius:999px;background:rgba(196,181,253,.16);overflow:hidden}
+.achievement-progress-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#9274dc,#f4d782);transition:width .25s ease}
+.achievement-badge.unlocked .achievement-progress-text{color:#f4d782}
 @media(max-width:390px){.achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 
@@ -1950,13 +1954,13 @@ async function answerDailyChallenge(choice,button,item,today){
 
 /* quizspark-achievements-v1 */
 const achievementDefinitions=[
- {id:"first-quiz",icon:"🎮",name:"First Steps",description:"Complete your first quiz",unlocked:()=>games>=1},
- {id:"quiz-explorer",icon:"🧭",name:"Quiz Explorer",description:"Play 5 quizzes",unlocked:()=>games>=5},
- {id:"brain-builder",icon:"🧠",name:"Brain Builder",description:"Get 25 correct answers",unlocked:()=>correctTotal>=25},
- {id:"scholar",icon:"📚",name:"Scholar",description:"Complete your first lesson",unlocked:()=>lessonsDone.length>=1},
- {id:"daily-spark",icon:"⚡",name:"Daily Spark",description:"Complete 3 daily challenges",unlocked:()=>dailyChallengeDates.length>=3},
- {id:"point-collector",icon:"💎",name:"Point Collector",description:"Earn 100 points",unlocked:()=>savedPoints>=100},
- {id:"gold-legend",icon:"👑",name:"Gold Legend",description:"Reach 500 points",unlocked:()=>savedPoints>=500}
+ {id:"first-quiz",icon:"🎮",name:"First Steps",description:"Complete your first quiz",progressLabel:"Quizzes completed",progress:()=>games,target:1,unlocked:()=>games>=1},
+ {id:"quiz-explorer",icon:"🧭",name:"Quiz Explorer",description:"Play 5 quizzes",progressLabel:"Quizzes played",progress:()=>games,target:5,unlocked:()=>games>=5},
+ {id:"brain-builder",icon:"🧠",name:"Brain Builder",description:"Get 25 correct answers",progressLabel:"Correct answers",progress:()=>correctTotal,target:25,unlocked:()=>correctTotal>=25},
+ {id:"scholar",icon:"📚",name:"Scholar",description:"Complete your first lesson",progressLabel:"Lessons completed",progress:()=>lessonsDone.length,target:1,unlocked:()=>lessonsDone.length>=1},
+ {id:"daily-spark",icon:"⚡",name:"Daily Spark",description:"Complete 3 daily challenges",progressLabel:"Daily challenges",progress:()=>dailyChallengeDates.length,target:3,unlocked:()=>dailyChallengeDates.length>=3},
+ {id:"point-collector",icon:"💎",name:"Point Collector",description:"Earn 100 points",progressLabel:"Points earned",progress:()=>savedPoints,target:100,unlocked:()=>savedPoints>=100},
+ {id:"gold-legend",icon:"👑",name:"Gold Legend",description:"Reach 500 points",progressLabel:"Points earned",progress:()=>savedPoints,target:500,unlocked:()=>savedPoints>=500}
 ];
 function renderAchievementBadges(){
  const unlocked=achievementDefinitions.filter(item=>item.unlocked()).length;
@@ -1966,12 +1970,16 @@ function renderAchievementBadges(){
   grid.replaceChildren();
   achievementDefinitions.forEach(item=>{
    const earned=item.unlocked(),card=document.createElement("div");
+   const amount=Math.max(0,Number(item.progress())||0),shown=Math.min(amount,item.target),percent=Math.min(100,Math.round(shown/item.target*100));
    card.className="achievement-badge"+(earned?" unlocked":"");
    card.title=item.description;
    const icon=document.createElement("div");icon.className="achievement-icon";icon.textContent=item.icon;
    const name=document.createElement("div");name.className="achievement-name";name.textContent=item.name;
-   const status=document.createElement("div");status.className="achievement-status";status.textContent=earned?"✓ Unlocked":"🔒 Locked";
-   card.append(icon,name,status);grid.appendChild(card);
+   const status=document.createElement("div");status.className="achievement-status";status.textContent=earned?"✓ Unlocked":"🔒 "+item.description;
+   const progressText=document.createElement("div");progressText.className="achievement-progress-text";progressText.textContent=shown.toLocaleString()+" / "+item.target.toLocaleString()+" "+item.progressLabel;
+   const track=document.createElement("div");track.className="achievement-progress-track";track.setAttribute("role","progressbar");track.setAttribute("aria-label",item.name+" progress");track.setAttribute("aria-valuemin","0");track.setAttribute("aria-valuemax",String(item.target));track.setAttribute("aria-valuenow",String(shown));
+   const fill=document.createElement("div");fill.className="achievement-progress-fill";fill.style.width=percent+"%";track.appendChild(fill);
+   card.append(icon,name,status,progressText,track);grid.appendChild(card);
   });
  });
 }
