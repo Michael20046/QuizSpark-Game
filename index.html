@@ -755,6 +755,27 @@ setupInviteFriends();
 
 /* READABLE MULTI-PARAGRAPH LESSON CONTENT */
 #readerContent{white-space:pre-line;line-height:1.85;color:#e4e1f4;font-size:15px}
+
+/* WELCOME LANDING FEATURES */
+.welcome-features{
+ margin:0 0 16px;padding:20px 16px;border:1px solid #7055a8;border-radius:19px;
+ background:radial-gradient(circle at 100% 0,#f4c95d1c,transparent 35%),linear-gradient(150deg,#211b43,#192344 78%);
+ box-shadow:0 10px 26px #08051f33
+}
+.welcome-intro{text-align:center;margin:0 auto 16px;max-width:540px}
+.welcome-kicker{font-size:10px;font-weight:850;letter-spacing:1.5px;color:#ffe6a3}
+.welcome-intro h2{margin:8px 0;color:#fff4d3;font-size:clamp(20px,5vw,25px);line-height:1.25}
+.welcome-intro p,.welcome-feature p{color:#c9c4df;font-size:13px;line-height:1.55;margin:6px 0 0}
+.welcome-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.welcome-feature{
+ min-width:0;padding:13px;border:1px solid #514477;border-radius:14px;
+ background:linear-gradient(145deg,#30245f,#202747)
+}
+.welcome-icon{font-size:24px}
+.welcome-feature h3{margin:7px 0 4px;color:#ffe6a3;font-size:14px}
+.welcome-note{margin:14px 2px 0;text-align:center;color:#bcb4d6;font-size:11px;line-height:1.5}
+@media(max-width:360px){.welcome-features{padding:16px 12px}.welcome-feature{padding:11px}.welcome-feature h3{font-size:13px}.welcome-feature p{font-size:12px}}
+
 </style>
 </head>
 
@@ -772,6 +793,20 @@ setupInviteFriends();
   <h1>Welcome to QuizSpark! ⚡</h1>
   <p>Learn more. Play more. Grow smarter. Build knowledge one question at a time.</p>
  </div>
+ <section class="welcome-features" aria-labelledby="welcomeFeaturesTitle">
+  <div class="welcome-intro">
+   <span class="welcome-kicker">YOUR NEXT ADVENTURE STARTS HERE</span>
+   <h2 id="welcomeFeaturesTitle">One place to play, learn and explore</h2>
+   <p>Build your knowledge, discover original stories and celebrate every milestone — at your own pace.</p>
+  </div>
+  <div class="welcome-feature-grid">
+   <article class="welcome-feature"><span class="welcome-icon">🎮</span><h3>Play Quizzes</h3><p>Test yourself across different subjects and difficulty levels.</p></article>
+   <article class="welcome-feature"><span class="welcome-icon">📚</span><h3>Learn Something</h3><p>Explore lessons and check what you've learned with short quizzes.</p></article>
+   <article class="welcome-feature"><span class="welcome-icon">📖</span><h3>Read Stories</h3><p>Discover original stories from Nigeria and countries around the world, one page at a time.</p></article>
+   <article class="welcome-feature"><span class="welcome-icon">🏆</span><h3>Track Your Progress</h3><p>Earn in-app points, unlock achievement badges and follow your progress.</p></article>
+  </div>
+  <p class="welcome-note">✨ Free to get started · Your progress and achievements are part of your QuizSpark account · Points are in-app rewards, not cash.</p>
+ </section>
  <div class="card">
   <h2>Your Account</h2>
   <div id="signupFields">
