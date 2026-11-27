@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" role="img" aria-labelledby="title desc">
-<title id="title">The Boy in Lagos — QuizSpark Stories</title><desc id="desc">A young Nigerian boy stands before Lagos city, a yellow danfo bus, market stalls and the Nigerian flag, in a purple and gold book-cover design.</desc>
+<title id="title">Larry & Adeshola — QuizSpark Stories</title><desc id="desc">A young person stands before a Lagos-inspired city scene, a yellow danfo bus, market stalls and the Nigerian flag, beneath the title Larry & Adeshola.</desc>
 <defs>
  <linearGradient id="bg" x2="0" y2="1"><stop stop-color="#15133c"/><stop offset=".48" stop-color="#1763a0"/><stop offset="1" stop-color="#f4a34a"/></linearGradient>
  <linearGradient id="purple" x2="1" y2="1"><stop stop-color="#54268c"/><stop offset="1" stop-color="#171039"/></linearGradient>
@@ -31,6 +31,6 @@
 <rect x="14" y="14" width="572" height="872" rx="24" fill="none" stroke="url(#gold)" stroke-width="9"/>
 <path d="M25 30H575V150H25Z" fill="url(#purple)" stroke="url(#gold)" stroke-width="5"/>
 <text x="300" y="78" fill="url(#gold)" font-family="Georgia,serif" font-size="38" font-weight="bold" text-anchor="middle">QuizSpark Stories</text><text x="300" y="118" fill="#fff0c4" font-family="Georgia,serif" font-size="20" text-anchor="middle">READ • DREAM • DISCOVER</text>
-<text x="300" y="220" fill="url(#gold)" stroke="#30164f" stroke-width="2" paint-order="stroke" font-family="Georgia,serif" font-size="67" font-weight="bold" text-anchor="middle">The Boy</text><text x="300" y="292" fill="url(#gold)" stroke="#30164f" stroke-width="2" paint-order="stroke" font-family="Georgia,serif" font-size="67" font-weight="bold" text-anchor="middle">in Lagos</text>
-<path d="M25 810H575V870H25Z" fill="url(#purple)" stroke="url(#gold)" stroke-width="5"/><text x="300" y="848" fill="#ffe8a0" font-family="Georgia,serif" font-size="25" font-weight="bold" text-anchor="middle">A NIGERIAN STORY</text>
+<text x="300" y="220" fill="url(#gold)" stroke="#30164f" stroke-width="2" paint-order="stroke" font-family="Georgia,serif" font-size="64" font-weight="bold" text-anchor="middle">Larry &amp;</text><text x="300" y="292" fill="url(#gold)" stroke="#30164f" stroke-width="2" paint-order="stroke" font-family="Georgia,serif" font-size="67" font-weight="bold" text-anchor="middle">Adeshola</text><text x="300" y="330" fill="#fff0c4" font-family="Georgia,serif" font-size="19" text-anchor="middle">A LOVE THAT WASN&apos;T MEANT TO LAST</text>
+<path d="M25 810H575V870H25Z" fill="url(#purple)" stroke="url(#gold)" stroke-width="5"/><text x="300" y="848" fill="#ffe8a0" font-family="Georgia,serif" font-size="25" font-weight="bold" text-anchor="middle">A STORY OF LOVE &amp; LETTING GO</text>
 </svg>
