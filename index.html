@@ -889,6 +889,19 @@ setupInviteFriends();
  </section>
 
 
+ <section class="card" id="communityQuestionCard" aria-labelledby="communityQuestionTitle">
+  <div class="daily-topline"><span class="daily-tag">💬 COMMUNITY QUESTION</span><span class="daily-reward">🌍 One vote per day</span></div>
+  <h2 id="communityQuestionTitle">Question of the Day</h2>
+  <p class="muted" id="communityQuestionDate">Share your opinion with the QuizSpark community.</p>
+  <h3 id="communityQuestionPrompt">Loading today's community question...</h3>
+  <div id="communityQuestionOptions" class="daily-answers"></div>
+  <p id="communityQuestionMessage" class="message" aria-live="polite"></p>
+  <div id="communityQuestionResults" class="story-card" hidden style="margin-top:12px">
+   <strong>📊 Community results</strong>
+   <div id="communityQuestionBars" style="display:grid;gap:10px;margin-top:12px"></div>
+   <p class="muted" id="communityQuestionTotal" style="margin-bottom:0"></p>
+  </div>
+ </section>
  <section class="card invite-card" id="inviteFriendsCard" aria-labelledby="inviteFriendsTitle">
   <div class="daily-topline"><span class="daily-tag">🤝 GROW THE COMMUNITY</span><span class="daily-reward">🌍 Share the fun</span></div>
   <h2 id="inviteFriendsTitle">Invite Friends to QuizSpark</h2>
@@ -1960,6 +1973,102 @@ const dailyChallengeQuestions=[
  {q:"What is 12 multiplied by 8?",a:"96",o:["84","88","108"]},
  {q:"Which continent is the Sahara Desert in?",a:"Africa",o:["Asia","Australia","South America"]}
 ];
+
+/* QUESTION OF THE DAY COMMUNITY POLL */
+const communityDailyQuestions=[
+ {q:"What helps you learn something new most effectively?",options:["Reading and taking notes","Practising with questions","Watching or listening to lessons"]},
+ {q:"If you had one free hour to learn, what would you choose?",options:["Science or technology","Languages or communication","Business or creative skills"]},
+ {q:"What makes a great story unforgettable?",options:["A brave character","A surprising adventure","A meaningful lesson"]},
+ {q:"Which skill would you most like to improve this year?",options:["Problem solving","Writing and speaking","Digital skills"]},
+ {q:"How do you prefer to challenge your brain?",options:["Quick quizzes","Puzzles and riddles","Longer learning projects"]}
+];
+function communityQuestionToday(){
+ const key=localChallengeDate().replaceAll("-","");
+ return communityDailyQuestions[Number(key)%communityDailyQuestions.length];
+}
+async function renderCommunityQuestion(){
+ const prompt=$("communityQuestionPrompt"),options=$("communityQuestionOptions"),message=$("communityQuestionMessage");
+ if(!prompt||!options||!message)return;
+ const today=localChallengeDate(),item=communityQuestionToday();
+ $("communityQuestionDate").textContent="Today's community poll · "+today+" · Vote once and see how other learners answered.";
+ prompt.textContent=item.q;options.replaceChildren();message.className="message";
+ $("communityQuestionResults").hidden=true;
+ if(!currentUser){message.textContent="Sign in to cast your daily vote.";return;}
+ let myChoice=null;
+ try{
+  const mine=await getDoc(doc(db,"players",currentUser.uid));
+  const data=mine.exists()?mine.data():{};
+  if(data.communityPollDate===today&&item.options.includes(data.communityPollChoice))myChoice=data.communityPollChoice;
+ }catch(error){message.textContent="Unable to load your vote right now. Please try again.";message.className="message error";return;}
+ if(myChoice){
+  message.textContent="✅ Your vote is recorded: "+myChoice;
+  await loadCommunityQuestionResults(today,item);
+  return;
+ }
+ item.options.forEach(choice=>{
+  const button=document.createElement("button");button.type="button";button.className="daily-answer";button.textContent=choice;
+  button.addEventListener("click",()=>submitCommunityQuestionVote(choice,today,item));
+  options.appendChild(button);
+ });
+ message.textContent="Choose one answer to see the community results.";
+}
+let communityVoteSaving=false;
+async function submitCommunityQuestionVote(choice,today,item){
+ if(communityVoteSaving||!currentUser||!item.options.includes(choice))return;
+ communityVoteSaving=true;
+ $("communityQuestionOptions").querySelectorAll("button").forEach(button=>button.disabled=true);
+ $("communityQuestionMessage").textContent="Recording your vote...";
+ try{
+  const ref=doc(db,"players",currentUser.uid);let recorded=false;
+  await runTransaction(db,async tx=>{
+   const snap=await tx.get(ref);if(!snap.exists())throw new Error("Player profile not found.");
+   const data=snap.data();
+   if(data.communityPollDate!==today){
+    tx.update(ref,{communityPollDate:today,communityPollChoice:choice,updatedAt:serverTimestamp()});
+    recorded=true;
+   }
+  });
+  if(!recorded){
+   $("communityQuestionMessage").textContent="You have already voted in today's poll.";
+  }else{
+   $("communityQuestionMessage").textContent="🎉 Thank you! Your vote has been counted.";
+  }
+  await renderCommunityQuestion();
+ }catch(error){
+  $("communityQuestionMessage").textContent="Your vote could not be saved. Please try again.";
+  $("communityQuestionMessage").className="message error";
+  $("communityQuestionOptions").querySelectorAll("button").forEach(button=>button.disabled=false);
+ }finally{communityVoteSaving=false;}
+}
+async function loadCommunityQuestionResults(today,item){
+ const results=$("communityQuestionResults"),bars=$("communityQuestionBars");
+ if(!results||!bars)return;
+ bars.replaceChildren();results.hidden=false;
+ try{
+  const snapshot=await getDocs(collection(db,"players"));
+  const counts=Object.fromEntries(item.options.map(option=>[option,0]));
+  snapshot.docs.forEach(player=>{
+   const data=player.data();
+   if(data.communityPollDate===today&&Object.prototype.hasOwnProperty.call(counts,data.communityPollChoice))counts[data.communityPollChoice]++;
+  });
+  const total=Object.values(counts).reduce((sum,count)=>sum+count,0);
+  item.options.forEach(option=>{
+   const count=counts[option],percent=total?Math.round(count/total*100):0;
+   const wrap=document.createElement("div");
+   const line=document.createElement("div");line.style.cssText="display:flex;justify-content:space-between;gap:8px;font-size:14px";
+   const label=document.createElement("span");label.textContent=option;
+   const value=document.createElement("strong");value.textContent=percent+"% · "+count;
+   line.append(label,value);
+   const track=document.createElement("div");track.style.cssText="height:9px;border-radius:99px;background:#51447e;overflow:hidden;margin-top:5px";
+   const fill=document.createElement("div");fill.style.cssText="height:100%;width:"+percent+"%;background:linear-gradient(90deg,#9b75ed,#f2cf78);border-radius:99px";
+   track.appendChild(fill);wrap.append(line,track);bars.appendChild(wrap);
+  });
+  $("communityQuestionTotal").textContent=total+" vote"+(total===1?"":"s")+" recorded today.";
+ }catch(error){
+  $("communityQuestionTotal").textContent="Your vote is saved. Community totals are temporarily unavailable.";
+ }
+}
+
 function localChallengeDate(){
  const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
@@ -2075,6 +2184,7 @@ function updateDashboard(){
  $("profileName").textContent=name;$("profileEmail").textContent=currentUser?.email||"";
  renderAchievementBadges();
  renderDailyChallenge();
+renderCommunityQuestion();
  $("lessonsCompleted").textContent=lessonsDone.length;$("profileLessons").textContent=lessonsDone.length;
 }
 
