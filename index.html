@@ -963,6 +963,14 @@ setupInviteFriends();
     <div class="story-card" style="text-align:center"><strong id="readingBooksCompleted" style="display:block;font-size:25px;color:#f2cf78">0</strong><span class="muted">Books finished</span></div>
     <div class="story-card" style="text-align:center"><strong id="readingPagesReached" style="display:block;font-size:25px;color:#f2cf78">0</strong><span class="muted">Pages reached</span></div>
    </div>
+   <div class="story-card" style="margin-top:12px;border:1px solid #8f7136">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+     <span style="font-size:25px" id="readingLevelIcon" aria-hidden="true">🌱</span>
+     <div style="flex:1;min-width:150px"><strong id="readingLevelName" style="display:block;color:#f2cf78;font-size:17px">New Reader</strong><span class="muted" id="readingLevelProgress">Finish your first book to earn Beginner Reader.</span></div>
+    </div>
+    <div class="story-progress" style="margin-top:12px"><div id="readingLevelProgressFill" style="width:0%"></div></div>
+    <p class="muted" id="readingLevelNext" style="margin:7px 0 0">0 of 1 books completed toward Beginner Reader</p>
+   </div>
    <p class="muted" style="margin:10px 0 0">Your reading progress is counted on this device. Pages reached means the furthest page saved in each book.</p>
   </section>
   <section class="recent-reading" aria-labelledby="completedStoriesHeading" style="margin:0 0 22px;padding:15px;border:1px solid #8f7136;border-radius:15px;background:linear-gradient(145deg,#302653,#192344)">
@@ -3185,6 +3193,21 @@ function renderReadingStatistics(){
  set("readingBooksStarted",started);
  set("readingBooksCompleted",completedIds.size);
  set("readingPagesReached",pagesReached);
+ const levels=[
+  {min:0,name:"New Reader",icon:"🌱",next:1,nextName:"Beginner Reader"},
+  {min:1,name:"Beginner Reader",icon:"📖",next:5,nextName:"Book Lover"},
+  {min:5,name:"Book Lover",icon:"💜",next:10,nextName:"Master Reader"},
+  {min:10,name:"Master Reader",icon:"👑",next:15,nextName:"Story Champion"},
+  {min:15,name:"Story Champion",icon:"🏆",next:15,nextName:"Top level reached"}
+ ];
+ const level=[...levels].reverse().find(item=>completedIds.size>=item.min)||levels[0];
+ const next=level.next;
+ const progress=next>level.min?Math.min(100,Math.max(0,(completedIds.size-level.min)/(next-level.min)*100)):100;
+ set("readingLevelName",level.name);
+ set("readingLevelIcon",level.icon);
+ set("readingLevelProgress",level.name==="Story Champion"?"Congratulations — you have reached the highest reading level!":"Keep reading to unlock "+level.nextName+".");
+ set("readingLevelNext",level.name==="Story Champion"?"All 15 or more completed books celebrated":completedIds.size+" of "+next+" books completed toward "+level.nextName);
+ const bar=document.getElementById("readingLevelProgressFill");if(bar)bar.style.width=progress+"%";
 }
 function renderCompletedStories(){
  const shelf=document.getElementById("completedStoryShelf");if(!shelf)return;
