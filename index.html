@@ -1067,6 +1067,11 @@ setupInviteFriends();
    <h2 id="storyPageTitle">Story title</h2>
    <div class="story-progress"><div id="storyProgressFill"></div></div>
    <p class="muted" id="storyPageCount">Page 1 of 1</p>
+   <div class="story-listen-tools" role="group" aria-label="Listen to story" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px">
+    <button class="primary" id="storyReadAloudBtn" type="button" style="width:auto;margin:0">🔊 Read Aloud</button>
+    <button class="secondary" id="storyStopReadingBtn" type="button" style="width:auto;margin:0" disabled>⏹ Stop</button>
+    <span class="muted" id="storyListenStatus" role="status" aria-live="polite" style="align-self:center;font-size:13px">Listen to this page read aloud</span>
+   </div>
    <div class="story-reading-tools" role="group" aria-label="Story reading preferences" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 16px;padding:10px;border:1px solid #51447e;border-radius:12px;background:#1b2042">
     <span style="color:#d8ccff;font-size:13px;font-weight:700;margin-right:auto">Text size</span>
     <button class="secondary" id="storyFontDown" type="button" aria-label="Decrease reading text size" style="width:auto;margin:0;padding:8px 13px">A−</button>
@@ -3407,6 +3412,27 @@ quizSparkStories.push(
 {chapter:"Chapter 4 · The Festival",title:"The Next Keeper",body:"Asha's grandmother gave her a small family lantern. Keeping a tradition, she said, did not mean guarding an object; it meant carrying forward the care behind it. Asha placed it beside the letters in the school display, proud of the past and curious about what her generation might add."}]}
 );
 
+ {id:"the-blue-door-of-fez",title:"The Blue Door of Fez",country:"Morocco",region:"North Africa",genre:"Mystery · Family",description:"A young apprentice follows a trail of painted symbols through the old medina and uncovers a story her family had nearly forgotten.",backCover:"Behind a blue door in the old medina lies a secret carried through generations. When twelve-year-old Salma finds a tiny brass key beneath her grandfather's workbench, she follows its clues through winding lanes, quiet courtyards and a forgotten workshop. But the final lock will open only when she learns why the story was hidden.",pages:[
+  {chapter:"Chapter 1 · The Key",title:"A Mark Beneath the Bench",body:"The morning light slipped between the rooftops of Fez and fell across Salma's grandfather's workshop. She was meant to be sweeping the floor, but a small metallic glint beneath the old bench caught her eye. It was a brass key tied to a faded blue thread. On its handle was a symbol she had seen before: a tiny eight-pointed star.\n\nHer grandfather, Idris, looked up when she showed it to him. For a moment his hands became still. Then he smiled, but it was not his usual smile. “Some doors,” he said, “wait for the right question.” Salma asked what door the key belonged to. He only pointed towards the narrow street outside."},
+  {chapter:"Chapter 2 · The Medina",title:"A Trail of Blue Tiles",body:"Salma noticed the same star carved into a fountain near the market. Beside it, a blue tile showed an arrow pointing towards a quiet courtyard. An elderly bookseller named Hadi recognised the pattern. He explained that Salma's great-grandmother had once taught children to read in a small room nearby. The room had been closed for many years.\n\nHadi gave Salma a folded note. It contained a simple message: “A place is remembered when its stories are shared.” Salma wondered why her family had never spoken about the reading room. She decided to ask her grandfather again, this time with the note in her hand."},
+  {chapter:"Chapter 3 · The Open Door",title:"The Story Room",body:"Idris finally told Salma that the room had been used by neighbours to learn, exchange books and help one another. After a difficult period, the family had locked it and kept the key safe. He had feared that no one would care about it anymore.\n\nTogether they opened the blue door. Dust floated in the sunlight, but shelves of books still stood along the walls. Salma asked if they could clean the room and invite children to read there again. Her grandfather nodded. By the end of the month, the little room was full of voices. Salma placed the brass key beside the books, ready for the next young reader."}
+ ]},
+ {id:"the-nile-lantern",title:"The Lanterns Along the Nile",country:"Egypt",region:"North Africa",genre:"Adventure · Friendship",description:"Two friends set out to return a lost lantern and discover how small acts of kindness connect a whole neighbourhood.",backCover:"When a lantern drifts away from a riverside celebration, friends Mariam and Youssef set out to find its owner before sunset. Their search takes them through busy streets, quiet gardens and a boat workshop beside the Nile. Along the way, they discover that the lantern is more than a decoration: it carries a message of hope from one generation to the next.",pages:[
+  {chapter:"Chapter 1 · The Missing Light",title:"A Lantern on the Water",body:"Mariam and Youssef were helping prepare the neighbourhood celebration when a sudden breeze lifted a paper lantern from the table. It rolled across the riverbank and slipped onto the water. Youssef ran along the path, but the current carried it away. Inside the lantern, Mariam had noticed a small card with a name written in careful handwriting.\n\nThey asked a boat maker nearby if he had seen it. He pointed downstream and offered them a place in his little wooden boat. “Keep your eyes open,” he said. “The river carries many things, but people can help bring some of them home.”"},
+  {chapter:"Chapter 2 · The Boat Workshop",title:"A Message in the Fold",body:"The friends found the lantern caught beside a small landing. Its paper was damp, but the card was safe. The name belonged to Amina, an elderly neighbour who had made lanterns for the celebration for many years. On the back of the card was a note: “For everyone who helped me begin again.”\n\nMariam and Youssef visited Amina with the lantern. She explained that, years earlier, neighbours had helped her rebuild her workshop after a storm. Every year she made a lantern to thank them. This year's lantern had been meant for the youngest helpers."},
+  {chapter:"Chapter 3 · A Brighter Evening",title:"The Shared Lantern",body:"Amina invited the children to help repair the lantern. They added a new paper panel and wrote the names of everyone who had helped prepare the celebration. When evening came, the lantern was placed in the centre of the gathering rather than sent down the river.\n\nAs the lights glowed, Amina thanked the children for bringing it back. Mariam realised that the message was not about one person at all. It was about a community that remembered kindness. The friends promised to help make next year's lantern, and this time they would invite even more neighbours to write a message."}
+ ]},
+ {id:"the-olive-tree-promise",title:"The Olive Tree Promise",country:"Tunisia",region:"North Africa",genre:"Family · Courage",description:"A brother and sister work with their neighbours to protect an old olive tree and learn that caring for the future takes teamwork.",backCover:"In a village where an ancient olive tree has stood for generations, Lina and Sami hear that the land around it may be changed. Determined to protect a place filled with family memories, they gather stories, ask questions and bring their neighbours together. Their journey shows that courage can begin with listening and grow through cooperation.",pages:[
+  {chapter:"Chapter 1 · The Old Tree",title:"A Shade Full of Memories",body:"Every summer, Lina and Sami visited their grandmother beneath the oldest olive tree in the village. Its trunk was twisted, its branches wide, and its shade reached almost to the stone wall. Their grandmother said the tree had been there when she was a child. It had witnessed weddings, harvests, arguments and celebrations.\n\nOne afternoon, the children heard that a new road might pass near the tree. They worried that the roots could be damaged. Their grandmother told them not to panic. “First learn what is planned,” she said. “Then find out who can help.”"},
+  {chapter:"Chapter 2 · The Neighbours",title:"Listening Before Acting",body:"Lina and Sami spoke with the gardener, the shopkeeper and an older neighbour who kept photographs of the village. Each person remembered something different about the tree. The gardener explained how its roots held the soil. The shopkeeper remembered community meals beneath its branches.\n\nThe children made a small display of photographs and written memories. They asked the local council for a meeting and invited neighbours to attend. They did not demand that every change stop; they asked whether the road could be planned to protect the tree and its roots."},
+  {chapter:"Chapter 3 · A Promise Kept",title:"A Future for the Tree",body:"At the meeting, the neighbours shared their memories and the gardener explained the importance of protecting the roots. The planners agreed to review the route and work with the community on a safer design. It took patience and several conversations, but the final plan kept the oldest part of the grove protected.\n\nThat summer, Lina and Sami helped plant young olive trees nearby. Their grandmother watched them press soil around each sapling. “A promise,” she said, “is not only something we make. It is something we care for.” The children looked at the old tree and imagined the shade the new trees would one day give."}
+ ]},
+ {id:"the-library-of-the-casbah",title:"The Library of the Casbah",country:"Algeria",region:"North Africa",genre:"Mystery · Learning",description:"A curious student discovers a hidden collection of letters and brings a forgotten neighbourhood reading space back to life.",backCover:"When Amine finds a handwritten catalogue tucked inside a damaged book, he begins searching for the neighbourhood library described in its pages. With help from a retired teacher and his classmates, he uncovers letters, local history and a room waiting to be used again. The mystery becomes a project that brings readers of different ages together.",pages:[
+  {chapter:"Chapter 1 · The Catalogue",title:"A Note in an Old Book",body:"Amine loved visiting the second-hand book stall near the Casbah. One afternoon, a thin book fell open and a folded page slipped onto the table. It was a catalogue of books, each marked with a date and a handwritten note. At the bottom was an address and a sentence: “For the room where every voice belongs.”\n\nThe address led to a building Amine had passed many times. He asked a retired teacher, Madame Nadia, about it. She recognised the handwriting immediately. The room, she explained, had once been a small community library."},
+  {chapter:"Chapter 2 · The Locked Room",title:"Shelves Behind the Door",body:"Madame Nadia helped Amine speak with the building caretaker. Together they opened the room and found empty shelves, a few boxes and a window covered in dust. The catalogue matched several books in the boxes. Some contained notes from readers who had borrowed them years earlier.\n\nAmine and his classmates asked permission to clean the room. They sorted the books, repaired torn covers and made a list of what was still needed. The retired teacher showed them how to record titles and care for the collection."},
+  {chapter:"Chapter 3 · A Place for Everyone",title:"The First Reading Day",body:"After weeks of careful work, the room opened for a small reading afternoon. Children chose adventure books while older neighbours shared memories of the area. Amine placed the old catalogue in a display case so visitors could see how the library had begun.\n\nA little girl asked if she could recommend a book for the next meeting. Amine handed her a notebook and invited her to write the title. The library was no longer a forgotten room. It had become a place where stories could travel between generations."}
+ ]}
+
 ];
 
 /* quizspark-next-expansion-10-books: two further pages for every book */
@@ -3780,6 +3806,48 @@ function setupStoryReadingTools(){
  applyStoryFontSize(getStoryFontSize());
  applyStoryTheme(getStoryTheme());
 }
+let quizSparkSpeechUtterance=null;
+function stopStoryReadAloud(){
+ if("speechSynthesis" in window)window.speechSynthesis.cancel();
+ quizSparkSpeechUtterance=null;
+ const play=document.getElementById("storyReadAloudBtn");
+ const stop=document.getElementById("storyStopReadingBtn");
+ const status=document.getElementById("storyListenStatus");
+ if(play)play.disabled=false;
+ if(stop)stop.disabled=true;
+ if(status)status.textContent="Reading stopped";
+}
+function readStoryAloud(){
+ const body=document.getElementById("storyPageBody");
+ const play=document.getElementById("storyReadAloudBtn");
+ const stop=document.getElementById("storyStopReadingBtn");
+ const status=document.getElementById("storyListenStatus");
+ if(!body||!body.textContent.trim())return;
+ if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){
+  if(status)status.textContent="Read aloud is not supported by this browser. Try your device's text-to-speech accessibility setting.";
+  return;
+ }
+ window.speechSynthesis.cancel();
+ const textToRead=(document.getElementById("storyPageTitle")?.textContent||"")+". "+body.textContent;
+ quizSparkSpeechUtterance=new SpeechSynthesisUtterance(textToRead);
+ quizSparkSpeechUtterance.rate=0.9;
+ quizSparkSpeechUtterance.onstart=()=>{
+  if(play)play.disabled=true;
+  if(stop)stop.disabled=false;
+  if(status)status.textContent="Reading this page aloud…";
+ };
+ quizSparkSpeechUtterance.onend=()=>{
+  if(play)play.disabled=false;
+  if(stop)stop.disabled=true;
+  if(status)status.textContent="Finished reading this page";
+ };
+ quizSparkSpeechUtterance.onerror=()=>{
+  if(play)play.disabled=false;
+  if(stop)stop.disabled=true;
+  if(status)status.textContent="Audio could not start. Please try again.";
+ };
+ window.speechSynthesis.speak(quizSparkSpeechUtterance);
+}
 const QUIZSPARK_COMPLETED_STORIES_KEY="quizspark-completed-stories-v1";
 function getCompletedStoryIds(){
  try{
@@ -4053,7 +4121,7 @@ function renderStoryShelf(){
  const favouriteOnly=!!document.getElementById("showFavouriteStories")?.checked;
  const favourites=getFavouriteStoryIds();
  const filtered=quizSparkStories.filter(story=>{
-  const haystack=[story.title,story.description,story.country,story.genre].join(" ").toLowerCase();
+  const haystack=[story.title,story.description,story.backCover,story.country,story.region,story.genre].join(" ").toLowerCase();
   return (!search||haystack.includes(search))&&(!country||story.country===country)&&(!genre||story.genre===genre)&&(!favouriteOnly||favourites.includes(story.id));
  });
  const count=document.getElementById("storyFilterCount");
@@ -4066,8 +4134,8 @@ function renderStoryShelf(){
  filtered.forEach(story=>{
   const card=document.createElement("article");card.className="story-card";
   const title=document.createElement("h3");title.textContent=story.title;
-  const meta=document.createElement("div");meta.className="story-meta";meta.textContent=story.country+" · "+story.genre+" · "+story.pages.length+" pages";
-  const desc=document.createElement("p");desc.textContent=story.description;
+  const meta=document.createElement("div");meta.className="story-meta";meta.textContent=story.country+(story.region?" · "+story.region:"")+" · "+story.genre+" · "+story.pages.length+" pages";
+  const desc=document.createElement("p");desc.textContent=story.description;\n  const backCover=document.createElement("p");backCover.className="story-back-cover";backCover.textContent="📘 Back cover · "+(story.backCover||story.description);backCover.style.cssText="padding:11px 12px;margin:9px 0 12px;border-left:3px solid #d8b45f;border-radius:8px;background:rgba(216,180,95,.09);line-height:1.65;color:inherit";
   const tag=document.createElement("span");tag.className="story-tag";tag.textContent="✦ Original fiction";
   const saved=Math.min(Math.max(Number(localStorage.getItem("quizspark-story-"+story.id)||0),0),story.pages.length-1);
   const progress=document.createElement("p");progress.className="story-progress-note";
@@ -4081,7 +4149,7 @@ function renderStoryShelf(){
   favouriteBtn.textContent=isFavourite?"♥ Saved to Favourites · Remove":"♡ Add to Favourites";
   favouriteBtn.setAttribute("aria-pressed",String(isFavourite));
   favouriteBtn.addEventListener("click",()=>toggleFavouriteStory(story.id));
-  card.append(title,meta,desc,tag,progress,btn,favouriteBtn);shelf.appendChild(card);
+  card.append(title,meta,desc,backCover,tag,progress,btn,favouriteBtn);shelf.appendChild(card);
  });
 }
 function setupStoryFilters(){
@@ -4112,6 +4180,7 @@ function openQuizSparkStory(id){
 }
 function renderQuizSparkStoryPage(){
  if(!activeStory)return;
+ stopStoryReadAloud();
  const page=activeStory.pages[activeStoryPage],total=activeStory.pages.length;
  document.getElementById("storyChapter").textContent=page.chapter;
  document.getElementById("storyPageTitle").textContent=activeStory.title+" — "+page.title;
@@ -4129,6 +4198,8 @@ document.getElementById("storyPrevBtn").addEventListener("click",()=>{if(activeS
 document.getElementById("storyNextBtn").addEventListener("click",()=>{if(!activeStory)return;if(activeStoryPage<activeStory.pages.length-1){activeStoryPage++;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}else{completeActiveStory();}});
 setupStoryFilters();
 setupStoryReadingTools();
+document.getElementById("storyReadAloudBtn")?.addEventListener("click",readStoryAloud);
+document.getElementById("storyStopReadingBtn")?.addEventListener("click",stopStoryReadAloud);
 document.getElementById("toggleStoryBookmark")?.addEventListener("click",toggleCurrentStoryBookmark);
 document.getElementById("clearStoryBookmarks")?.addEventListener("click",()=>{
  try{localStorage.removeItem(QUIZSPARK_STORY_BOOKMARKS_KEY);}catch(error){}
