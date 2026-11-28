@@ -4271,7 +4271,7 @@ function renderStoryShelf(){
   const coverBrand=document.createElement("small");coverBrand.textContent="QUIZSPARK STORIES";
   frontCover.append(coverArt,coverTitle,coverBrand);
   if(story.coverImage){
-   const coverImage=document.createElement("img");coverImage.className="story-front-cover";coverImage.alt=story.title+" front cover";coverImage.loading="lazy";coverImage.decoding="async";coverImage.src=story.coverImage;
+   const coverImage=document.createElement("img");coverImage.className="story-front-cover";coverImage.alt=story.title+" front cover";coverImage.loading="lazy";coverImage.decoding="async";coverImage.src="/QuizSpark-Game/"+String(story.coverImage).replace(/^\/+/, "");
    coverImage.addEventListener("error",()=>{frontCover.hidden=false;coverImage.replaceWith(frontCover);});
    frontCover.hidden=true;coverImage.addEventListener("load",()=>{frontCover.hidden=true;});
    card.appendChild(coverImage);
