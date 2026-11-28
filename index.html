@@ -1111,7 +1111,7 @@ setupInviteFriends();
  <div class="hero"><span class="story-welcome">LEARN MORE · PLAY MORE · GROW SMARTER</span><h1>🎓 QuizSpark University</h1><p>A growing learning library for school learners, curious adults and lifelong learners. Explore courses from beginner to advanced, then learn through books, written lessons, educational videos and quizzes.</p><button class="primary" onclick="showPage('learn')">Open Learning Centre →</button></div>
  <div class="card"><h2>Find a course</h2><label for="universitySearch">Search courses and subjects</label><input id="universitySearch" type="search" placeholder="e.g. investing, biology, coding, property"><label for="universityArea">Course area</label><select id="universityArea"><option value="">All course areas</option></select><label for="universityLevel">Learning level</label><select id="universityLevel"><option value="">All levels</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select><p class="muted" id="universityCourseCount" aria-live="polite"></p></div>
  <div class="card"><h2>Explore the course catalogue</h2><p class="muted">Existing lessons and quizzes open in the Learning Centre. Additional course lessons will be added in stages.</p><div id="universityCourseList" class="university-course-grid"></div></div>
- <div class="card hidden" id="universityPathwayPanel" aria-live="polite"><button class="secondary" id="closeUniversityPathway" type="button">← Back to all courses</button><h2 id="universityPathwayTitle">Course pathway</h2><p class="muted" id="universityPathwayIntro"></p><div class="welcome-feature-grid" id="universityModuleStages"></div><h3>Related lessons and practice</h3><p class="muted">These are existing QuizSpark lessons linked to this subject. New specialist modules will be added as the pathway develops.</p><div id="universityPathwayLessons"></div></div>
+ <div class="card hidden" id="universityPathwayPanel" aria-live="polite"><button class="secondary" id="closeUniversityPathway" type="button">← Back to all courses</button><h2 id="universityPathwayTitle">Course pathway</h2><p class="muted" id="universityPathwayIntro"></p><div class="welcome-feature-grid" id="universityModuleStages"></div><h3>Course modules</h3><p class="muted">Each module includes topics to study, a learning objective and a practical assignment. Work through them in order.</p><div id="universityDetailedModuleList"></div><h3>Related lessons and practice</h3><p class="muted">These existing QuizSpark lessons support this course. Specialist course modules are being expanded in stages.</p><div id="universityPathwayLessons"></div></div>
  <div class="card"><h2>How learning works</h2><div class="welcome-feature-grid"><article class="welcome-feature"><span class="welcome-icon">📖</span><h3>Books and reading</h3><p>Read relevant QuizSpark books and learning material.</p></article><article class="welcome-feature"><span class="welcome-icon">📝</span><h3>Written lessons</h3><p>Study clear lessons and mark your progress.</p></article><article class="welcome-feature"><span class="welcome-icon">🎥</span><h3>Video learning</h3><p>Find educational videos for the topic you are studying.</p></article><article class="welcome-feature"><span class="welcome-icon">🏆</span><h3>Practice and progress</h3><p>Test your knowledge with quizzes and track achievements.</p></article></div><p class="muted">QuizSpark certificates recognise learning milestones on this platform. They are certificates of completion, not accredited university degrees or professional licences.</p></div>
 </section>
 
@@ -3103,6 +3103,92 @@ const universityCourses=[
 {title:"Sports, Fitness & Wellbeing",area:"Life & Personal Development",level:"Beginner",icon:"⚽",description:"Sports knowledge, movement, fitness principles, teamwork and healthy habits.",path:"Life Skills"},
 {title:"General Knowledge & Brain Training",area:"Life & Personal Development",level:"Beginner",icon:"🧠",description:"World facts, reasoning, memory, riddles and broad learning challenges.",path:"General Knowledge"}
 ];
+const universityDetailedModules={
+ "Business Management":[
+  ["Business foundations","Types of businesses, value creation, stakeholders and business environments","Explain how a business creates value for customers and stakeholders.","Compare two local businesses and identify the customer problem each solves."],
+  ["Planning and organisation","Business models, goals, roles, operations and legal responsibilities","Prepare a practical outline for a small, responsible business.","Write a one-page business plan with customers, offer, costs and delivery."],
+  ["People, customers and operations","Leadership, customer service, suppliers, quality and team communication","Identify ways to improve service quality and team performance.","Create a simple customer-service and daily-operations checklist."],
+  ["Finance, growth and governance","Cash flow, performance measures, risks, ethics and sustainable growth","Use basic financial information to assess whether growth is manageable.","Review a sample business budget and recommend three improvements."]
+ ],
+ "Entrepreneurship & Start-ups":[
+  ["Finding a worthwhile problem","Customer needs, observation, interviews and problem definition","Distinguish a real customer need from an untested assumption.","Interview or survey five potential customers and summarise their needs."],
+  ["Testing the idea","Value proposition, competitor research, prototypes and minimum viable tests","Design a low-cost test before committing major resources.","Create a simple prototype or service test and define success measures."],
+  ["Launching responsibly","Business models, pricing, registration, compliance and first sales","Outline the steps needed for a responsible small launch.","Prepare a launch checklist covering customers, costs, rules and delivery."],
+  ["Measuring and improving","Cash flow, customer feedback, unit economics and ethical growth","Use evidence to decide whether to adapt, continue or pause a venture.","Analyse a sample start-up scenario and present a 90-day improvement plan."]
+ ],
+ "Accounting & Financial Literacy":[
+  ["Accounting language and records","Assets, liabilities, equity, income, expenses and source documents","Classify common transactions and explain why records matter.","Sort a set of sample transactions into the correct categories."],
+  ["Recording transactions","Debits and credits, journals, ledgers and trial balances","Describe how transactions move through a basic accounting system.","Record a small set of fictional business transactions in a simple journal."],
+  ["Understanding financial statements","Income statements, balance sheets and cash-flow statements","Explain what each basic financial statement can and cannot tell a reader.","Prepare a simplified income statement from supplied figures."],
+  ["Budgeting and controls","Budgets, reconciliations, documentation, fraud awareness and review","Identify basic controls that help keep financial records reliable.","Build a monthly budget and suggest two checks to reduce recording errors."]
+ ],
+ "Economics & Market Systems":[
+  ["Scarcity and choice","Resources, opportunity cost, incentives and economic systems","Explain why scarcity requires choices and trade-offs.","Describe the opportunity cost of a household or business decision."],
+  ["Supply, demand and prices","Demand, supply, equilibrium, shortages and surpluses","Interpret how changes in supply or demand may affect prices.","Draw and explain a simple supply-and-demand scenario."],
+  ["Competition and market structures","Competition, monopoly, oligopoly, consumer choice and regulation","Compare how different market structures affect consumers and firms.","Compare two industries and identify signs of competition."],
+  ["Economic wellbeing and policy","Productivity, inequality, public goods, inflation and policy trade-offs","Discuss how economic policies can have benefits and costs.","Write a balanced short note on one economic policy choice."]
+ ],
+ "Banking & Financial Services":[
+  ["How banking works","Deposits, payments, accounts, interest and the role of banks","Describe common banking services and how banks support payments.","Compare the features and fees of two fictional account offers."],
+  ["Digital payments and security","Transfers, cards, mobile money, authentication and fraud prevention","Recognise safe payment practices and common scam warning signs.","Create a checklist for safely making and receiving digital payments."],
+  ["Lending and financial intermediation","Loans, savings, credit assessment, liquidity and maturity","Explain at a basic level how deposits and lending relate.","Map the stages of a simple loan application and repayment."],
+  ["Consumer protection and regulation","Disclosure, complaints, deposit protection concepts and regulatory oversight","Identify questions a customer should ask before using a financial service.","Review a sample product disclosure and list unclear fees or risks."]
+ ],
+ "Credit & Responsible Borrowing":[
+  ["Understanding credit","Principal, interest, fees, collateral, guarantees and credit history","Explain the main parts of a borrowing agreement.","Label the key terms in a fictional loan offer."],
+  ["Calculating borrowing costs","Simple and compound interest, repayment schedules and total cost","Compare borrowing offers using total repayment rather than headline rates alone.","Calculate the total cost of two sample repayment plans."],
+  ["Credit reports and consumer rights","Credit records, errors, privacy, complaints and fair treatment","Describe responsible ways to review and correct credit information.","Draft a checklist for checking a credit report and disputing an error."],
+  ["Debt risk and repayment planning","Affordability, missed payments, debt priorities and support options","Recognise signs that borrowing may be unaffordable.","Create a fictional repayment plan that protects essential living costs."]
+ ],
+ "Stock Market Studies":[
+  ["Markets and exchanges","Shares, exchanges, brokers, issuers, indices and market participants","Explain what a stock exchange does and what owning a share means.","Trace a fictional company's path from issuing shares to secondary trading."],
+  ["Orders and market mechanics","Market and limit orders, bid-ask spread, liquidity and settlement","Describe how common orders work and why execution prices can differ.","Work through a simulated order-book example using fictional prices."],
+  ["Company information","Prospectuses, announcements, earnings, governance and disclosures","Identify reliable public information used to study a listed company.","Review a fictional company announcement and summarise its key facts."],
+  ["Market risk and investor protection","Volatility, diversification, scams, regulations and long-term perspective","Identify risks and warning signs without assuming returns are guaranteed.","Create a risk checklist for a beginner researching a listed company."]
+ ],
+ "Investing & Financial Markets":[
+  ["Saving, investing and goals","Time horizon, inflation, liquidity, risk capacity and objectives","Distinguish saving from investing and connect choices to goals.","Write a fictional investor profile with goals and time horizon."],
+  ["Investment types","Shares, bonds, funds, cash equivalents and property exposure","Compare how major asset types may generate returns and carry risks.","Build a comparison table of four asset types using supplied facts."],
+  ["Risk, return and diversification","Volatility, loss, correlation, concentration and diversification","Explain why diversification can reduce concentration risk but cannot remove all risk.","Review a sample portfolio and identify concentration risks."],
+  ["Research and responsible decisions","Fees, evidence, fraud prevention, regulation and review","Evaluate investment claims and identify missing evidence or unrealistic promises.","Assess a fictional investment advertisement for red flags and unanswered questions."]
+ ],
+ "Real Estate & Property":[
+  ["Property markets and ownership","Residential, commercial and land uses; ownership and title concepts","Identify major property types and explain basic ownership considerations.","Compare the likely uses and risks of two fictional properties."],
+  ["Due diligence and location","Title checks, condition surveys, planning, neighbourhood and comparable sales","List checks that should happen before a property commitment.","Prepare a due-diligence checklist for a fictional property purchase."],
+  ["Property finance and rental cash flow","Deposits, mortgages, interest, rent, vacancy, maintenance and fees","Estimate basic rental cash flow and distinguish revenue from profit.","Calculate a sample property's monthly income and operating costs."],
+  ["Risk, regulation and long-term management","Tenancy responsibilities, insurance, taxes, repairs and market risk","Recognise legal and financial responsibilities of property ownership.","Create a risk register for a fictional rental property."]
+ ],
+ "Personal Financial Planning":[
+  ["Your financial picture","Income, expenses, assets, debts, goals and financial records","Organise a clear snapshot of a fictional household's finances.","Prepare a simple personal balance sheet and monthly spending list."],
+  ["Budgeting and emergency preparation","Needs, wants, saving habits, emergency funds and cash access","Build a realistic budget that reflects priorities and uncertainty.","Create a monthly budget and a plan for an unexpected expense."],
+  ["Debt, protection and major decisions","Borrowing costs, insurance basics, scams and consumer safeguards","Identify questions to ask before taking on debt or buying protection.","Compare two fictional insurance summaries and identify exclusions."],
+  ["Long-term goals and review","Education, housing, retirement concepts, inflation and periodic review","Explain why plans should be reviewed when circumstances change.","Prepare a one-year fictional savings and goal review plan."]
+ ],
+ "Portfolio Construction & Diversification":[
+  ["Investor objectives and constraints","Goals, horizon, liquidity, risk tolerance and capacity for loss","Translate an investor profile into clear portfolio constraints.","Write an investment policy summary for a fictional investor."],
+  ["Asset allocation foundations","Asset classes, strategic allocation and diversification","Explain how allocation shapes a portfolio's overall risk exposure.","Compare two hypothetical allocations and discuss their trade-offs."],
+  ["Portfolio monitoring","Rebalancing, contributions, withdrawals, fees and performance measures","Describe why portfolios are monitored and when rebalancing may be considered.","Calculate how a sample allocation changes after market movements."],
+  ["Risk review and governance","Concentration, liquidity, scenario analysis and behavioural discipline","Identify portfolio vulnerabilities and explain limits of diversification.","Prepare a short risk review of a fictional multi-asset portfolio."]
+ ],
+ "Investment Risk & Behaviour":[
+  ["Types of investment risk","Market, credit, liquidity, inflation, currency and operational risk","Distinguish major risks and identify where they may arise.","Classify risks in a set of fictional investment scenarios."],
+  ["Behaviour and decision traps","Overconfidence, loss aversion, herd behaviour and confirmation bias","Recognise how emotions and biases can affect financial decisions.","Analyse a fictional investor's decisions and identify possible biases."],
+  ["Risk measurement and communication","Volatility, drawdown, scenarios, assumptions and uncertainty","Explain what simple risk measures show and what they leave out.","Compare two hypothetical investments using supplied risk data."],
+  ["Fraud prevention and risk controls","Due diligence, custody, diversification, documentation and reporting","Identify warning signs and basic controls for protecting assets.","Prepare a fraud-prevention checklist for a beginner investor."]
+ ],
+ "Investment Valuation":[
+  ["Valuation purpose and evidence","Intrinsic value, market price, assumptions and information quality","Explain why an estimate of value is not a guaranteed future price.","List the assumptions needed to value a fictional company."],
+  ["Relative valuation","Price-to-earnings, price-to-sales, enterprise value and comparables","Describe how valuation multiples can support comparisons and mislead.","Compare fictional companies using supplied ratios and context."],
+  ["Cash-flow valuation concepts","Discounting, time value of money, cash-flow forecasts and terminal value","Explain the basic logic of discounting future cash flows.","Work through a simplified present-value example with given inputs."],
+  ["Sensitivity and valuation limits","Scenarios, margin of safety, uncertainty and model risk","Identify which assumptions most affect a valuation estimate.","Prepare a sensitivity table from a small fictional data set."]
+ ],
+ "Company Financial Analysis":[
+  ["Reading company reports","Income statement, balance sheet, cash flow and notes","Locate key information in a simplified annual report.","Summarise revenue, profit, debt and cash flow from fictional statements."],
+  ["Profitability and efficiency","Margins, return measures, asset use and operating performance","Calculate and interpret basic profitability ratios.","Calculate gross margin and operating margin from supplied figures."],
+  ["Liquidity and solvency","Current ratio, working capital, leverage and interest coverage","Assess short-term payment capacity and longer-term debt exposure.","Compare two fictional firms using liquidity and leverage indicators."],
+  ["Quality, context and limitations","Accounting policies, one-off items, cash conversion and peer comparison","Avoid drawing conclusions from a single ratio or reporting period.","Write a balanced one-page analysis using a fictional company report."]
+ ]
+};
 function openUniversityPathway(course){
  const panel=$("universityPathwayPanel");if(!panel)return;
  $("universityPathwayTitle").textContent=course.title+" — Course Pathway";
@@ -3115,6 +3201,14 @@ function openUniversityPathway(course){
  ];
  const stageHost=$("universityModuleStages");stageHost.replaceChildren();
  stages.forEach(([title,description,icon])=>{const card=document.createElement("article");card.className="welcome-feature";const symbol=document.createElement("span");symbol.className="welcome-icon";symbol.textContent=icon;const h=document.createElement("h3");h.textContent=title;const p=document.createElement("p");p.textContent=description;card.append(symbol,h,p);stageHost.appendChild(card);});
+ const moduleHost=$("universityDetailedModuleList");moduleHost.replaceChildren();
+ const detailed=universityDetailedModules[course.title]||[];
+ if(detailed.length){
+  detailed.forEach((module,index)=>{const card=document.createElement("article");card.className="lesson";const h=document.createElement("h3");h.textContent="Module "+(index+1)+": "+module[0];const topics=document.createElement("p");topics.textContent="Topics: "+module[1];const outcome=document.createElement("p");outcome.textContent="Learning objective: "+module[2];const task=document.createElement("p");task.textContent="Practical assignment: "+module[3];card.append(h,topics,outcome,task);moduleHost.appendChild(card);});
+  const note=document.createElement("p");note.className="muted";note.textContent="This course has a four-module outline. Assignments are practice activities and are not yet submitted for formal grading.";moduleHost.appendChild(note);
+ }else{
+  const note=document.createElement("p");note.className="muted";note.textContent="The detailed subject syllabus for this course is still being prepared. The four-stage pathway and related lessons are available while specialist modules are developed.";moduleHost.appendChild(note);
+ }
  const source=lessons[course.path]||[];
  const words=(course.title+" "+course.description).toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>3&&!["introduction","fundamentals","foundations","understanding","learning","course","study","basic","systems"].includes(w));
  const ranked=source.map(item=>{const title=item.title.toLowerCase(),body=item.body.toLowerCase();let score=0;words.forEach(word=>{if(title.includes(word))score+=4;else if(body.includes(word))score+=1;});return {item,score};}).sort((a,b)=>b.score-a.score);
