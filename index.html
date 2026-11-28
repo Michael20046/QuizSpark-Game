@@ -4199,6 +4199,7 @@ renderQuizLevelProgress();
 loadDailyTournamentLeaderboard();
 refreshStartButton();
 console.log("QuizSpark initialised successfully.");
+window.__quizsparkModuleReady=true;
 </script>
 
 <script>
@@ -5474,7 +5475,6 @@ document.getElementById("clearReadingHistory")?.addEventListener("click",()=>{
  localStorage.removeItem(QUIZSPARK_READING_HISTORY_KEY);renderRecentStoryShelf();
 });
 
-window.__quizsparkModuleReady=true;
 </script>
 
 </body>
