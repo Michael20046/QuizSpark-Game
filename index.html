@@ -1308,12 +1308,11 @@ const firebaseConfig={
 
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
-// Prefer session-only authentication, but never let a persistence error stop the entire app from wiring its buttons.
-try{
- await setPersistence(auth,browserSessionPersistence);
-}catch(persistenceError){
+// Apply session-only authentication in the background. Do not block app startup
+// while the browser initializes IndexedDB or Firebase persistence.
+setPersistence(auth,browserSessionPersistence).catch(persistenceError=>{
  console.error("QuizSpark: session persistence could not be applied; continuing with Firebase default persistence.",persistenceError);
-}
+});
 const db=getFirestore(app);
 const googleProvider=new GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt:"select_account"});
