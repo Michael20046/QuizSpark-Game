@@ -1284,8 +1284,12 @@ const firebaseConfig={
 
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
-// Keep authentication only for the active browser session; signing out or ending the session requires a fresh sign-in.
-await setPersistence(auth,browserSessionPersistence);
+// Prefer session-only authentication, but never let a persistence error stop the entire app from wiring its buttons.
+try{
+ await setPersistence(auth,browserSessionPersistence);
+}catch(persistenceError){
+ console.error("QuizSpark: session persistence could not be applied; continuing with Firebase default persistence.",persistenceError);
+}
 const db=getFirestore(app);
 const googleProvider=new GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt:"select_account"});
