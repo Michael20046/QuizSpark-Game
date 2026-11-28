@@ -686,6 +686,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 .story-back-cover:after{content:"✦  ✦  ✦";display:block;margin-top:12px;text-align:center;color:#e4c16b;letter-spacing:.5em;font-size:12px}
 .story-back-cover-label{display:block;margin-bottom:7px;color:#f5d477;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
 .story-back-cover-copy{margin:0!important;color:#f5e8c2!important;font-family:Georgia,serif;font-size:14px!important;line-height:1.75!important}
+.story-barcode{display:flex;flex-direction:column;gap:4px;width:112px;margin:10px auto 0;padding:5px 7px 4px;background:#fff;border-radius:3px;box-sizing:border-box}.story-barcode:before{content:"";display:block;height:30px;width:100%;background:repeating-linear-gradient(90deg,#111 0 2px,#fff 2px 4px,#111 4px 5px,#fff 5px 8px,#111 8px 11px,#fff 11px 13px,#111 13px 14px,#fff 14px 17px)}.story-barcode span{display:block;color:#171717;font:700 7px/1.2 Arial,sans-serif;letter-spacing:.08em;text-align:center}
 .story-tag{display:inline-block;background:#3a2d64;color:#f6dfa0;border:1px solid #9878cb;border-radius:20px;padding:5px 10px;font-size:11px;margin:3px 4px 7px 0}
 .story-card button{width:100%;margin-top:10px}
 
@@ -4853,6 +4854,7 @@ function renderInteractiveStoryShelf(){
  const progress=getInteractiveStoryProgress();
  interactiveStoryBooks.forEach(book=>{
   const card=document.createElement("article");card.className="story-card";
+  if(book.coverImage){const cover=document.createElement("img");cover.className="story-front-cover";cover.alt=book.title+" cover";cover.loading="lazy";cover.decoding="async";cover.src="/QuizSpark-Game/"+String(book.coverImage).replace(/^\\/+/, "");cover.addEventListener("error",()=>{cover.hidden=true;});card.appendChild(cover);}
   const title=document.createElement("h3");title.textContent=book.title;
   const meta=document.createElement("div");meta.className="story-meta";meta.textContent=book.country+" · "+book.genre;
   const desc=document.createElement("p");desc.className="muted";desc.textContent=book.description;
