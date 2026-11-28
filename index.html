@@ -816,6 +816,11 @@ setupInviteFriends();
 .quiz-history-row strong{color:var(--gold,#f5c451)}
 .quiz-history-row span{font-size:.94rem}
 .quiz-history-row small{opacity:.72;font-size:.8rem}
+/* QUIZSPARK UNIVERSITY COURSE CARDS */
+.university-course-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.university-course{min-width:0;padding:15px;border:1px solid #66529a;border-radius:15px;background:linear-gradient(145deg,#30245f,#192344);display:flex;flex-direction:column;align-items:flex-start}
+.university-course-icon{font-size:28px}.university-course h3{color:#ffe6a3;margin:8px 0 3px}.university-course-meta{font-size:11px;color:#c4b5de;margin:0 0 8px}.university-course .muted{font-size:13px;margin:0 0 9px}.university-course-book{font-size:12px;color:#f2dca0;line-height:1.5;margin:auto 0 8px}.university-course .primary{margin-top:8px}
+@media(max-width:520px){.university-course-grid{grid-template-columns:1fr}}
 </style>
 </head>
 
@@ -881,6 +886,7 @@ setupInviteFriends();
  <div class="hero">
   <h1 id="homeGreeting">Hello, Player! 👋</h1>
   <p>Discover something new every day. Learn, play and challenge yourself.</p>
+  <button class="primary" onclick="showPage('university')">🎓 Explore QuizSpark University</button>
   <button class="primary" onclick="showPage('learn')">📚 Explore Learning Centre</button>
   <button class="secondary" onclick="showPage('play')">🎮 Enter Quiz Arena</button>
  </div>
@@ -1099,8 +1105,15 @@ setupInviteFriends();
  </div>
 </section>
 
+<section id="universityPage" class="page">
+ <div class="hero"><span class="story-welcome">LEARN MORE · PLAY MORE · GROW SMARTER</span><h1>🎓 QuizSpark University</h1><p>A growing learning library for school learners, curious adults and lifelong learners. Explore courses from beginner to advanced, then learn through books, written lessons, educational videos and quizzes.</p><button class="primary" onclick="showPage('learn')">Open Learning Centre →</button></div>
+ <div class="card"><h2>Find a course</h2><label for="universitySearch">Search courses and subjects</label><input id="universitySearch" type="search" placeholder="e.g. investing, biology, coding, property"><label for="universityArea">Course area</label><select id="universityArea"><option value="">All course areas</option></select><label for="universityLevel">Learning level</label><select id="universityLevel"><option value="">All levels</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select><p class="muted" id="universityCourseCount" aria-live="polite"></p></div>
+ <div class="card"><h2>Explore the course catalogue</h2><p class="muted">Existing lessons and quizzes open in the Learning Centre. Additional course lessons will be added in stages.</p><div id="universityCourseList" class="university-course-grid"></div></div>
+ <div class="card"><h2>How learning works</h2><div class="welcome-feature-grid"><article class="welcome-feature"><span class="welcome-icon">📖</span><h3>Books and reading</h3><p>Read relevant QuizSpark books and learning material.</p></article><article class="welcome-feature"><span class="welcome-icon">📝</span><h3>Written lessons</h3><p>Study clear lessons and mark your progress.</p></article><article class="welcome-feature"><span class="welcome-icon">🎥</span><h3>Video learning</h3><p>Find educational videos for the topic you are studying.</p></article><article class="welcome-feature"><span class="welcome-icon">🏆</span><h3>Practice and progress</h3><p>Test your knowledge with quizzes and track achievements.</p></article></div><p class="muted">QuizSpark certificates recognise learning milestones on this platform. They are certificates of completion, not accredited university degrees or professional licences.</p></div>
+</section>
+
 <section id="learnPage" class="page">
- <div class="hero"><h1>📚 Learning Centre</h1><p>Explore useful subjects and develop skills at your own pace.</p></div>
+ <div class="hero"><h1>📚 Learning Centre</h1><p>Explore useful subjects and develop skills at your own pace.</p><button class="primary" onclick="showPage('university')">🎓 Browse University Courses</button></div>
  <div class="card"><h3>Choose Your Learning Area</h3><div class="category-grid" id="learningCategories"></div></div>
  <div class="card"><h3 id="lessonHeading">Explore Lessons</h3><div id="lessonList"><p class="muted">Choose an area above.</p></div></div>
  <div class="card">
@@ -2475,6 +2488,48 @@ onAuthStateChanged(auth,async user=>{
   await loadReviews();
  }catch(e){setMessage("authMessage",friendlyError(e),"error");}
 });
+
+/* QUIZSPARK UNIVERSITY COURSE CATALOGUE */
+const universityCourses=[
+{title:"Mathematics",area:"School & Academic",level:"Beginner",icon:"➗",description:"Numbers, arithmetic, fractions, algebra, geometry and problem solving.",path:"School"},
+{title:"English Language & Communication",area:"School & Academic",level:"Beginner",icon:"📚",description:"Grammar, vocabulary, reading, writing, speaking and clear communication.",path:"School"},
+{title:"Biology & Life Science",area:"School & Academic",level:"Beginner",icon:"🧬",description:"Cells, living organisms, human biology, ecology and evolution.",path:"School"},
+{title:"Chemistry",area:"School & Academic",level:"Beginner",icon:"⚗️",description:"Atoms, elements, compounds, reactions and laboratory foundations.",path:"School"},
+{title:"Physics",area:"School & Academic",level:"Beginner",icon:"🔭",description:"Motion, forces, energy, electricity, waves and matter.",path:"School"},
+{title:"History, Geography & Culture",area:"Humanities & Society",level:"Beginner",icon:"🌍",description:"World history, maps, civilisations, cultures and global connections.",path:"General Knowledge"},
+{title:"Business Management",area:"Business & Entrepreneurship",level:"Beginner",icon:"💼",description:"Business ideas, planning, operations, customers, leadership and growth.",path:"Business",book:"Building Businesses: From Ideas to Real Estate"},
+{title:"Entrepreneurship & Start-ups",area:"Business & Entrepreneurship",level:"Intermediate",icon:"🚀",description:"Validate ideas, understand customers, test products and build sustainable ventures.",path:"Business"},
+{title:"Accounting & Financial Literacy",area:"Business & Entrepreneurship",level:"Beginner",icon:"🧾",description:"Budgets, income, expenses, profit, cash flow and responsible record keeping.",path:"Business"},
+{title:"Investing & Financial Markets",area:"Finance & Investing",level:"Beginner",icon:"📈",description:"Shares, bonds, funds, diversification, risk, long-term investing and global markets.",path:"Business",book:"The Global Investors Field Guide"},
+{title:"Real Estate & Property",area:"Finance & Investing",level:"Beginner",icon:"🏠",description:"Property types, rental income, due diligence, mortgages, risks and property funds.",path:"Business",book:"Building Businesses: From Ideas to Real Estate"},
+{title:"Marketing & Digital Business",area:"Business & Entrepreneurship",level:"Intermediate",icon:"📣",description:"Branding, customer research, marketing strategy, content and online sales.",path:"Business"},
+{title:"Computer Science & Programming",area:"Technology & Computing",level:"Beginner",icon:"💻",description:"Computational thinking, coding foundations, algorithms and software development.",path:"Technology"},
+{title:"Artificial Intelligence & Data",area:"Technology & Computing",level:"Intermediate",icon:"🤖",description:"AI concepts, machine learning foundations, data literacy and responsible use.",path:"Technology"},
+{title:"Cybersecurity & Digital Safety",area:"Technology & Computing",level:"Beginner",icon:"🔐",description:"Online safety, privacy, passwords, scams, networks and security principles.",path:"Technology"},
+{title:"Web Design & Development",area:"Technology & Computing",level:"Beginner",icon:"🌐",description:"How websites work, HTML, CSS, JavaScript, accessibility and publishing.",path:"Technology"},
+{title:"Health & Medical Sciences",area:"Health & Science",level:"Beginner",icon:"🩺",description:"Human biology, anatomy foundations, public health and health literacy.",path:"School"},
+{title:"Engineering & Design",area:"Science, Engineering & Environment",level:"Beginner",icon:"⚙️",description:"Design thinking, structures, systems, materials and practical problem solving.",path:"Technology"},
+{title:"Agriculture & Environment",area:"Science, Engineering & Environment",level:"Beginner",icon:"🌱",description:"Soils, crops, food systems, biodiversity, climate and sustainability.",path:"General Knowledge"},
+{title:"Law, Citizenship & Society",area:"Humanities & Society",level:"Beginner",icon:"⚖️",description:"Civic knowledge, legal systems, rights, responsibilities and public institutions.",path:"General Knowledge"},
+{title:"Languages & Creative Arts",area:"Humanities & Society",level:"Beginner",icon:"🎨",description:"Language learning, literature, visual arts, music appreciation and creativity.",path:"General Knowledge"},
+{title:"Life Skills & Personal Development",area:"Life & Personal Development",level:"Beginner",icon:"💡",description:"Communication, time management, critical thinking and everyday decisions.",path:"Life Skills"},
+{title:"Sports, Fitness & Wellbeing",area:"Life & Personal Development",level:"Beginner",icon:"⚽",description:"Sports knowledge, movement, fitness principles, teamwork and healthy habits.",path:"Life Skills"},
+{title:"General Knowledge & Brain Training",area:"Life & Personal Development",level:"Beginner",icon:"🧠",description:"World facts, reasoning, memory, riddles and broad learning challenges.",path:"General Knowledge"}
+];
+function renderUniversityCourses(){
+ const host=$("universityCourseList");if(!host)return;
+ const search=($("universitySearch")?.value||"").trim().toLowerCase(),area=$("universityArea")?.value||"",level=$("universityLevel")?.value||"";
+ const filtered=universityCourses.filter(course=>(!search||[course.title,course.area,course.description].join(" ").toLowerCase().includes(search))&&(!area||course.area===area)&&(!level||course.level===level));
+ $("universityCourseCount").textContent="Showing "+filtered.length+" of "+universityCourses.length+" course pathways.";host.replaceChildren();
+ if(!filtered.length){const empty=document.createElement("p");empty.className="muted";empty.textContent="No courses match your search. Try another subject.";host.appendChild(empty);return;}
+ filtered.forEach(course=>{const card=document.createElement("article");card.className="university-course";const icon=document.createElement("div");icon.className="university-course-icon";icon.textContent=course.icon;const h=document.createElement("h3");h.textContent=course.title;const meta=document.createElement("p");meta.className="university-course-meta";meta.textContent=course.area+" · "+course.level+" level";const desc=document.createElement("p");desc.className="muted";desc.textContent=course.description;const book=document.createElement("p");book.className="university-course-book";book.textContent=course.book?"📖 Related book: "+course.book:"📖 Reading material and course books will be linked as the pathway expands.";const btn=document.createElement("button");btn.className="primary";btn.type="button";btn.textContent="Open learning materials →";btn.onclick=()=>{showPage("learn");displayLessons(course.path);$("videoSearch").value=course.title;};card.append(icon,h,meta,desc,book,btn);host.appendChild(card);});
+}
+function setupUniversity(){
+ const area=$("universityArea");if(!area)return;
+ [...new Set(universityCourses.map(course=>course.area))].sort().forEach(name=>{const option=document.createElement("option");option.value=name;option.textContent=name;area.appendChild(option);});
+ ["universitySearch","universityArea","universityLevel"].forEach(id=>$(id)?.addEventListener(id==="universitySearch"?"input":"change",renderUniversityCourses));
+ renderUniversityCourses();
+}
 
 /* LEARNING CENTRE */
 function buildLearningCategories(){
@@ -4351,6 +4406,7 @@ function renderQuizSparkStoryPage(){
 }
 document.getElementById("storyPrevBtn").addEventListener("click",()=>{if(activeStory&&activeStoryPage>0){activeStoryPage--;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}});
 document.getElementById("storyNextBtn").addEventListener("click",()=>{if(!activeStory)return;if(activeStoryPage<activeStory.pages.length-1){activeStoryPage++;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}else{completeActiveStory();}});
+setupUniversity();
 setupStoryFilters();
 setupStoryReadingTools();
 document.getElementById("storyReadAloudBtn")?.addEventListener("click",readStoryAloud);
