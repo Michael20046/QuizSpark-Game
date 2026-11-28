@@ -24,6 +24,7 @@
 }
 </script>
 <meta name="theme-color" content="#101632">
+<style>#quizsparkStartupError{margin:12px auto;padding:12px 14px;max-width:900px;border:1px solid #d9a441;border-radius:10px;background:#382a18;color:#ffe6a3;font-weight:700;line-height:1.5}</style>
 <meta name="description" content="Play QuizSpark, a free online quiz and learning game. Challenge yourself with general knowledge, science, history, geography, maths and more across beginner, intermediate and advanced levels.">
 <meta name="google-adsense-account" content="ca-pub-2631012541843607">
 <meta name="google-site-verification" content="0a5y_PGdjWCUjNbgG_Lp1rfWKIyjgS5XwfLHb03P8SQ" />
@@ -833,6 +834,7 @@ setupInviteFriends();
 <div class="install-help hidden" id="installHelp" role="status" aria-live="polite"></div>
 
 <main>
+<div id="quizsparkStartupError" role="alert" aria-live="assertive" hidden></div>
 <section id="authPage" class="page active">
  <div class="hero">
   <h1>Welcome to QuizSpark! ⚡</h1>
@@ -1260,6 +1262,28 @@ setupInviteFriends();
 
 <footer>© 2026 QuizSpark. Learn More. Play More. Grow Smarter.<br><a href="./privacy.html">Privacy Policy</a> · <a href="./terms.html">Terms of Service</a> · <a href="mailto:mj1311407@gmail.com">Contact</a></footer>
 
+<script>
+/* QuizSpark startup diagnostics: show why the app controls fail if its main module cannot start. */
+(function(){
+ window.__quizsparkModuleReady=false;
+ function report(message){
+  const box=document.getElementById("quizsparkStartupError");
+  if(box){box.hidden=false;box.textContent="QuizSpark could not start its controls: "+message;}
+  const authMessage=document.getElementById("authMessage");
+  if(authMessage)authMessage.textContent="App startup problem: "+message;
+  console.error("QuizSpark startup problem:",message);
+ }
+ window.addEventListener("error",function(event){
+  if(!window.__quizsparkModuleReady)report(event.message||"A script failed to load. Please refresh and try again.");
+ });
+ window.addEventListener("unhandledrejection",function(event){
+  if(!window.__quizsparkModuleReady)report(event.reason?.message||String(event.reason||"A startup request failed."));
+ });
+ window.setTimeout(function(){
+  if(!window.__quizsparkModuleReady)report("The app's main script did not finish loading. Check the internet connection or try opening the site in Chrome.");
+ },12000);
+})();
+</script>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
@@ -5450,6 +5474,7 @@ document.getElementById("clearReadingHistory")?.addEventListener("click",()=>{
  localStorage.removeItem(QUIZSPARK_READING_HISTORY_KEY);renderRecentStoryShelf();
 });
 
+window.__quizsparkModuleReady=true;
 </script>
 
 </body>
