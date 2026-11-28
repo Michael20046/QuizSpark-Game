@@ -28,6 +28,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate main JavaScript module
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path("index.html").read_text(encoding="utf-8")
+          match = re.search(r'<script type="module">\\s*(.*?)</script>', html, re.S)
+          if not match:
+              raise SystemExit("QuizSpark main module was not found.")
+          Path("/tmp/quizspark-main.mjs").write_text(match.group(1), encoding="utf-8")
+          PY
+          node --check /tmp/quizspark-main.mjs
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
