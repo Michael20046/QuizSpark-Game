@@ -4299,7 +4299,12 @@ function renderStoryShelf(){
   favouriteBtn.textContent=isFavourite?"♥ Saved to Favourites · Remove":"♡ Add to Favourites";
   favouriteBtn.setAttribute("aria-pressed",String(isFavourite));
   favouriteBtn.addEventListener("click",()=>toggleFavouriteStory(story.id));
-  card.append(title,meta,desc,backCover,tag,progress,btn,favouriteBtn);shelf.appendChild(card);
+  if(story.id==="the-boy-in-lagos"){
+   card.append(title,meta,desc,tag,progress,btn,favouriteBtn);
+  }else{
+   card.append(title,meta,desc,backCover,tag,progress,btn,favouriteBtn);
+  }
+  shelf.appendChild(card);
  });
 }
 function setupStoryFilters(){
