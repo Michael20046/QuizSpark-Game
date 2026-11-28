@@ -3929,7 +3929,7 @@ function setupStoryReadingTools(){
  applyStoryFontSize(getStoryFontSize());
  applyStoryTheme(getStoryTheme());
 }
-let quizSparkSpeechUtterance=null,quizSparkSpeechActive=false,quizSparkSpeechPaused=false,quizSparkSpeechRun=0;
+let quizSparkSpeechUtterance=null,quizSparkSpeechActive=false,quizSparkSpeechPaused=false,quizSparkSpeechRun=0,quizSparkSpeechChunks=[],quizSparkSpeechChunkIndex=0;
 function updateStorySpeechControls(message){
  const play=document.getElementById("storyReadAloudBtn"),stop=document.getElementById("storyStopReadingBtn"),status=document.getElementById("storyListenStatus");
  if(play){play.disabled=false;play.textContent=quizSparkSpeechPaused?"▶ Resume Reading":quizSparkSpeechActive?"⏸ Pause Reading":"🔊 Read Full Story";}
@@ -3937,21 +3937,32 @@ function updateStorySpeechControls(message){
  if(status&&message)status.textContent=message;
 }
 function stopStoryReadAloud(){
- quizSparkSpeechRun++;quizSparkSpeechActive=false;quizSparkSpeechPaused=false;quizSparkSpeechUtterance=null;
+ quizSparkSpeechRun++;quizSparkSpeechActive=false;quizSparkSpeechPaused=false;quizSparkSpeechUtterance=null;quizSparkSpeechChunks=[];quizSparkSpeechChunkIndex=0;
  if("speechSynthesis" in window)window.speechSynthesis.cancel();
  updateStorySpeechControls("Reading stopped");
+}
+function makeStorySpeechChunks(text){
+ const words=String(text||"").trim().split(/\s+/),chunks=[];let line="";
+ words.forEach(word=>{if(line&&(line.length+word.length+1)>170){chunks.push(line);line=word;}else{line+=(line?" ":"")+word;}});
+ if(line)chunks.push(line);return chunks;
 }
 function speakCurrentStoryPage(run){
  if(!quizSparkSpeechActive||run!==quizSparkSpeechRun||!activeStory)return;
  const page=activeStory.pages[activeStoryPage];
  if(!page){quizSparkSpeechActive=false;quizSparkSpeechPaused=false;updateStorySpeechControls("Finished reading the whole story");return;}
- const utterance=new SpeechSynthesisUtterance(page.title+". "+page.body);quizSparkSpeechUtterance=utterance;utterance.rate=0.9;
- utterance.onstart=()=>{if(run===quizSparkSpeechRun)updateStorySpeechControls("Reading page "+(activeStoryPage+1)+" of "+activeStory.pages.length+"…");};
- utterance.onend=()=>{
-  if(run!==quizSparkSpeechRun||!quizSparkSpeechActive)return;
-  if(activeStoryPage<activeStory.pages.length-1){activeStoryPage++;renderQuizSparkStoryPage();window.setTimeout(()=>speakCurrentStoryPage(run),180);}
+ quizSparkSpeechChunks=makeStorySpeechChunks((page.title||"")+". "+page.body);quizSparkSpeechChunkIndex=0;
+ speakNextStorySpeechChunk(run);
+}
+function speakNextStorySpeechChunk(run){
+ if(!quizSparkSpeechActive||run!==quizSparkSpeechRun)return;
+ if(quizSparkSpeechChunkIndex>=quizSparkSpeechChunks.length){
+  if(activeStoryPage<activeStory.pages.length-1){activeStoryPage++;renderQuizSparkStoryPage();window.setTimeout(()=>speakCurrentStoryPage(run),160);}
   else{quizSparkSpeechActive=false;quizSparkSpeechPaused=false;quizSparkSpeechUtterance=null;updateStorySpeechControls("Finished reading the whole story");}
- };
+  return;
+ }
+ const utterance=new SpeechSynthesisUtterance(quizSparkSpeechChunks[quizSparkSpeechChunkIndex]);quizSparkSpeechUtterance=utterance;utterance.rate=0.9;
+ utterance.onstart=()=>{if(run===quizSparkSpeechRun)updateStorySpeechControls("Reading page "+(activeStoryPage+1)+" of "+activeStory.pages.length+"…");};
+ utterance.onend=()=>{if(run!==quizSparkSpeechRun||!quizSparkSpeechActive)return;quizSparkSpeechChunkIndex++;window.setTimeout(()=>speakNextStorySpeechChunk(run),60);};
  utterance.onerror=(event)=>{if(run!==quizSparkSpeechRun||event?.error==="canceled")return;quizSparkSpeechActive=false;quizSparkSpeechPaused=false;updateStorySpeechControls("Audio stopped unexpectedly. Tap Read Full Story to continue from this page.");};
  window.speechSynthesis.speak(utterance);
 }
