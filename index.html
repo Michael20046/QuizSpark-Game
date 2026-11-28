@@ -1111,6 +1111,7 @@ setupInviteFriends();
  <div class="hero"><span class="story-welcome">LEARN MORE · PLAY MORE · GROW SMARTER</span><h1>🎓 QuizSpark University</h1><p>A growing learning library for school learners, curious adults and lifelong learners. Explore courses from beginner to advanced, then learn through books, written lessons, educational videos and quizzes.</p><button class="primary" onclick="showPage('learn')">Open Learning Centre →</button></div>
  <div class="card"><h2>Find a course</h2><label for="universitySearch">Search courses and subjects</label><input id="universitySearch" type="search" placeholder="e.g. investing, biology, coding, property"><label for="universityArea">Course area</label><select id="universityArea"><option value="">All course areas</option></select><label for="universityLevel">Learning level</label><select id="universityLevel"><option value="">All levels</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select><p class="muted" id="universityCourseCount" aria-live="polite"></p></div>
  <div class="card"><h2>Explore the course catalogue</h2><p class="muted">Existing lessons and quizzes open in the Learning Centre. Additional course lessons will be added in stages.</p><div id="universityCourseList" class="university-course-grid"></div></div>
+ <div class="card hidden" id="universityPathwayPanel" aria-live="polite"><button class="secondary" id="closeUniversityPathway" type="button">← Back to all courses</button><h2 id="universityPathwayTitle">Course pathway</h2><p class="muted" id="universityPathwayIntro"></p><div class="welcome-feature-grid" id="universityModuleStages"></div><h3>Related lessons and practice</h3><p class="muted">These are existing QuizSpark lessons linked to this subject. New specialist modules will be added as the pathway develops.</p><div id="universityPathwayLessons"></div></div>
  <div class="card"><h2>How learning works</h2><div class="welcome-feature-grid"><article class="welcome-feature"><span class="welcome-icon">📖</span><h3>Books and reading</h3><p>Read relevant QuizSpark books and learning material.</p></article><article class="welcome-feature"><span class="welcome-icon">📝</span><h3>Written lessons</h3><p>Study clear lessons and mark your progress.</p></article><article class="welcome-feature"><span class="welcome-icon">🎥</span><h3>Video learning</h3><p>Find educational videos for the topic you are studying.</p></article><article class="welcome-feature"><span class="welcome-icon">🏆</span><h3>Practice and progress</h3><p>Test your knowledge with quizzes and track achievements.</p></article></div><p class="muted">QuizSpark certificates recognise learning milestones on this platform. They are certificates of completion, not accredited university degrees or professional licences.</p></div>
 </section>
 
@@ -3102,16 +3103,41 @@ const universityCourses=[
 {title:"Sports, Fitness & Wellbeing",area:"Life & Personal Development",level:"Beginner",icon:"⚽",description:"Sports knowledge, movement, fitness principles, teamwork and healthy habits.",path:"Life Skills"},
 {title:"General Knowledge & Brain Training",area:"Life & Personal Development",level:"Beginner",icon:"🧠",description:"World facts, reasoning, memory, riddles and broad learning challenges.",path:"General Knowledge"}
 ];
+function openUniversityPathway(course){
+ const panel=$("universityPathwayPanel");if(!panel)return;
+ $("universityPathwayTitle").textContent=course.title+" — Course Pathway";
+ $("universityPathwayIntro").textContent=course.area+" · "+course.level+" level. "+course.description+" This pathway starts with foundations, builds core knowledge, applies ideas to examples and finishes with review and assessment.";
+ const stages=[
+  ["1. Foundations","Learn key terms, background knowledge and the basic principles of "+course.title+".","📘"],
+  ["2. Core knowledge","Study the main ideas, methods, systems and important concepts in this subject.","🧠"],
+  ["3. Practical application","Work through examples, case studies or realistic problems and practise explaining your decisions.","🛠️"],
+  ["4. Review and assessment","Revisit important ideas, complete lesson quizzes and check what you understand before progressing.","🏆"]
+ ];
+ const stageHost=$("universityModuleStages");stageHost.replaceChildren();
+ stages.forEach(([title,description,icon])=>{const card=document.createElement("article");card.className="welcome-feature";const symbol=document.createElement("span");symbol.className="welcome-icon";symbol.textContent=icon;const h=document.createElement("h3");h.textContent=title;const p=document.createElement("p");p.textContent=description;card.append(symbol,h,p);stageHost.appendChild(card);});
+ const source=lessons[course.path]||[];
+ const words=(course.title+" "+course.description).toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>3&&!["introduction","fundamentals","foundations","understanding","learning","course","study","basic","systems"].includes(w));
+ const ranked=source.map(item=>{const title=item.title.toLowerCase(),body=item.body.toLowerCase();let score=0;words.forEach(word=>{if(title.includes(word))score+=4;else if(body.includes(word))score+=1;});return {item,score};}).sort((a,b)=>b.score-a.score);
+ const relevant=ranked.filter(x=>x.score>0).slice(0,5);
+ const chosen=relevant.length?relevant:ranked.slice(0,3);
+ const host=$("universityPathwayLessons");host.replaceChildren();
+ if(!chosen.length){const p=document.createElement("p");p.className="muted";p.textContent="No written lessons are linked to this course yet. More material is being prepared.";host.appendChild(p);}
+ chosen.forEach(({item})=>{const row=document.createElement("article");row.className="lesson";const h=document.createElement("h3");h.textContent=item.title;const status=document.createElement("p");status.className="muted";status.textContent=lessonsDone.includes(item.id)?"✓ Completed · quiz "+(lessonQuizzesDone.includes(item.id)?"completed":"available"):"Written lesson · quiz available";const btn=document.createElement("button");btn.className="primary";btn.type="button";btn.textContent="Open this lesson →";btn.onclick=()=>openLesson(course.path,item.id);row.append(h,status,btn);host.appendChild(row);});
+ panel.classList.remove("hidden");panel.scrollIntoView({behavior:"smooth",block:"start"});
+ $("universityCourseList").classList.add("hidden");
+}
+function closeUniversityPathway(){const panel=$("universityPathwayPanel");panel?.classList.add("hidden");$("universityCourseList")?.classList.remove("hidden");}
 function renderUniversityCourses(){
  const host=$("universityCourseList");if(!host)return;
  const search=($("universitySearch")?.value||"").trim().toLowerCase(),area=$("universityArea")?.value||"",level=$("universityLevel")?.value||"";
  const filtered=universityCourses.filter(course=>(!search||[course.title,course.area,course.description].join(" ").toLowerCase().includes(search))&&(!area||course.area===area)&&(!level||course.level===level));
  $("universityCourseCount").textContent="Showing "+filtered.length+" of "+universityCourses.length+" course pathways.";host.replaceChildren();
  if(!filtered.length){const empty=document.createElement("p");empty.className="muted";empty.textContent="No courses match your search. Try another subject.";host.appendChild(empty);return;}
- filtered.forEach(course=>{const card=document.createElement("article");card.className="university-course";const icon=document.createElement("div");icon.className="university-course-icon";icon.textContent=course.icon;const h=document.createElement("h3");h.textContent=course.title;const meta=document.createElement("p");meta.className="university-course-meta";meta.textContent=course.area+" · "+course.level+" level";const desc=document.createElement("p");desc.className="muted";desc.textContent=course.description;const book=document.createElement("p");book.className="university-course-book";book.textContent=course.book?"📖 Related book: "+course.book:"📖 Reading material and course books will be linked as the pathway expands.";const btn=document.createElement("button");btn.className="primary";btn.type="button";btn.textContent="Open learning materials →";btn.onclick=()=>{showPage("learn");displayLessons(course.path);$("videoSearch").value=course.title;};card.append(icon,h,meta,desc,book,btn);host.appendChild(card);});
+ filtered.forEach(course=>{const card=document.createElement("article");card.className="university-course";const icon=document.createElement("div");icon.className="university-course-icon";icon.textContent=course.icon;const h=document.createElement("h3");h.textContent=course.title;const meta=document.createElement("p");meta.className="university-course-meta";meta.textContent=course.area+" · "+course.level+" level";const desc=document.createElement("p");desc.className="muted";desc.textContent=course.description;const book=document.createElement("p");book.className="university-course-book";book.textContent=course.book?"📖 Related book: "+course.book:"📖 Reading material and course books will be linked as the pathway expands.";const btn=document.createElement("button");btn.className="primary";btn.type="button";btn.textContent="View course pathway →";btn.onclick=()=>openUniversityPathway(course);card.append(icon,h,meta,desc,book,btn);host.appendChild(card);});
 }
 function setupUniversity(){
  const area=$("universityArea");if(!area)return;
+ $("closeUniversityPathway")?.addEventListener("click",closeUniversityPathway);
  [...new Set(universityCourses.map(course=>course.area))].sort().forEach(name=>{const option=document.createElement("option");option.value=name;option.textContent=name;area.appendChild(option);});
  ["universitySearch","universityArea","universityLevel"].forEach(id=>$(id)?.addEventListener(id==="universitySearch"?"input":"change",renderUniversityCourses));
  renderUniversityCourses();
