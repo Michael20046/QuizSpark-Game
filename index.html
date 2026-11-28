@@ -4942,6 +4942,14 @@ function renderStoryShelf(){
   const backCoverCopy=document.createElement("p");backCoverCopy.className="story-back-cover-copy";backCoverCopy.textContent=story.backCover||("Discover "+story.title+". "+(story.description||"Turn the pages and follow the characters on their journey."));
   const backFooter=document.createElement("span");backFooter.className="story-back-cover-footer";backFooter.textContent="A STORY TO REMEMBER  ·  ✦";
   backCover.append(backBrand,backTitle,backCoverLabel,backCoverCopy,backFooter);
+  /* Display the BACK cover in the library, as requested. */
+  if(story.backCoverImage){
+   const backImage=document.createElement("img");backImage.className="story-front-cover";backImage.alt=story.title+" back cover";backImage.loading="lazy";backImage.decoding="async";backImage.src="/QuizSpark-Game/"+String(story.backCoverImage).replace(/^\\/+/, "");
+   backImage.addEventListener("error",()=>{backImage.replaceWith(backCover);});
+   card.replaceChildren(backImage);
+  }else{
+   card.replaceChildren(backCover);
+  }
   const tag=document.createElement("span");tag.className="story-tag";tag.textContent="✦ Original fiction";
   const saved=Math.min(Math.max(Number(localStorage.getItem("quizspark-story-"+story.id)||0),0),story.pages.length-1);
   const progress=document.createElement("p");progress.className="story-progress-note";
