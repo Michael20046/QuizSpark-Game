@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+<title id="title">QuizSpark — Stories, University and Games</title>
+<desc id="desc">Explore stories, learn new skills and play interactive quizzes with QuizSpark.</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#171334"/><stop offset=".55" stop-color="#25205a"/><stop offset="1" stop-color="#101632"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe6a3"/><stop offset="1" stop-color="#eab84d"/></linearGradient>
+ <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9b7aff"/><stop offset="1" stop-color="#6543d8"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="14"/></filter>
+</defs>
+<rect width="1200" height="630" rx="0" fill="url(#bg)"/>
+<circle cx="1050" cy="90" r="220" fill="#9b7aff" opacity=".12" filter="url(#shadow)"/>
+<circle cx="140" cy="560" r="230" fill="#eab84d" opacity=".09" filter="url(#shadow)"/>
+<path d="M0 500 C250 430 360 620 620 520 S980 430 1200 510 V630 H0Z" fill="#ffffff" opacity=".025"/>
+<text x="70" y="95" fill="#ffe6a3" font-family="Arial,sans-serif" font-size="26" font-weight="700" letter-spacing="5">WELCOME TO</text>
+<text x="65" y="180" fill="#fff" font-family="Arial,sans-serif" font-size="88" font-weight="800" letter-spacing="-3">QuizSpark</text>
+<text x="72" y="226" fill="#d9d4f4" font-family="Arial,sans-serif" font-size="27">Read a story. Learn something new. Play to grow.</text>
+<!-- story card -->
+<g transform="translate(70 290)">
+ <rect width="320" height="230" rx="24" fill="#2a2458" stroke="#9275e8" stroke-width="2"/>
+ <rect x="22" y="22" width="276" height="130" rx="16" fill="#443277"/>
+ <path d="M40 122 Q90 58 142 106 T270 80 V152 H40Z" fill="#d69c55" opacity=".9"/>
+ <path d="M40 132 Q105 92 160 126 T280 104 V152 H40Z" fill="#7655c9"/>
+ <circle cx="238" cy="58" r="18" fill="#ffe6a3"/>
+ <path d="M132 45 Q160 28 188 45 V126 Q160 108 132 126Z" fill="#fff0c4" stroke="#c99b45" stroke-width="3"/>
+ <path d="M132 45 Q104 28 76 45 V126 Q104 108 132 126Z" fill="#fff8e7" stroke="#c99b45" stroke-width="3"/>
+ <path d="M82 61 Q105 55 124 66 M82 78 Q105 72 124 83 M140 66 Q160 55 182 61 M140 83 Q160 72 182 78" stroke="#c7a86c" stroke-width="4" fill="none" stroke-linecap="round"/>
+ <text x="24" y="190" fill="#ffe6a3" font-family="Arial,sans-serif" font-size="25" font-weight="700">STORIES</text>
+ <text x="24" y="215" fill="#e6e1fa" font-family="Arial,sans-serif" font-size="16">Discover worlds worth reading</text>
+</g>
+<!-- university card -->
+<g transform="translate(440 290)">
+ <rect width="320" height="230" rx="24" fill="#242b52" stroke="#d6b45e" stroke-width="2"/>
+ <rect x="22" y="22" width="276" height="130" rx="16" fill="#303c70"/>
+ <path d="M62 88 L160 42 L258 88 L160 134Z" fill="url(#gold)" stroke="#fff0bd" stroke-width="2"/>
+ <path d="M91 98 V128 Q160 170 229 128 V98 L160 131Z" fill="#e3b85e"/>
+ <path d="M245 88 V137" stroke="#ffe6a3" stroke-width="5"/>
+ <circle cx="245" cy="145" r="8" fill="#ffe6a3"/>
+ <path d="M160 42 V26" stroke="#fff0bd" stroke-width="5"/>
+ <text x="24" y="190" fill="#ffe6a3" font-family="Arial,sans-serif" font-size="25" font-weight="700">UNIVERSITY</text>
+ <text x="24" y="215" fill="#e6e1fa" font-family="Arial,sans-serif" font-size="16">Build skills, one lesson at a time</text>
+</g>
+<!-- games card -->
+<g transform="translate(810 290)">
+ <rect width="320" height="230" rx="24" fill="#2a2458" stroke="#9275e8" stroke-width="2"/>
+ <rect x="22" y="22" width="276" height="130" rx="16" fill="#3c306d"/>
+ <path d="M78 77 Q85 55 112 58 H208 Q235 55 242 77 L260 119 Q265 142 242 144 L207 123 H113 L78 144 Q55 142 60 119Z" fill="url(#violet)" stroke="#c8b7ff" stroke-width="3"/>
+ <path d="M104 85 V111 M91 98 H117" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+ <circle cx="203" cy="89" r="8" fill="#ffe6a3"/><circle cx="226" cy="109" r="8" fill="#ffe6a3"/>
+ <text x="24" y="190" fill="#ffe6a3" font-family="Arial,sans-serif" font-size="25" font-weight="700">GAMES</text>
+ <text x="24" y="215" fill="#e6e1fa" font-family="Arial,sans-serif" font-size="16">Challenge yourself and have fun</text>
+</g>
+<text x="600" y="585" fill="#ffe6a3" font-family="Arial,sans-serif" font-size="22" font-weight="700" text-anchor="middle" letter-spacing="2">YOUR NEXT DISCOVERY STARTS HERE  •  QUIZSPARK</text>
+</svg>
