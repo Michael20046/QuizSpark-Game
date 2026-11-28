@@ -925,7 +925,7 @@ setupInviteFriends();
   <button class="primary" id="shareInviteBtn" type="button">📲 Share with Friends</button>
   <p class="message" id="inviteMessage" aria-live="polite">Share QuizSpark with someone today!</p>
  </section>
- <a class="about-link" href="./about.html">ℹ️ About QuizSpark — Learn More About the Game</a>
+ <a class="about-link" href="./about.html">ℹ️ About QuizSpark — Stories, University & Games</a>
  <h2>Your Dashboard</h2>
  <div class="grid">
   <div class="stat"><span>⚡ Total Points</span><strong id="homePoints">0</strong></div>
@@ -1086,7 +1086,9 @@ setupInviteFriends();
    <div class="story-listen-tools" role="group" aria-label="Listen to story" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px">
     <button class="primary" id="storyReadAloudBtn" type="button" style="width:auto;margin:0">🔊 Read Aloud</button>
     <button class="secondary" id="storyStopReadingBtn" type="button" style="width:auto;margin:0" disabled>⏹ Stop</button>
-    <span class="muted" id="storyListenStatus" role="status" aria-live="polite" style="align-self:center;font-size:13px">Listen to this page read aloud</span>
+    <label for="storyVoiceSelect" style="align-self:center;color:#d8ccff;font-size:13px;font-weight:700">Reader voice</label>
+    <select id="storyVoiceSelect" aria-label="Choose story reader voice" style="width:auto;min-width:min(100%,210px);max-width:100%;margin:0;padding:9px;border:1px solid #80652f;border-radius:9px;background:#211b48;color:#ffe6a3"><option value="">System default voice</option></select>
+    <span class="muted" id="storyListenStatus" role="status" aria-live="polite" style="align-self:center;font-size:13px">Choose a voice, then listen to the story</span>
    </div>
    <div class="story-reading-tools" role="group" aria-label="Story reading preferences" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 16px;padding:10px;border:1px solid #51447e;border-radius:12px;background:#1b2042">
     <span style="color:#d8ccff;font-size:13px;font-weight:700;margin-right:auto">Text size</span>
@@ -4938,7 +4940,37 @@ function applyStoryTheme(theme){
  });
  try{localStorage.setItem(QUIZSPARK_STORY_THEME_KEY,safeTheme);}catch(error){}
 }
+const QUIZSPARK_STORY_VOICE_KEY="quizspark-story-reader-voice-v1";
+function getStoryReaderVoice(){
+ const selected=localStorage.getItem(QUIZSPARK_STORY_VOICE_KEY)||"";
+ if(!selected||!("speechSynthesis" in window))return null;
+ return window.speechSynthesis.getVoices().find(voice=>voice.voiceURI===selected)||null;
+}
+function populateStoryReaderVoices(){
+ const select=document.getElementById("storyVoiceSelect");
+ if(!select||!("speechSynthesis" in window))return;
+ const selected=localStorage.getItem(QUIZSPARK_STORY_VOICE_KEY)||"";
+ const voices=window.speechSynthesis.getVoices().slice().sort((a,b)=>(a.lang+" "+a.name).localeCompare(b.lang+" "+b.name));
+ select.replaceChildren();
+ const defaultOption=document.createElement("option");defaultOption.value="";defaultOption.textContent="System default voice";select.appendChild(defaultOption);
+ voices.forEach(voice=>{
+  const option=document.createElement("option");option.value=voice.voiceURI;
+  option.textContent=voice.name+" ("+voice.lang+")";select.appendChild(option);
+ });
+ select.value=voices.some(voice=>voice.voiceURI===selected)?selected:"";
+ if(!voices.length){const option=document.createElement("option");option.value="";option.textContent="No extra voices available on this device";option.disabled=true;select.appendChild(option);}
+}
 function setupStoryReadingTools(){
+ const voiceSelect=document.getElementById("storyVoiceSelect");
+ if(voiceSelect){
+  populateStoryReaderVoices();
+  voiceSelect.addEventListener("change",()=>{
+   try{if(voiceSelect.value)localStorage.setItem(QUIZSPARK_STORY_VOICE_KEY,voiceSelect.value);else localStorage.removeItem(QUIZSPARK_STORY_VOICE_KEY);}catch(error){}
+   const status=document.getElementById("storyListenStatus");
+   if(status)status.textContent=voiceSelect.value?"Reader voice saved on this device.":"Using your device's default voice.";
+  });
+  if("speechSynthesis" in window)window.speechSynthesis.addEventListener("voiceschanged",populateStoryReaderVoices);
+ }
  document.getElementById("storyFontDown")?.addEventListener("click",()=>applyStoryFontSize(getStoryFontSize()-2));
  document.getElementById("storyFontUp")?.addEventListener("click",()=>applyStoryFontSize(getStoryFontSize()+2));
  document.getElementById("storyFontReset")?.addEventListener("click",()=>applyStoryFontSize(17));
@@ -4979,7 +5011,7 @@ function speakNextStorySpeechChunk(run){
   else{quizSparkSpeechActive=false;quizSparkSpeechPaused=false;quizSparkSpeechUtterance=null;updateStorySpeechControls("Finished reading the whole story");}
   return;
  }
- const utterance=new SpeechSynthesisUtterance(quizSparkSpeechChunks[quizSparkSpeechChunkIndex]);quizSparkSpeechUtterance=utterance;utterance.rate=0.9;
+ const utterance=new SpeechSynthesisUtterance(quizSparkSpeechChunks[quizSparkSpeechChunkIndex]);quizSparkSpeechUtterance=utterance;utterance.rate=0.9;const selectedVoice=getStoryReaderVoice();if(selectedVoice)utterance.voice=selectedVoice;
  utterance.onstart=()=>{if(run===quizSparkSpeechRun)updateStorySpeechControls("Reading page "+(activeStoryPage+1)+" of "+activeStory.pages.length+"…");};
  utterance.onend=()=>{if(run!==quizSparkSpeechRun||!quizSparkSpeechActive)return;quizSparkSpeechChunkIndex++;window.setTimeout(()=>speakNextStorySpeechChunk(run),60);};
  utterance.onerror=(event)=>{if(run!==quizSparkSpeechRun||event?.error==="canceled")return;quizSparkSpeechActive=false;quizSparkSpeechPaused=false;updateStorySpeechControls("Audio stopped unexpectedly. Tap Read Full Story to continue from this page.");};
