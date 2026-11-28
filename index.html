@@ -1097,6 +1097,7 @@ setupInviteFriends();
    </div>
    <div class="story-body" id="storyPageBody"></div>
    <button class="secondary" id="toggleStoryBookmark" type="button" aria-pressed="false" style="width:100%;margin:16px 0 0;border:1px solid #8f7136">🔖 Bookmark This Page</button>
+   <section class="card" aria-labelledby="storyThoughtsHeading" style="margin-top:16px;border:1px solid #80652f;background:linear-gradient(145deg,#29204f,#202747)"><h3 id="storyThoughtsHeading" style="color:#ffe6a3">💭 My Story Thoughts</h3><p class="muted">Write what you think about this story, what you learned, or a question you want to remember. Your note is private and saved only on this device.</p><label for="storyThoughtInput">Your reflection</label><textarea id="storyThoughtInput" maxlength="1000" rows="4" placeholder="What stood out to you in this story?"></textarea><button class="primary" id="saveStoryThoughtBtn" type="button">Save My Thought</button><p class="message" id="storyThoughtMessage" role="status" aria-live="polite">Your thoughts have not been saved yet.</p></section>
   </div>
   <div class="story-controls">
    <button class="secondary" id="storyPrevBtn" type="button">← Previous</button>
@@ -5046,12 +5047,37 @@ async function awardStoryReadingPoints(storyId,pageIndex,isFinalPage){
  }
 }
 
+const QUIZSPARK_STORY_THOUGHTS_KEY="quizspark-story-thoughts-v1";
+function getStoryThoughts(){
+ try{const value=JSON.parse(localStorage.getItem(QUIZSPARK_STORY_THOUGHTS_KEY)||"{}");return value&&typeof value==="object"&&!Array.isArray(value)?value:{};}catch(error){return {};}
+}
+function loadCurrentStoryThought(){
+ const input=document.getElementById("storyThoughtInput"),message=document.getElementById("storyThoughtMessage"),button=document.getElementById("saveStoryThoughtBtn");
+ if(!activeStory||!input)return;
+ const note=getStoryThoughts()[activeStory.id]||"";
+ input.value=note;
+ if(message)message.textContent=note?"Your saved thought is ready. You can update it anytime.":"Add a private reflection about this book.";
+ if(button)button.textContent=note?"Update My Thought":"Save My Thought";
+}
+function saveCurrentStoryThought(){
+ if(!activeStory)return;
+ const input=document.getElementById("storyThoughtInput"),message=document.getElementById("storyThoughtMessage"),button=document.getElementById("saveStoryThoughtBtn");
+ const note=(input?.value||"").trim();
+ if(!note){if(message)message.textContent="Write a thought before saving.";return;}
+ const thoughts=getStoryThoughts();thoughts[activeStory.id]=note;
+ try{
+  localStorage.setItem(QUIZSPARK_STORY_THOUGHTS_KEY,JSON.stringify(thoughts));
+  if(message)message.textContent="✓ Your private story thought has been saved on this device.";
+  if(button)button.textContent="Update My Thought";
+ }catch(error){if(message)message.textContent="Could not save your thought. Please check available device storage.";}
+}
 function renderQuizSparkStoryPage(){
  if(!activeStory)return;
  const page=activeStory.pages[activeStoryPage],total=activeStory.pages.length;
  document.getElementById("storyChapter").textContent=page.chapter;
  document.getElementById("storyPageTitle").textContent=activeStory.title+" — "+page.title;
  document.getElementById("storyPageBody").textContent=page.body;
+ loadCurrentStoryThought();
  applyStoryFontSize(getStoryFontSize());
  document.getElementById("storyPageCount").textContent="Page "+(activeStoryPage+1)+" of "+total+" · "+activeStory.country;
  document.getElementById("storyProgressFill").style.width=((activeStoryPage+1)/total*100)+"%";
@@ -5070,6 +5096,7 @@ setupStoryReadingTools();
 document.getElementById("storyReadAloudBtn")?.addEventListener("click",readStoryAloud);
 document.getElementById("storyStopReadingBtn")?.addEventListener("click",stopStoryReadAloud);
 document.getElementById("toggleStoryBookmark")?.addEventListener("click",toggleCurrentStoryBookmark);
+document.getElementById("saveStoryThoughtBtn")?.addEventListener("click",saveCurrentStoryThought);
 document.getElementById("clearStoryBookmarks")?.addEventListener("click",()=>{
  try{localStorage.removeItem(QUIZSPARK_STORY_BOOKMARKS_KEY);}catch(error){}
  renderStoryBookmarkShelf();updateStoryBookmarkButton();
