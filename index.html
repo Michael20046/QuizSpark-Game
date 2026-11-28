@@ -4194,6 +4194,7 @@ $("refreshLeaderboard").onclick=loadLeaderboard;
 buildLearningCategories();
 buildQuizCategories();
 renderQuizLevelProgress();
+setupUniversity();
 loadDailyTournamentLeaderboard();
 refreshStartButton();
 console.log("QuizSpark initialised successfully.");
@@ -5451,7 +5452,6 @@ function renderQuizSparkStoryPage(){
 }
 document.getElementById("storyPrevBtn").addEventListener("click",()=>{if(activeStory&&activeStoryPage>0){activeStoryPage--;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}});
 document.getElementById("storyNextBtn").addEventListener("click",()=>{if(!activeStory)return;if(activeStoryPage<activeStory.pages.length-1){activeStoryPage++;renderQuizSparkStoryPage();window.scrollTo({top:0,behavior:"smooth"});}else{completeActiveStory();}});
-setupUniversity();
 setupStoryFilters();
 setupStoryReadingTools();
 document.getElementById("storyReadAloudBtn")?.addEventListener("click",readStoryAloud);
