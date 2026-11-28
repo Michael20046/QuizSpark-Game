@@ -984,7 +984,7 @@ setupInviteFriends();
    <p>Travel through fiction from around the world — from the busy streets of Lagos to quiet villages, distant cities and mysterious coastlines. Discover courage, love, friendship, family, mystery, adventure and second chances in original stories created for curious readers.</p>
    <p>Every book unfolds page by page. Take your time, follow each character's journey and pick up exactly where you left off. This library keeps growing, with new books and chapters added along the way.</p>
    <div class="story-stats">
-    <div class="story-stat"><strong id="storyBookCount">17</strong><span>Original books</span></div>
+    <div class="story-stat"><strong id="storyBookCount">30</strong><span>Original books</span></div>
     <div class="story-stat"><strong id="storyPageTotal">—</strong><span>Reading pages</span></div>
     <div class="story-stat"><strong>🌍</strong><span>Stories across countries</span></div>
    </div>
@@ -4854,7 +4854,7 @@ function renderInteractiveStoryShelf(){
  const progress=getInteractiveStoryProgress();
  interactiveStoryBooks.forEach(book=>{
   const card=document.createElement("article");card.className="story-card";
-  if(book.coverImage){const cover=document.createElement("img");cover.className="story-front-cover";cover.alt=book.title+" cover";cover.loading="lazy";cover.decoding="async";cover.src="/QuizSpark-Game/"+String(book.coverImage).replace(/^\\/+/, "");cover.addEventListener("error",()=>{cover.hidden=true;});card.appendChild(cover);}
+  if(book.coverImage){const cover=document.createElement("img");cover.className="story-front-cover";cover.alt=book.title+" cover";cover.loading="lazy";cover.decoding="async";cover.src="/QuizSpark-Game/"+String(book.coverImage).replace(/^\/+/, "");cover.addEventListener("error",()=>{cover.hidden=true;});card.appendChild(cover);}
   const title=document.createElement("h3");title.textContent=book.title;
   const meta=document.createElement("div");meta.className="story-meta";meta.textContent=book.country+" · "+book.genre;
   const desc=document.createElement("p");desc.className="muted";desc.textContent=book.description;
