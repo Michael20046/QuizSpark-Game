@@ -4272,7 +4272,7 @@ function renderStoryShelf(){
   frontCover.append(coverArt,coverTitle,coverBrand);
   if(story.coverImage){
    const coverImage=document.createElement("img");coverImage.className="story-front-cover";coverImage.alt=story.title+" front cover";coverImage.loading="lazy";coverImage.decoding="async";coverImage.src=story.coverImage;
-   coverImage.addEventListener("error",()=>coverImage.replaceWith(frontCover));
+   coverImage.addEventListener("error",()=>{frontCover.hidden=false;coverImage.replaceWith(frontCover);});
    frontCover.hidden=true;coverImage.addEventListener("load",()=>{frontCover.hidden=true;});
    card.appendChild(coverImage);
   }else{card.appendChild(frontCover);}
