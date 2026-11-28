@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 980" role="img" aria-labelledby="t d">
+<title id="t">Larry and Adesola — back cover</title><desc id="d">A purple and gold illustrated back cover for a Nigerian romance story, with Lagos skyline and a heartfelt synopsis.</desc>
+<defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#21104f"/><stop offset=".58" stop-color="#42227b"/><stop offset="1" stop-color="#160e35"/></linearGradient><linearGradient id="gold" x2="0" y2="1"><stop stop-color="#fff0a5"/><stop offset=".5" stop-color="#e9bd4e"/><stop offset="1" stop-color="#a66a19"/></linearGradient></defs>
+<rect width="700" height="980" fill="url(#bg)"/><rect x="20" y="20" width="660" height="940" rx="24" fill="none" stroke="url(#gold)" stroke-width="5"/>
+<path d="M22 790L95 730 150 770 230 680 295 750 365 660 430 735 510 675 585 740 678 680V958H22Z" fill="#100d2d" opacity=".8"/>
+<g fill="#151638"><path d="M45 690h55v170H45zm80-70h70v240h-70zm95 42h45v198h-45zm300-25h58v223h-58zm78-55h55v278h-55z"/></g>
+<g fill="#f4d477" opacity=".75"><path d="M58 715h8v12h-8zm0 28h8v12h-8zm84-70h9v14h-9zm28 0h9v14h-9zm0 32h9v14h-9zm368 0h8v13h-8zm84-50h8v13h-8z"/></g>
+<path d="M20 850Q170 810 350 845T680 830" fill="none" stroke="#e4b94e" stroke-width="4" opacity=".8"/>
+<text x="350" y="92" fill="url(#gold)" font-family="Georgia,serif" font-size="34" font-weight="bold" text-anchor="middle">QUIZSPARK STORIES</text>
+<text x="350" y="132" fill="#fff1c5" font-family="Georgia,serif" font-size="19" text-anchor="middle" letter-spacing="4">READ • DREAM • LEARN</text>
+<path d="M65 165H635" stroke="#d8b65d" stroke-width="2"/>
+<text x="350" y="225" fill="#ffe18a" font-family="Georgia,serif" font-size="38" font-style="italic" text-anchor="middle">A beautiful beginning…</text>
+<text x="350" y="273" fill="#fff" font-family="Georgia,serif" font-size="35" font-weight="bold" text-anchor="middle">A difficult goodbye.</text>
+<g fill="#fff5df" font-family="Georgia,serif" font-size="23">
+<text x="72" y="355">Larry thought he and Adesola were building</text><text x="72" y="389">something special. Three months of messages,</text><text x="72" y="423">laughter and growing affection brought them</text><text x="72" y="457">together. Then one careless moment involving</text><text x="72" y="491">Adesola’s younger sister changed everything.</text>
+<text x="72" y="553">Larry tried to make things right, but hurt feelings,</text><text x="72" y="587">silence and different expectations pushed them</text><text x="72" y="621">apart. As he searches for answers, he must learn</text><text x="72" y="655">that love needs respect, honest communication</text><text x="72" y="689">and the freedom to choose.</text>
+</g>
+<path d="M68 735Q350 705 632 735L610 815Q350 850 90 815Z" fill="#e7bf52"/>
+<text x="350" y="770" fill="#28164c" font-family="Georgia,serif" font-size="24" font-weight="bold" text-anchor="middle">A heartfelt story of first love,</text><text x="350" y="802" fill="#28164c" font-family="Georgia,serif" font-size="24" font-weight="bold" text-anchor="middle">accountability and letting go. ♥</text>
+<text x="350" y="895" fill="#ffe9a0" font-family="Georgia,serif" font-size="25" text-anchor="middle">Larry &amp; Adesola</text><text x="350" y="928" fill="#d8c8ff" font-family="Arial,sans-serif" font-size="15" text-anchor="middle">A LOVE THAT WASN’T MEANT TO LAST</text>
+</svg>
