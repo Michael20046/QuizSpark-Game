@@ -34,7 +34,7 @@ jobs:
           from pathlib import Path
           import re
           html = Path("index.html").read_text(encoding="utf-8")
-          match = re.search(r'<script type="module">\s*(.*?)</script>', html, re.S)
+          match = re.search(r'<script type="module">\\s*(.*?)</script>', html, re.S)
           if not match:
               raise SystemExit("QuizSpark main module was not found.")
           Path("/tmp/quizspark-main.mjs").write_text(match.group(1), encoding="utf-8")
@@ -48,6 +48,7 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: .
+          name: github-pages-${{ github.run_attempt }}
 
       # Allow GitHub Actions artifact metadata to become available before deployment lookup.
       - name: Wait for Pages artifact registration
@@ -56,3 +57,5 @@ jobs:
       - name: Deploy website
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
