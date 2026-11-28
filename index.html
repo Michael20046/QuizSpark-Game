@@ -5241,6 +5241,16 @@ function openQuizSparkStory(id,resumePage){
 const QUIZSPARK_STORY_READING_REWARDS_KEY="quizspark-story-reading-rewards-v1";
 async function awardStoryReadingPoints(storyId,pageIndex,isFinalPage){
  if(!currentUser||!activeStory)return;
+ const message=document.getElementById("storyPointsMessage");
+ const readingDelayMs=20000;
+ if(message)message.textContent="📖 Keep this page open and read for 20 seconds to earn its points.";
+ setTimeout(async()=>{
+  if(!currentUser||!activeStory||activeStory.id!==storyId||activeStoryPage!==pageIndex)return;
+  await saveStoryReadingRewardAfterReading(storyId,pageIndex,isFinalPage);
+ },readingDelayMs);
+}
+async function saveStoryReadingRewardAfterReading(storyId,pageIndex,isFinalPage){
+ if(!currentUser||!activeStory||activeStory.id!==storyId||activeStoryPage!==pageIndex)return;
  const rewardKey=storyId+":page:"+pageIndex;
  const completionKey=storyId+":completed";
  const ref=doc(db,"players",currentUser.uid);
