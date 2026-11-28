@@ -50,7 +50,7 @@ small{color:var(--muted)}@media(max-width:480px){main{padding:10px}header{paddin
 </div>
 <section class="card">
 <div class="section-head"><h2>Registered players</h2><input id="playerSearch" type="search" placeholder="Search players" style="max-width:260px"></div>
-<div class="table-wrap"><table><thead><tr><th>Player</th><th>Email</th><th>Account ID</th><th>Country</th><th>Games played</th><th>Correct answers</th><th>Points</th><th>Last updated</th></tr></thead><tbody id="playersBody"><tr><td colspan="8">No data loaded yet.</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Player</th><th>Account type</th><th>Email</th><th>Account ID</th><th>Country</th><th>Games played</th><th>Correct answers</th><th>Points</th><th>Last updated</th></tr></thead><tbody id="playersBody"><tr><td colspan="9">No data loaded yet.</td></tr></tbody></table></div>
 </section>
 <section class="card">
 <h2>Player reviews</h2>
@@ -86,9 +86,9 @@ function dateText(value){
 function cell(value){const td=document.createElement("td");td.textContent=value==null?"—":String(value);return td;}
 function renderPlayers(){
  const term=$("playerSearch").value.trim().toLowerCase(),body=$("playersBody");body.replaceChildren();
- const filtered=playersCache.filter(p=>[p.name,p.email,p.country].some(value=>String(value||"").toLowerCase().includes(term)));
- if(!filtered.length){const tr=document.createElement("tr"),td=cell("No matching players found.");td.colSpan=6;tr.append(td);body.append(tr);return;}
- filtered.forEach(p=>{const tr=document.createElement("tr");tr.append(cell(p.name||"Unnamed player"),cell(p.email||"Not recorded"),cell(p.id||"—"),cell(p.country||"Unknown"),cell(p.gamesPlayed||0),cell(p.correctAnswers||0),cell(p.points||0),cell(dateText(p.updatedAt||p.createdAt)));body.append(tr);});
+ const filtered=playersCache.filter(p=>[p.name,p.email,p.country,p.id].some(value=>String(value||"").toLowerCase().includes(term)));
+ if(!filtered.length){const tr=document.createElement("tr"),td=cell("No matching players found.");td.colSpan=9;tr.append(td);body.append(tr);return;}
+ filtered.forEach(p=>{const tr=document.createElement("tr");tr.append(cell(p.name||"Unnamed player"),cell(p.id===ADMIN_UID?"Administrator":"Player"),cell(p.email||"Not recorded"),cell(p.id||"—"),cell(p.country||"Unknown"),cell(p.gamesPlayed||0),cell(p.correctAnswers||0),cell(p.points||0),cell(dateText(p.updatedAt||p.createdAt)));body.append(tr);});
 }
 async function loadDashboard(){
  showMessage("dashboardMessage","Loading QuizSpark data...");
